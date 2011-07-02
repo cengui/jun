@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<script type="text/javascript" src="../src/Jun.js"></script>
+	<script type="text/javascript" src="../src/Jun.string.js"></script>
+	<script type="text/javascript" src="../src/Jun.array.js"></script>
+	<script type="text/javascript" src="../src/Jun.com.js"></script>
+	<script type="text/javascript">
+		module("Jun.array");
+		test("Jun.array", function(){
+		
+			var array = [0,1,2,3,4,5,6,7,8,9];
+			same(Jun.array.systemSort([8,2,5,4,3,6,7,1,9,0]), array, "systemSort okay");
+			same(Jun.array.bubbleSort([8,2,5,4,3,6,7,1,9,0]), array, "bubbleSort okay" );
+			same(Jun.array.quickSort([8,2,5,4,3,6,7,1,9,0]), array, "quickSort okay" );
+			same(Jun.array.insertSort([8,2,5,4,3,6,7,1,9,0]), array, "insertSort okay" );
+			same(Jun.array.shellSort([8,2,5,4,3,6,7,1,9,0]), array, "shellSort okay" );
+			
+		});
+		
+		module("Jun.string");
+		test("Jun.String", function(){
+			equals(Jun.string.pad("0", 2), "00");
+			equals(Jun.string.pad("1", 2, '4'), "41");
+			equals(Jun.string.pad("0", 3, ' '), "  0");
+			equals(Jun.string.pad("0", 0, ' '), "0");
+		});
+		
+		
+		module("Jun.com");
+		test("Jun.com", function(){
+			
+			same(Jun.com.trim(" nihao "), "nihao");
+			same(Jun.com.trim(" n i h a o "), "n i h a o");
+			try{
+				ok(Jun.com.now());
+			}catch(e){}
+			
+		});
+		
+		
+		
+		
+	</script>
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+</body>
+</html>

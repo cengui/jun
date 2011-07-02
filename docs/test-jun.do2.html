@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>加载网络上的js文件</title>
+		<script src="../src/jun.js" type="text/javascript"></script>
+		<script src="../src/jun.do.js" type="text/javascript"></script>
+	</head>
+	<body onload="load1();load2();load3();">
+		<div id="log"></div>
+		<script>
+		
+			WW.add('jQuery', 'http://code.jquery.com/jquery-1.6.1.min.js');
+			WW.add('douban','http://img3.douban.com/js/packed_douban7312964743.js');
+			WW.add('ok','Jun.com.js', true);//ture 表示不用加载此项 这有助于上线以后的文件合并
+			
+			
+			function load1(){
+				WW.use('jQuery', function(){
+					document.getElementById('log').innerHTML += '<div>jQuery  ok</div>';
+				});
+			}
+			
+			function load2(){
+				WW.use('douban', function(){
+					document.getElementById('log').innerHTML += '<div>douban ok</div>';
+				});
+			}
+			
+			function load3(){
+				WW.use('douban,ok', function(){
+					document.getElementById('log').innerHTML += '<div>douban,ok ok</div>';
+				});
+			}
+			
+		</script>
+	<body>
+</html>

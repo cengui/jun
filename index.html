@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>index</title>
+		<script src="src/jun.js" type="text/javascript"></script>
+		<script src="src/jun.do.js" type="text/javascript"></script>
+		<script>
+			WW.add("ajax","src/Jun.ajax.js");
+			WW.add("array","src/Jun.array.js");
+			WW.add("com","src/Jun.com.js");
+			WW.add("dom","src/Jun.dom.js");
+			WW.add("string","src/Jun.string.js");
+		</script>
+	</head>
+	<body onload="loadJS();">
+		Hello World  世界你好
+	<body>
+	<script>
+		function loadJS(){
+			WW.use("ajax,array,com,dom,string", function(){
+				console.log("ok");
+			})
+		}
+	</script>
+</html>

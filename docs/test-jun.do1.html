@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>加载本地的文件</title>
+		<script src="../src/jun.js" type="text/javascript"></script>
+		<script src="../src/jun.do.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="log"></div>
+		<script>
+		
+			
+			WW.add('jun1','../src/Jun.ajax.js');
+			WW.add('jun2','../src/Jun.com.js');
+			WW.add('jun4','../src/Jun.string.js');
+		
+			WW.use('jun1,jun2,jun4', function(){
+				alert("ok");
+			});
+
+		</script>
+	<body>
+</html>
