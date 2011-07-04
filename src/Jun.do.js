@@ -90,8 +90,8 @@ var WW = {
 			}
 		}, 500);
 	},
-	checkBack:function(modelKey, key){//内部
-		this.module[modelKey].isOkay = true;
+	checkBack:function(modelKey, key, isOkey){//内部
+		this.module[modelKey].isOkay = isOkey;
 		var query = this.query[key];
 		if(++(query.complet) === query.total){
 			query.callback();//回调函数
@@ -104,8 +104,12 @@ var WW = {
 
 		script[this.support] = function(){
 			if ( /undefined|loaded|complete/.test(script.readyState) ){
-				_this.checkBack(modelKey, key);
+				_this.checkBack(modelKey, key, true);
 			}
+		};
+		script.onerror = function(e){
+			window.console && window.console.log(e);
+			_this.checkBack(modelKey, key, false);
 		};
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('src', url);
