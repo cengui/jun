@@ -119,6 +119,39 @@ GIT 基础
 	提示 // 敲两次tab
 	Git 命令别名
 	$ git config --global alias.co checkout // git co 代替了 git checkout
+
+
+分支
+
+    	创建分支
+	$ git branch testing // 创建testing
+	$ git checkout testing// 切换到testing
+	$ git checkout -b iss53 //创建并切换到iss53
+	$ git merge hotfix //把hotfix 分支合并到当前分支
+	
+	查看分支
+	$ git branch -v//最后一次commit信息
+        $ git branch --merged | --no-merged//筛选出你已经（或尚未）与当前分支合并的分支
+
+        删除
+	$ git branch -D testing
+
+	推送
+	$ git push origin serverfix//把当前推送到 serverfix分支
+	
+	更新同步
+	$ git fetch
+
+服务器上的GIT
+		       ---http://progit.org/book/zh/ch4-3.html	
+	生成 SSH 公钥  ---http://github.com/guides/providing-your-ssh-key。
+	$ cd ~/.ssh //公钥的位置
+	$ ls
+	authorized_keys2  id_dsa       known_hosts
+	config            id_dsa.pub
+	
+	$ ssh-keygen //如果上面看不到公钥  可以用次来创建 会要求输入存放位置 和密码
+
 	
 
 参考资料
