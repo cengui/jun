@@ -152,7 +152,11 @@ GIT 基础
 	
 	$ ssh-keygen //如果上面看不到公钥  可以用次来创建 会要求输入存放位置 和密码
 
-	
+
+储藏
+	$ git status //储藏
+	$ git stash list//储藏列表
+	$ git stash apply//应用储藏
 
 参考资料
    http://zh.wikipedia.org/wiki/Git
