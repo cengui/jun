@@ -116,6 +116,7 @@ GIT 基础
         
         删除
 	$ git tag -d [tagname] //删除标签
+	$ git push origin :refs/tags/tagname //删除远程标签
 	
 
 技巧和窍门
@@ -144,6 +145,9 @@ GIT 基础
 	
 	更新同步
 	$ git fetch
+	
+	删除远程分支
+	git push origin :branchname
 
 服务器上的GIT
 		       ---http://progit.org/book/zh/ch4-3.html	
