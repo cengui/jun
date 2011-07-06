@@ -75,8 +75,8 @@ GIT 基础
 	取消已经暂存的文件
 	$ git reset HEAD fileName
 	
-	取消对文件的修改(回退到以前未修改的状态)
-    $ git checkout -- fileName
+	取消对文件的修改(回退到以前未修改的状态) //很有用 也很危险
+    	$ git checkout -- fileName
 
 远程仓库的使用
 
@@ -113,6 +113,10 @@ GIT 基础
 	分享标签
 	$ git push origin [tagname] //提交 一个标签
 	$ git push origin --tags // 推送所有本地标签
+        
+        删除
+	$ git tag -d [tagname] //删除标签
+	$ git push origin :refs/tags/tagname //删除远程标签
 	
 
 技巧和窍门
@@ -141,6 +145,9 @@ GIT 基础
 	
 	更新同步
 	$ git fetch
+	
+	删除远程分支
+	git push origin :branchname
 
 服务器上的GIT
 		       ---http://progit.org/book/zh/ch4-3.html	
