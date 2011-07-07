@@ -1,0 +1,18 @@
+﻿3.0 tag test file
+
+
+nihao add master branch
+add testing branch
+
+// 修改hosts文件如下 用来访问google+
+72.14.204.132 lh6.googleusercontent.com
+72.14.204.132 lh5.googleusercontent.com
+72.14.204.132 lh4.googleusercontent.com
+72.14.204.132 lh3.googleusercontent.com
+72.14.204.132 lh2.googleusercontent.com
+72.14.204.132 lh1.googleusercontent.com
+2404:6800:8005::8a plus.google.com
+72.14.213.100 plus.google.com
+
+
+test

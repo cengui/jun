@@ -75,8 +75,8 @@ GIT 基础
 	取消已经暂存的文件
 	$ git reset HEAD fileName
 	
-	取消对文件的修改(回退到以前未修改的状态)
-    $ git checkout -- fileName
+	取消对文件的修改(回退到以前未修改的状态) //很有用 也很危险
+    	$ git checkout -- fileName
 
 远程仓库的使用
 
