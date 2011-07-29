@@ -6,24 +6,24 @@
  
  ;(function(){
 	 
-	 var DOM = (function(){
-	 	 var Methods = "g,find,first,last,hasChilds,parent,next,prev,html,attr,removeAttr,css,isElement,isText,htmlForElem,append,before,after,animate";
-		 var MethodList = Methods.split(',');
-		 var i = 0;
-		 var d = {};
-		 for(i; i<MethodList.length; i++){
-			d[MethodList[i]] = (function(key){
-				return function(){
-					var elem = Jun.dom[key].apply(this, [this].concat([].slice.call(arguments)));
-					if(Jun.dom.isElement(elem)){
-						return Jun.mix(elem, DOM);
-					}
-					return elem;
-				}
-			})(MethodList[i])
-		 }
-		return d;
-	 })();
+	 // var DOM = (function(){
+	 	 // var Methods = "g,find,first,last,hasChilds,parent,next,prev,html,attr,removeAttr,css,isElement,isText,htmlForElem,append,before,after,animate";
+		 // var MethodList = Methods.split(',');
+		 // var i = 0;
+		 // var d = {};
+		 // for(i; i<MethodList.length; i++){
+			// d[MethodList[i]] = (function(key){
+				// return function(){
+					// var elem = Jun.dom[key].apply(this, [this].concat([].slice.call(arguments)));
+					// if(Jun.dom.isElement(elem)){
+						// return Jun.mix(elem, DOM);
+					// }
+					// return elem;
+				// }
+			// })(MethodList[i])
+		 // }
+		// return d;
+	 // })();
 	 
 	 
 	 Jun.dom = {
@@ -40,21 +40,14 @@
 		},
 		
 		query:function(string){
-			var elem = document.querySelector(string);
-			return Jun.dom.g(elem);
+			return document.querySelector(string);
 		},
 		create:function(tagName){
 			return document.createElement(tagName);
 		},
 		
-		g:function(elem){
-			return Jun.mix(elem, DOM);
-		},
 		
 		/* DOM Three find*/
-		find:function(){
-		
-		},
 		first:function(elem){
 			//elem = getElem(elem, this);
 			return elem.firstElementChild;//.firstChild;
