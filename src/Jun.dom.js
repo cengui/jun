@@ -5,27 +5,7 @@
  */
  
  ;(function(){
-	 
-	 // var DOM = (function(){
-	 	 // var Methods = "g,find,first,last,hasChilds,parent,next,prev,html,attr,removeAttr,css,isElement,isText,htmlForElem,append,before,after,animate";
-		 // var MethodList = Methods.split(',');
-		 // var i = 0;
-		 // var d = {};
-		 // for(i; i<MethodList.length; i++){
-			// d[MethodList[i]] = (function(key){
-				// return function(){
-					// var elem = Jun.dom[key].apply(this, [this].concat([].slice.call(arguments)));
-					// if(Jun.dom.isElement(elem)){
-						// return Jun.mix(elem, DOM);
-					// }
-					// return elem;
-				// }
-			// })(MethodList[i])
-		 // }
-		// return d;
-	 // })();
-	 
-	 
+
 	 Jun.dom = {
 		
 		/* query */
@@ -35,7 +15,6 @@
 		},
 		
 		getTG:function(elem, tagName){
-			//elem = getElem(elem, this);
 			return elem.getElementsByTagName(tagName);
 		},
 		
@@ -49,33 +28,27 @@
 		
 		/* DOM Three find*/
 		first:function(elem){
-			//elem = getElem(elem, this);
 			return elem.firstElementChild;//.firstChild;
 		},
 		
 		last:function(elem){
-			//elem = getElem(elem, this);
 			return elem.lastElementChild;//.lastChild;
 		},
 		
 		hasChilds:function(elem){
-			//elem = getElem(elem, this);
 			return elem.hasChildNodes();
 		},
 		
 		parent:function(elem){
-			//elem = getElem(elem, this);
 			return elem.parentNode;
 		},
 		
 		next:function(elem){
-			//elem = getElem(elem, this);
 			return elem.nextElementSibling//.nextSibling;
 			// ie 6 测试只有  nextSibling
 		},
 		
 		prev:function(elem){
-			//elem = getElem(elem, this);
 			return elem.previousElementSibling;//.previousSibling;
 		},
 		find:function(elem, string){
@@ -123,19 +96,16 @@
 		// 文档判断
 		isElement:function(elem){
 			//标准dom节点
-			//elem = getElem(elem, this);
 			return elem.nodeType == 1;
 		},
 		
 		isText:function(elem){
 			// 文本节点
-			//elem = getElem(elem, this);
 			return elem.nodeType == 3;
 		},
 		
 		// 文档处理
-		
-		htmlForElem:function(html){
+		htmlToElem:function(html){
 			if(typeof html == 'string'){
 				var dom = Jun.dom;
 				var div = document.createDocumentFragment("DIV");// 04-18 lujun
@@ -145,21 +115,21 @@
 		},
 		
 		append:function(elem, html){
-			elem.appendChild( Jun.dom.htmlForElem(html) );
+			elem.appendChild( Jun.dom.htmlToElem(html) );
 			return elem;
 		},
 		
 		before:function(elem, html){
-			elem.parentNode.insertBefore(Jun.dom.htmlForElem(html), elem);
+			elem.parentNode.insertBefore(Jun.dom.htmlToElem(html), elem);
 			return elem;
 		},
 		after:function(elem, html){
 			var parent = elem.parentNode;
-			parent.lastChild == elem ? parent.appendChild(Jun.dom.htmlForElem(html)) : parent.insertBefore(Jun.dom.htmlForElem(html), elem.nextSibling);
+			parent.lastChild == elem ? parent.appendChild(Jun.dom.htmlToElem(html)) : parent.insertBefore(Jun.dom.htmlToElem(html), elem.nextSibling);
+			return elem;
 		},
 		
 		//文档动画
-		
 		animate:function(elem, style, val, callBack, time, px){
 			px = px || 'px'; //---   这里还需要进一步判断
 			time = time || 300;
@@ -179,14 +149,6 @@
 	 var tween = {
 	 	eain:function(t, b, c, d){ return - c * (t /= d) * (t - 2) + b}
 	 }
-
-
-	 // ie6 特殊处理
- 	 Jun.mix(Jun.dom, {
-	 	
-	 })
-	
  	
-  })()
- // 这里必须正对ie 6做一些优化
+  })();
  
