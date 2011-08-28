@@ -111,8 +111,10 @@ var WW = {
 			window.console && window.console.log(e);
 			_this.checkBack(modelKey, key, false);
 		};
+
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('src', url);
+		
 		document.getElementsByTagName('head')[0].appendChild(script);
 	}
 };

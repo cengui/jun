@@ -37,7 +37,7 @@
 	// js 利用sort进行排序
  	systemSort:function(array){
 		return array.sort(function(a, b){
-			return a > b;
+			return a - b;//这里一定是 a - b， 不能比较两个数的大小
 		});
 	},
 	// 冒泡排序
