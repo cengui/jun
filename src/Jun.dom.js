@@ -5,27 +5,7 @@
  */
  
  ;(function(){
-	 
-	 var DOM = (function(){
-	 	 var Methods = "g,find,first,last,hasChilds,parent,next,prev,html,attr,removeAttr,css,isElement,isText,htmlForElem,append,before,after,animate";
-		 var MethodList = Methods.split(',');
-		 var i = 0;
-		 var d = {};
-		 for(i; i<MethodList.length; i++){
-			d[MethodList[i]] = (function(key){
-				return function(){
-					var elem = Jun.dom[key].apply(this, [this].concat([].slice.call(arguments)));
-					if(Jun.dom.isElement(elem)){
-						return Jun.mix(elem, DOM);
-					}
-					return elem;
-				}
-			})(MethodList[i])
-		 }
-		return d;
-	 })();
-	 
-	 
+
 	 Jun.dom = {
 		
 		/* query */
@@ -37,27 +17,20 @@
 			return document.getElementById(id);
 		},
 		getTG:function(elem, tagName){
-			//elem = getElem(elem, this);
 			return elem.getElementsByTagName(tagName);
 		},
 		
 		query:function(string){
-			var elem = document.querySelector(string);
-			return Jun.dom.g(elem);
+			return document.querySelector(string);
 		},
 		create:function(tagName){
 			return document.createElement(tagName);
 		},
 		
-		g:function(elem){
-			return Jun.mix(elem, DOM);
-		},
 		
 		/* DOM Three find*/
-		find:function(){
-		
-		},
 		first:function(elem){
+<<<<<<< HEAD
 			//elem = getElem(elem, this);
 			var first = elem.firstElementChild;//高级浏览器
 			if(first || first === null){
@@ -83,6 +56,13 @@
 				return last;
 			}
 			return this.prev(last);
+=======
+			return elem.firstElementChild;//.firstChild;
+		},
+		
+		last:function(elem){
+			return elem.lastElementChild;//.lastChild;
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 		},
 		
 		hasChilds:function(elem){
@@ -90,6 +70,7 @@
 		},
 		
 		parent:function(elem){
+<<<<<<< HEAD
 			return elem.parentNode;//对于已经删除的元素 IE6返回的祖先元素为 document-fragment
 		},
 		
@@ -108,10 +89,18 @@
 			
 			return this.next(next);
 			//return elem.nextElementSibling//.nextSibling;
+=======
+			return elem.parentNode;
+		},
+		
+		next:function(elem){
+			return elem.nextElementSibling//.nextSibling;
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 			// ie 6 测试只有  nextSibling
 		},
 		
 		prev:function(elem){
+<<<<<<< HEAD
 			//elem = getElem(elem, this);
 			var prev = elem.previousElementSibling;//.previousSibling;
 
@@ -125,6 +114,9 @@
 			}
 			return this.prev(prev);
 			
+=======
+			return elem.previousElementSibling;//.previousSibling;
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 		},
 		find:function(elem, string){
 			throw 'Jun.dom.find Error';
@@ -172,6 +164,7 @@
 			return typeof content === "string";
 		},
 		// 文档处理
+<<<<<<< HEAD
 		html:function(elem, html){
 			if(html){
 				elem.innerHTML = html;
@@ -187,9 +180,17 @@
 			ele.innerHTML = html;
 			while(ele.firstChild){
 				documentFragment.appendChild(ele.firstChild);
+=======
+		htmlToElem:function(html){
+			if(typeof html == 'string'){
+				var dom = Jun.dom;
+				var div = document.createDocumentFragment("DIV");// 04-18 lujun
+				return dom.html(div, html);
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 			}
 			return documentFragment;
 		},
+<<<<<<< HEAD
 		remove:function(ele){
 			var parent = this.parent(ele);
 			return parent && parent.removeChild(ele);
@@ -217,6 +218,26 @@
 		
 		//文档动画
 		animate:function(elem, style, val, callback, time, px){
+=======
+		
+		append:function(elem, html){
+			elem.appendChild( Jun.dom.htmlToElem(html) );
+			return elem;
+		},
+		
+		before:function(elem, html){
+			elem.parentNode.insertBefore(Jun.dom.htmlToElem(html), elem);
+			return elem;
+		},
+		after:function(elem, html){
+			var parent = elem.parentNode;
+			parent.lastChild == elem ? parent.appendChild(Jun.dom.htmlToElem(html)) : parent.insertBefore(Jun.dom.htmlToElem(html), elem.nextSibling);
+			return elem;
+		},
+		
+		//文档动画
+		animate:function(elem, style, val, callBack, time, px){
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 			px = px || 'px'; //---   这里还需要进一步判断
 			time = time || 300;
 			var b = parseFloat(Jun.dom.css(elem, style));
@@ -236,6 +257,5 @@
 	 	eain:function(t, b, c, d){ return - c * (t /= d) * (t - 2) + b}
 	 }
  	
-  })()
- // 这里必须正对ie 6做一些优化
+  })();
  

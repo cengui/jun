@@ -150,6 +150,12 @@ GIT 基础
 	
 	删除远程分支
 	git push origin :branchname
+	
+	git branch  –r //查看所有分支信息
+	
+	//获取远端分支
+	$ git checkout -b sf origin/serverfix
+	
 
 服务器上的GIT
 		       ---http://progit.org/book/zh/ch4-3.html	
