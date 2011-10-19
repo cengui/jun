@@ -92,7 +92,7 @@
 			same(Jun.dom.$('test1_4'), Jun.dom.last(ele), "Jun.dom.after");
 			
 			Jun.dom.before(Jun.dom.$('test1_4'), "<div id=\"test1_5\"></div>");
-			same(Jun.dom.next(Jun.dom.$('test1_3')), Jun.dom.$('test1_5'), "Jun.dom.after");
+			same(Jun.dom.next(Jun.dom.$('test1_3')), Jun.dom.$('test1_5'), "Jun.dom.before");
 			
 		//	Jun.dom.append(ele, ele_1);
 		//	same(ele_1, Jun.dom.last(ele),"Jun.dom.append");

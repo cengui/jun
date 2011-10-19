@@ -62,7 +62,7 @@
 		},
 		
 		parent:function(elem){
-			return elem.parentNode;//对于已经删除的元素 IE6返回的祖先元素为 document-fragment
+			return elem.parentNode;//对于已经删除的元素 标准返回null，IE6返回的祖先元素为 document-fragment
 		},
 		
 		next:function(elem){
