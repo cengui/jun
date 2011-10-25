@@ -12,5 +12,8 @@
 		var arr = new Array( length - String(string).length || 0 )
 		arr.push(string); 
 		return arr.join(pad || '0');
+	 },
+	 indexOf:function(string, str){
+		
 	 }
  }

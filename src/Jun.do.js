@@ -101,18 +101,27 @@ var WW = {
 	load:function(url, modelKey, key){//内部 加载一个JS
 		var _this = this;
 		var script = document.createElement('script');
-
+		
+		script.async = false;
 		script[this.support] = function(){
 			if ( /undefined|loaded|complete/.test(script.readyState) ){
+				script[_this.support] = null;
 				_this.checkBack(modelKey, key, true);
 			}
 		};
+		
 		script.onerror = function(e){
 			window.console && window.console.log(e);
 			_this.checkBack(modelKey, key, false);
 		};
+<<<<<<< HEAD
+
+=======
+		
+>>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('src', url);
+		
 		document.getElementsByTagName('head')[0].appendChild(script);
 	}
 };

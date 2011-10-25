@@ -5,27 +5,7 @@
  */
  
  ;(function(){
-	 
-	 var DOM = (function(){
-	 	 var Methods = "g,find,first,last,hasChilds,parent,next,prev,html,attr,removeAttr,css,isElement,isText,htmlForElem,append,before,after,animate";
-		 var MethodList = Methods.split(',');
-		 var i = 0;
-		 var d = {};
-		 for(i; i<MethodList.length; i++){
-			d[MethodList[i]] = (function(key){
-				return function(){
-					var elem = Jun.dom[key].apply(this, [this].concat([].slice.call(arguments)));
-					if(Jun.dom.isElement(elem)){
-						return Jun.mix(elem, DOM);
-					}
-					return elem;
-				}
-			})(MethodList[i])
-		 }
-		return d;
-	 })();
-	 
-	 
+
 	 Jun.dom = {
 		
 		/* query */
@@ -33,57 +13,88 @@
 		get:function(id){
 			return document.getElementById(id);
 		},
-		
+		$:function(id){
+			return document.getElementById(id);
+		},
 		getTG:function(elem, tagName){
-			//elem = getElem(elem, this);
 			return elem.getElementsByTagName(tagName);
 		},
 		
 		query:function(string){
-			var elem = document.querySelector(string);
-			return Jun.dom.g(elem);
+			return document.querySelector(string);
 		},
 		create:function(tagName){
 			return document.createElement(tagName);
 		},
 		
-		g:function(elem){
-			return Jun.mix(elem, DOM);
-		},
 		
 		/* DOM Three find*/
-		find:function(){
-		
-		},
 		first:function(elem){
 			//elem = getElem(elem, this);
-			return elem.firstElementChild;//.firstChild;
+			var first = elem.firstElementChild;//高级浏览器
+			if(first || first === null){
+				return first;
+			}
+			first = elem.firstChild;//ie6 7 8
+			if(first ===null || this.isElement(first)){
+				return first;
+			}
+			return this.next(first);
+			//return elem.firstElementChild;//.firstChild;
+			
 		},
 		
 		last:function(elem){
 			//elem = getElem(elem, this);
-			return elem.lastElementChild;//.lastChild;
+			var last = elem.lastElementChild;//.lastChild;
+			if(last || last === null){
+				return last;
+			}
+			last = elem.lastChild;
+			if(last === null || this.isElement(last)){
+				return last;
+			}
+			return this.prev(last);
 		},
 		
 		hasChilds:function(elem){
-			//elem = getElem(elem, this);
 			return elem.hasChildNodes();
 		},
 		
 		parent:function(elem){
-			//elem = getElem(elem, this);
-			return elem.parentNode;
+			return elem.parentNode;//对于已经删除的元素 标准返回null，IE6返回的祖先元素为 document-fragment
 		},
 		
 		next:function(elem){
 			//elem = getElem(elem, this);
-			return elem.nextElementSibling//.nextSibling;
-			// ie 6 测试只有  nextSibling
+			var next = elem.nextElementSibling;
+			
+			if(next || next === null){
+				return next;
+			}
+			
+			next = elem.nextSibling;
+			if(next === null || this.isElement(next)){
+				return next;
+			}
+			
+			return this.next(next);
 		},
 		
 		prev:function(elem){
+
 			//elem = getElem(elem, this);
-			return elem.previousElementSibling;//.previousSibling;
+			var prev = elem.previousElementSibling;//.previousSibling;
+
+			if(prev || prev === null){
+				return prev;
+			}
+			prev = elem.previousSibling;
+
+			if(prev === null || this.isElement(prev)){
+				return prev;
+			}
+			return this.prev(prev);
 		},
 		find:function(elem, string){
 			throw 'Jun.dom.find Error';
@@ -91,16 +102,6 @@
 		},
 				
 		/* dom 写入 */
-		
-		html:function(elem, html){
-			if(html){
-				elem.innerHTML = html;
-				return elem;
-			}else{
-				return elem.innerHTML;
-			}
-		},
-		
 		attr:function(elem, key, value){
 			if(value){
 				elem.setAttribute(key, value);
@@ -130,43 +131,62 @@
 		// 文档判断
 		isElement:function(elem){
 			//标准dom节点
-			//elem = getElem(elem, this);
 			return elem.nodeType == 1;
 		},
 		
 		isText:function(elem){
 			// 文本节点
-			//elem = getElem(elem, this);
 			return elem.nodeType == 3;
 		},
-		
+		isString:function(content){
+			return typeof content === "string";
+		},
 		// 文档处理
+		html:function(elem, html){
+			if(html){
+				elem.innerHTML = html;
+				return elem;
+			}else{
+				return elem.innerHTML;
+			}
+		},
 		
 		htmlForElem:function(html){
-			if(typeof html == 'string'){
-				var dom = Jun.dom;
-				var div = document.createDocumentFragment("DIV");// 04-18 lujun
-				return dom.html(div, html);
+			var ele = this.create("DIV");
+			var documentFragment = document.createDocumentFragment("DIV");
+			ele.innerHTML = html;
+			while(ele.firstChild){
+				documentFragment.appendChild(ele.firstChild);
 			}
-			return html;
+			return documentFragment;
 		},
-		
-		append:function(elem, html){
-			elem.appendChild( Jun.dom.htmlForElem(html) );
-			return elem;
+
+		remove:function(ele){
+			var parent = this.parent(ele);
+			return parent && parent.removeChild(ele);
 		},
-		
-		before:function(elem, html){
-			elem.parentNode.insertBefore(Jun.dom.htmlForElem(html), elem);
-			return elem;
+		before:function(ele, content){
+			if(this.isString(content)){
+				content = this.htmlForElem(content);
+			}
+			return ele.parentNode.insertBefore(content, ele);
 		},
-		after:function(elem, html){
-			var parent = elem.parentNode;
-			parent.lastChild == elem ? parent.appendChild(Jun.dom.htmlForElem(html)) : parent.insertBefore(Jun.dom.htmlForElem(html), elem.nextSibling);
+		after:function(ele, content){
+			if(this.isString(content)){
+				content = this.htmlForElem(content);
+			}
+			var parent = this.parent(ele);
+			return parent.lastChild == ele ? parent.appendChild(content) : parent.insertBefore(content, ele.nextSibling);
+
+		},
+		append:function(ele, content){
+			if(this.isString(content)){
+				content = this.htmlForElem(content);
+			}
+			return ele.appendChild( content );//如果传入字符串 返回值是 Document Fragment 并且为空
 		},
 		
 		//文档动画
-		
 		animate:function(elem, style, val, callBack, time, px){
 			px = px || 'px'; //---   这里还需要进一步判断
 			time = time || 300;
@@ -175,7 +195,7 @@
 			var st = new Date().getTime();
 			var a = setInterval(function(){
 				var t = new Date().getTime() - st;
-				if( t > time){t = time;clearInterval(a);callBack&&callBack();}
+				if( t > time){t = time;clearInterval(a);callback&&callback();}
 				elem.style[style] = parseFloat(tween.eain(t, b, val, time));// + px;
 			}, 10);
 			return a;
@@ -186,14 +206,6 @@
 	 var tween = {
 	 	eain:function(t, b, c, d){ return - c * (t /= d) * (t - 2) + b}
 	 }
-
-
-	 // ie6 特殊处理
- 	 Jun.mix(Jun.dom, {
-	 	
-	 })
-	
  	
-  })()
- // 这里必须正对ie 6做一些优化
+  })();
  
