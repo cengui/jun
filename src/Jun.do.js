@@ -114,11 +114,7 @@ var WW = {
 			window.console && window.console.log(e);
 			_this.checkBack(modelKey, key, false);
 		};
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> 33a5c2e8b3214978563af8ca77fc4f7b4f5cc8b0
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('src', url);
 		

@@ -1,0 +1,27 @@
+Jun.event = {
+	preventDefault : function (event) {
+	   if (event.preventDefault) {
+		   event.preventDefault();
+	   } else {
+		   event.returnValue = false;
+	   }
+	},
+	stopPropagation : function (event) {  
+	   if (event.stopPropagation) {
+		   event.stopPropagation();
+	   } else {
+		   event.cancelBubble = true;
+	   }
+	},
+	stop : function (event) {
+		this.stopPropagation(event);
+		this.preventDefault(event);
+	},
+	init:function(event){
+		var e = event || window.event;
+		e.preventDefault = this.preventDefault;
+		e.stopPropagation = this.stopPropagation;
+		e.stop = this.stop;
+		return e;
+	}
+}
