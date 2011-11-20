@@ -29,17 +29,26 @@
 		
 		
 		/* DOM Three find*/
-		first:function(elem){
+		first:function(element){
 			//elem = getElem(elem, this);
-			var first = elem.firstElementChild;//高级浏览器
+			var first = element.firstElementChild;//高级浏览器
 			if(first || first === null){
 				return first;
 			}
-			first = elem.firstChild;//ie6 7 8
-			if(first ===null || this.isElement(first)){
-				return first;
+			
+			// first = elem.firstChild;//ie6 7 8
+			// if(first ===null || this.isElement(first)){
+				// return first;
+			// }
+			// return this.next(first);
+			
+			element = element.firstChild;
+			
+			while(element != null && !this.isElement(element)){
+				element = element.nextSibling;
 			}
-			return this.next(first);
+			
+			return element;
 			//return elem.firstElementChild;//.firstChild;
 			
 		},
