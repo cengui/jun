@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+</head>
+<body>
+	<canvas id="tutorial" width="500" height="500"></canvas>
+	<script>
+		var canvas = document.getElementById('tutorial');
+		//var ctx = ;
+		
+		function Canvas(context){
+			
+			this.context = context;
+			this.init();
+			
+		}
+		Canvas.prototype = {
+			constructor:Canvas,
+			init:function(){
+				this.width = 500;
+				this.height = 500;
+				this.proportion = 1;//绘制比例
+				this.jx = 220;//width/2; 0坐标点的x位置
+				this.jy = 150;//height/2; 0坐标点的y位置
+				this.context.moveTo(0,0);
+			},
+			setBasePoint:function(){
+				
+			},
+			setColor:function(color){
+				this.context.fillStyle = color;
+			},
+			drawRect:function(x,y,width, height, coloc){
+				coloc = coloc || "#000";
+				this.context.fillStyle = coloc;
+				this.context.fillRect(x, y, width, height);
+			},
+			drawLine:function(x, y, sx, sy){//目标x y 开始sx sy
+				//this.context.beginPath();
+				
+				if(sx !== undefined && sy !== undefined ){
+					this.context.moveTo(sx,sy);
+				}
+			
+				this.context.lineTo(x, y);
+				this.context.stroke();
+			},
+			fillText:function(text, x, y){
+				this.context.textBaseline = "middle";
+				this.context.fillText(text, x, y);
+			},
+			build:function(){
+				var width = this.width;
+				var height = this.height;
+				this.setColor('#00000');
+				this.drawLine(this.getx(0), this.gety(height), this.getx(0), this.gety(-this.jy));// x轴
+				this.drawLine(this.getx(width), this.gety(0), this.getx(-this.jx), this.gety(0));// y轴
+				this.fillText("O", this.jx+5 , this.jy+10);//原点坐标 0
+				this.buildCoordinate(30);// +x height/2
+			},
+			buildCoordinate:function(lon){//坐标构建起点 终点 最小单位
+				
+				var sx = 0;
+				var sy = 0;
+				
+				// len = 中心点到4个最远点的最大绝对值 / 最小间隔单位
+				var len = Math.max(
+							Math.max( Math.abs(this.getx(0) - this.width), Math.abs(this.getx(0) - 0) ), //x轴绝对最大值
+							Math.max( Math.abs( this.gety(0) - this.height ), Math.abs( this.gety(0) - 0 ) ) //y轴绝对最大值
+						) / lon;
+						
+				//最大的一个象限能显示的点数
+
+				for(var i=1; i<=len;i++){
+				
+					sx = this.getx(lon*i);//第一象限
+					sy = this.gety(0);
+					this.drawLine(sx, sy, sx, sy-5);
+					this.context.textBaseline = "middle";
+					this.context.textAlign = "center";
+					this.fillText(lon*i, sx, sy+10);
+					
+					
+					sx = this.getx(0);//第2象限
+					sy = this.gety(-lon*i);
+					this.drawLine(sx, sy, sx-5, sy);
+					this.context.textAlign = "left";
+					this.fillText(lon*i, sx+5, sy);
+					
+					sx = this.getx(-lon*i);//第3象限
+					sy = this.gety(0);
+					
+					this.drawLine(sx, sy, sx, sy-5);
+					this.fillText(lon*i, sx, sy+10);
+					
+					sx = this.getx(0);//第4象限
+					sy = this.gety(lon*i);
+					this.drawLine(sx, sy, sx-5, sy);
+					this.context.textAlign = "left";
+					this.fillText(lon*i, sx+5, sy+10);
+
+				}
+				
+			},
+			getx:function(x){
+				return x+this.jx;
+			},
+			gety:function(y){
+				return y+this.jy;
+			}
+		};
+		
+		var ctx = new Canvas( canvas.getContext('2d') );
+		ctx.build();
+	</script>
+</body>
+</html>
