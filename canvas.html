@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+ï»¿<!DOCTYPE HTML>
 <html lang="zh">
 <head>
 	<meta charset="UTF-8">
@@ -6,41 +6,126 @@
 	<title>Hello Jun</title>
 </head>
 <body>
+	
 	<canvas id="tutorial" width="500" height="500"></canvas>
+	<div>
+		ç»˜åˆ¶æ¯”ä¾‹ï¼š
+		<select name="" onchange="change1(this)">
+			<option value="2">1:1</option>
+			<option value="2" selected>1:2</option>
+			<option value="5">1:5</option>
+			<option value="10">1:10</option>
+			<option value="20">1:20</option>
+			<option value="50">1:50</option>
+			<option value="100">1:100</option>
+		</select>
+		
+		åˆ»åº¦é—´éš”ï¼š
+		<select name="" onchange="change2(this)">
+			<option value="10">10</option>
+			<option value="30" selected>30</option>
+			<option value="60">60</option>
+			<option value="120">120</option>
+		</select>
+	</div>
 	<script>
+		function change1(elem){
+			ctx.setProportion( parseInt(elem.value) );
+			var st = new Date().getTime();
+			ctx.init();
+			console.log("init", new Date().getTime()-st);
+			
+			st = new Date().getTime();
+			ctx.build();
+			console.log("build", new Date().getTime()-st);
+			
+			st = new Date().getTime();
+			par.draw(ctx);
+			console.log("draw", new Date().getTime()-st);
+		}
+		
+		function change2(elem){
+			//alert(parseInt(elem.value));
+			ctx.setCalibration( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+			par.draw(ctx);
+		}
 		var canvas = document.getElementById('tutorial');
 		//var ctx = ;
 		
-		function Canvas(context){
+		function Canvas(context, width, height){
 			
 			this.context = context;
+			this.width = width || 500;
+			this.height = height || 500;
+			this.calibration = 30;//åˆ»åº¦
+			this.proportion = 2;//ç»˜åˆ¶æ¯”ä¾‹
+			this.jx = 250;//width/2; 0åæ ‡ç‚¹çš„xä½ç½®
+			this.jy = 250;//height/2; 0åæ ‡ç‚¹çš„yä½ç½®
+				
 			this.init();
 			
 		}
 		Canvas.prototype = {
 			constructor:Canvas,
 			init:function(){
-				this.width = 500;
-				this.height = 500;
-				this.proportion = 1;//»æÖÆ±ÈÀı
-				this.jx = 220;//width/2; 0×ø±êµãµÄxÎ»ÖÃ
-				this.jy = 150;//height/2; 0×ø±êµãµÄyÎ»ÖÃ
+				this.context.clearRect(0,0,this.width, this.height);
+				this.width *= this.proportion;
+				this.height *= this.proportion;
 				this.context.moveTo(0,0);
 			},
-			setBasePoint:function(){
-				
+			setProportion:function(proportion){//æ•´æ•°
+				this.proportion = proportion;
 			},
-			setColor:function(color){
+			setCalibration:function(calibration){
+				this.calibration = calibration;//åˆ»åº¦
+			},	
+			onlyQuadrant:function(quadran){//æ˜¾ç¤ºæŸä¸€è±¡é™ 1ï¼Œ 2ï¼Œ 3ï¼Œ 4
+				if(quadran == 1){
+					this.jx = 50;
+					this.jy = 450;
+				}
+				if(quadran == 2){
+					this.jx = 50;
+					this.jy = 50;
+				}
+				if(quadran == 3){
+					this.jx = 450;
+					this.jy = 50;
+				}
+				if(quadran == 4){
+					this.jx = 450;
+					this.jy = 450;
+				}
+				console.log(this.context);
+				
+				this.context.clearRect(0,0,this.width, this.height);
+				
+				this.build();
+			},
+			printPoint:function(x,y,width,height){
+				this.drawRect(this.getx(x), this.gety(y), width || 2, height || 2);
+			},
+			printLine:function(x, y, sx, sy){
+				this.drawLine(this.getx(x), this.gety(y), this.getx(sx),this.gety(sy));
+			},
+			setFillColor:function(color){
 				this.context.fillStyle = color;
+			},
+			setStrokeColor:function(color){
+				this.context.strokeStyle = color;
 			},
 			drawRect:function(x,y,width, height, coloc){
 				coloc = coloc || "#000";
 				this.context.fillStyle = coloc;
+				this.context.beginPath();
 				this.context.fillRect(x, y, width, height);
+				this.context.stroke();
 			},
-			drawLine:function(x, y, sx, sy){//Ä¿±êx y ¿ªÊ¼sx sy
+			drawLine:function(x, y, sx, sy){//ç›®æ ‡x y å¼€å§‹sx sy
 				//this.context.beginPath();
-				
+				this.context.beginPath();
 				if(sx !== undefined && sy !== undefined ){
 					this.context.moveTo(sx,sy);
 				}
@@ -55,66 +140,118 @@
 			build:function(){
 				var width = this.width;
 				var height = this.height;
-				this.setColor('#00000');
-				this.drawLine(this.getx(0), this.gety(height), this.getx(0), this.gety(-this.jy));// xÖá
-				this.drawLine(this.getx(width), this.gety(0), this.getx(-this.jx), this.gety(0));// yÖá
-				this.fillText("O", this.jx+5 , this.jy+10);//Ô­µã×ø±ê 0
-				this.buildCoordinate(30);// +x height/2
+				//this.context.save();
+				this.setStrokeColor('#000000');
+				this.drawLine(this.getx(0), this.gety(this.jy-height), this.getx(0), this.gety(this.jy*this.proportion));// yè½´
+				this.drawLine(this.getx(width-this.jx), this.gety(0), this.getx(-this.jx*this.proportion), this.gety(0));// xè½´
+				this.fillText("O", this.jx+5 , this.jy+10);//åŸç‚¹åæ ‡ 0
+				this.buildCoordinate(this.calibration * this.proportion);// +x height/2
+				
 			},
-			buildCoordinate:function(lon){//×ø±ê¹¹½¨Æğµã ÖÕµã ×îĞ¡µ¥Î»
+			buildCoordinate:function(calibration){//åæ ‡æ„å»ºèµ·ç‚¹ ç»ˆç‚¹ æœ€å°å•ä½
 				
 				var sx = 0;
 				var sy = 0;
 				
-				// len = ÖĞĞÄµãµ½4¸ö×îÔ¶µãµÄ×î´ó¾ø¶ÔÖµ / ×îĞ¡¼ä¸ôµ¥Î»
+				// len = ä¸­å¿ƒç‚¹åˆ°4ä¸ªæœ€è¿œç‚¹çš„æœ€å¤§ç»å¯¹å€¼ / æœ€å°é—´éš”å•ä½
 				var len = Math.max(
-							Math.max( Math.abs(this.getx(0) - this.width), Math.abs(this.getx(0) - 0) ), //xÖá¾ø¶Ô×î´óÖµ
-							Math.max( Math.abs( this.gety(0) - this.height ), Math.abs( this.gety(0) - 0 ) ) //yÖá¾ø¶Ô×î´óÖµ
-						) / lon;
+							Math.max( Math.abs(this.getx(0) - this.width), Math.abs(this.getx(0) - 0) ), //xè½´ç»å¯¹æœ€å¤§å€¼
+							Math.max( Math.abs( this.gety(0) - this.height ), Math.abs( this.gety(0) - 0 ) ) //yè½´ç»å¯¹æœ€å¤§å€¼
+						) / calibration;
 						
-				//×î´óµÄÒ»¸öÏóÏŞÄÜÏÔÊ¾µÄµãÊı
-
+				//æœ€å¤§çš„ä¸€ä¸ªè±¡é™èƒ½æ˜¾ç¤ºçš„ç‚¹æ•°
+				this.setFillColor('#d8d8d8');
 				for(var i=1; i<=len;i++){
 				
-					sx = this.getx(lon*i);//µÚÒ»ÏóÏŞ
+					sx = this.getx(calibration*i);//ç¬¬ä¸€è±¡é™
 					sy = this.gety(0);
 					this.drawLine(sx, sy, sx, sy-5);
 					this.context.textBaseline = "middle";
 					this.context.textAlign = "center";
-					this.fillText(lon*i, sx, sy+10);
+					this.fillText(calibration*i, sx, sy+10);
 					
 					
-					sx = this.getx(0);//µÚ2ÏóÏŞ
-					sy = this.gety(-lon*i);
+					sx = this.getx(0);//ç¬¬2è±¡é™
+					sy = this.gety(-calibration*i);
 					this.drawLine(sx, sy, sx-5, sy);
 					this.context.textAlign = "left";
-					this.fillText(lon*i, sx+5, sy);
+					this.fillText(calibration*i, sx+5, sy);
 					
-					sx = this.getx(-lon*i);//µÚ3ÏóÏŞ
+					sx = this.getx(-calibration*i);//ç¬¬3è±¡é™
 					sy = this.gety(0);
 					
 					this.drawLine(sx, sy, sx, sy-5);
-					this.fillText(lon*i, sx, sy+10);
+					this.fillText(calibration*i, sx, sy+10);
 					
-					sx = this.getx(0);//µÚ4ÏóÏŞ
-					sy = this.gety(lon*i);
+					sx = this.getx(0);//ç¬¬4è±¡é™
+					sy = this.gety(calibration*i);
 					this.drawLine(sx, sy, sx-5, sy);
 					this.context.textAlign = "left";
-					this.fillText(lon*i, sx+5, sy+10);
+					this.fillText(calibration*i, sx+5, sy+10);
 
 				}
-				
+
 			},
 			getx:function(x){
-				return x+this.jx;
+				return (this.jx+(x/this.proportion));
 			},
 			gety:function(y){
-				return y+this.jy;
+				return (this.jy-(y/this.proportion));
 			}
 		};
 		
+		
+		function Parabola(a,b,c){//æŠ›ç‰©çº¿å¯¹è±¡
+			//ax^2*bx+c
+			// a>0 å¼€å¤´å‘ä¸Š a<0å¼€å£å‘ä¸‹ 
+			//b 
+			//c >0 åŸç‚¹åœ¨yæ­£åŠè½´
+			// c <0 åŸç‚¹åœ¨yè´ŸåŠè½´
+			this.a = a == undefined ? 0 : a;
+			this.b = b == undefined ? 0 : b;
+			this.c = c == undefined ? 0 : c;
+		};
+		Parabola.prototype = {
+			constructor:Parabola,
+			getfx:function(x){//æŠ›ç‰©çº¿æ–¹ç¨‹
+				//ax^2 + bx + c
+				return this.a*(x*x)+this.b*x+this.c;
+				
+			},
+			getpx:function(){//é¡¶ç‚¹åæ ‡
+				// [-b/2a, (4ac-b)/4a]
+				return {x:-this.b/(2*this.a), y:(4*this.a*this.c-this.b)/(4*this.a)};
+			},
+			symmetryx:function(){//å¯¹ç§°è½´
+				// [-b/2*a]
+				return -this.b/(2*this.a);
+			},
+			min:function(){
+				return (4*this.a*this.c-this.b*this.b)/(4*this.a);
+				//å¤šäº†ä¸€ä¸ª*this.b
+			},
+			draw:function(context){// context printPoint //å¿…è¦ç»˜åˆ¶ç‚¹çš„æ–¹æ³•
+				context.build();
+				for(var i=-100; i<300; i++){
+					context.printPoint(i, this.getfx(i));
+				}
+				context.setStrokeColor("#ff0000");
+				context.printLine(this.symmetryx(), this.min(), this.symmetryx(), this.getfx(300));
+			}
+		};
+
+		var par = new Parabola(0.005, 0.5, 0);
+		/**
+		var par = new Parabola();
+		par.getfx = function(x){
+			return Math.sqrt(-4*x);
+		}
+		*/
 		var ctx = new Canvas( canvas.getContext('2d') );
-		ctx.build();
+		par.draw(ctx);
+		//y*y = 4x;
+		//y = Math.sqrt(4x);
+		
 	</script>
 </body>
 </html>
