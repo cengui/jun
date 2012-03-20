@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<style rel="stylesheet">
+		.box{border:1px solid #000;height:100px;
+			/*alpha(opacity=50) 两个滤镜直接添加到后面就行。不需要再写filter */
+			background:-moz-linear-gradient(bottom,#99CCFF,#6699CC);
+			background:-webkit-linear-gradient(bottom,#99CCFF,#6699CC);
+			filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#99CCFF,endColorstr=#6699CC);
+			
+		}
+		input[type="button"]{
+			padding:.3em .8em;
+			border:none;
+			border-radius:2px;
+			color:#fff;
+			cursor:pointer;
+			/*background:-webkit-gradient(linear,left top,left bottom,from(#99CCFF),to(#6699CC)); 以前的chrome */
+			background:-moz-linear-gradient(bottom,#3399CC,#99CCFF);
+			background:-webkit-linear-gradient(bottom,#3399CC,#99CCFF);
+			filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#66CCFF,endColorstr=#3399CC);
+		}
+		input[type="button"]:hover{
+			background:-webkit-linear-gradient(top,#3399CC,#99CCFF);
+			background:-moz-linear-gradient(top,#3399CC,#99CCFF);
+			filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#66CCFF,endColorstr=#3399CC);
+		}
+	</style>
+</head>
+<body>
+	<div class="box">111</div>
+	<input type="button" value="确定提交" />
+</body>
+</html>

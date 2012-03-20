@@ -11,15 +11,45 @@
 			WW.add("dom","src/Jun.dom.js");
 			WW.add("string","src/Jun.string.js");
 		</script>
+		
+		<script src="src/Jun.ajax.js"></script>
+		<script src="src/Jun.array.js"></script>
+		<script src="src/Jun.com.js"></script>
+		<script src="src/Jun.dom.js"></script>
+		<script src="src/Jun.string.js"></script>
+		<script src="src/Jun.event.js"></script>
 	</head>
-	<body onload="loadJS();">
+	<body onclick = "alert();" >
 		Hello World  世界你好
+		<div id="eventTest" z-index="-1">Event Test</div>
+		
+
 	<body>
 	<script>
-		function loadJS(){
-			WW.use("ajax,array,com,dom,string", function(){
-				console.log("ok");
-			})
-		}
+		///function loadJS(){
+		//	WW.use("ajax,array,com,dom,string", function(){
+				//console.log("ok");
+				
+				var div = Jun.dom.$("eventTest");
+				var click = function(event){
+					
+					var e = event || window.event;
+					var event = new Jun.event.initEvent(e);
+					//event.stop();
+					//alert(e.keyCode);
+					//alert(e.which);
+					
+					//var e = new Jun.event.initEvent(event);
+					//alert(e.event.keycode);
+				};
+				
+				Jun.dom.on(div, 'click', click);
+				Jun.dom.on(document.body, 'keyup', click);
+				//Jun.dom.off(div, 'click', click);
+				
+	//		})
+		//}
+		
+		
 	</script>
 </html>

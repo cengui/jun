@@ -71,6 +71,7 @@
 		},
 		
 		parent:function(elem){
+			//return elem.parentElement; ie 非标准
 			return elem.parentNode;//对于已经删除的元素 标准返回null，IE6返回的祖先元素为 document-fragment
 		},
 		
@@ -208,6 +209,26 @@
 				elem.style[style] = parseFloat(tween.eain(t, b, val, time));// + px;
 			}, 10);
 			return a;
+		},
+		on:function(element, type, fn){
+			if(element.addEventListener){
+				element.addEventListener(type, fn, false);
+			}else if(element.attachEvent){
+				element.attachEvent("on"+type, fn);// this会指向window
+			}else{
+				element["on"+type] = fn;
+			};
+			return element;
+		},
+		off:function(element, type, fn){
+			if(element.removeEventListener){
+				element.removeEventListener(type, fn, false);
+			}else if(element.detachEvent){
+				element.detachEvent("on"+type, fn);
+			}else{
+				element["on"+type] = null;
+			};
+			return element;
 		}
 	 };
 	 

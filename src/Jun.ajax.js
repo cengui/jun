@@ -22,6 +22,7 @@
 	ajax:function(json){
 		var xmlhttp = Jun.ajax.createXMLHTTP(),
 			dataArr = [];
+		
         xmlhttp.onreadystatechange = function(){
             if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
 				var dataString = xmlhttp.responseText;
@@ -37,14 +38,17 @@
         }
         
 		for( var e in json.data ){
-			arr.push(e + '=' + encodeURIComponent(json.data[e]));
+			dataArr.push(e + '=' + encodeURIComponent(json.data[e]));
 		}
 		
+
 		if(json.data != undefined && json.type == 'get'){
-            url += '?' + dataArr.join('&');
+            json.url += '?' + dataArr.join('&');
         }
         xmlhttp.open(json.type, json.url, true);
-        xmlhttp.send(json.type == 'post' ? dataArr.join('&') : null);
+		
+		xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
+        xmlhttp.send("a=1&b=2");
 	},
 	getJSON:function(url, callBack, data){
 		Jun.ajax.ajax({

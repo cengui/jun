@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+	
+	
+	<script>
+		var push = Array.prototype.push;
+		var object = {};
+		module("Jun.string");
+		test("Jun.String", function(){
+			var object = {};
+			push.call(object, "a");
+			equals(object.length, 1,"push.call(obj,'a') obj.length 会自动增加");
+			push.call(object, "b");
+			equals(object.length, 2,"push.call(obj,'b') obj.length 会自动增加");
+			
+			object.length = 0;
+			push.call(object, "c");
+			equals(object.length, 1,"push.call(obj,'c') obj.length 会自动增加");
+			//console.log(object);
+		});
+		
+		function objectPush(object, item){
+			object.length = object.length || 0;
+			object[object.length] = item;
+			object.length++;
+			return object;
+		}
+		
+		var obj = {
+			length:0,
+			push:Array.prototype.push,
+			//sort: [].sort,
+			//slice:Array.prototype.slice,
+			splice:Array.prototype.splice//必须
+		};
+		
+		
+		obj.push(1);
+		obj.push(2);
+		obj.length = 0;
+		console.log(obj);
+	</script>
+</body>
+</html>

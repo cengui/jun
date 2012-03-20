@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>animation  transition</title>
+	</script>
+	<style  rel="stylesheet">
+	
+		/*
+			transform 变形
+			transform: rotate | scale | skew | translate |matrix;
+		*/
+
+		/*
+			浏览器前缀
+				IE9 -ms- 
+				chrome,Safari -webkit-
+				opera -o-
+				firefox -moz-
+				linux下某款浏览器 -khtml-
+				
+		*/
+
+		.transform{
+			vertical-align: top;
+			width:100px;
+			height:100px;
+			background:#000;
+			display:inline-block;
+			color:#fff;
+			-moz-transition:all .1s ease-out;
+			-webkit-transition:all .1s ease-out;
+		}
+		
+		.rotate:hover{
+			-moz-transform:rotate(30deg);
+			-webkit-transform:rotate(30deg);
+		}
+		
+		.translate:hover{
+			/*
+				transform:translateX();单独变化X
+				transform:translateY();单独变化Y
+			*/
+			-moz-transform:translate(10px,20px);
+			-webkit-transform:translate(10px,20px);
+		}
+		
+		.scale:hover{
+			/*
+				transform:scaleX();单独变化X
+				transform:scaleY();单独变化Y
+			*/
+			-moz-transform:scale(.5,.5);
+			-webkit-transform:scale(.5,.7);
+		}
+		
+		.skew:hover{
+			/*
+				transform:skewX(<angle>) 
+				transform:skewY(<angle>) 
+			*/
+			-moz-transform:skew(20deg, 10deg);
+			-webkit-transform:skew(20deg, 0);
+		}
+		
+		.matrix:hover{
+			/*
+				具体比较复杂
+				matrix(<number>, <number>, <number>, <number>, <number>, <number>) 	
+			*/
+			
+		}
+		
+		.origin:hover{
+			/*变化几点被改变*/
+			-moz-transform-origin:left top; /*与background-position 的参数类似*/
+			-webkit-transform-origin:10px 10px;/*与background-position 的参数类似*/
+			
+			-moz-transform:rotate(30deg);
+			-webkit-transform:rotate(30deg);
+		}
+	</style>
+	
+	
+</head>
+<body>
+	
+	<div class="transform rotate">rotate,旋转</div>
+	<div class="transform translate">translate，移动</div>
+	<div class="transform scale">scale，缩放</div>
+	<div class="transform skew">rotate变形</div>
+	<div class="transform matrix">matrix 无</div>
+	<div class="transform origin">origin 改变基点</div>
+	
+	
+	<ul>
+		<li><a href="http://www.w3cplus.com/content/css3-transform">http://www.w3cplus.com/content/css3-transform</a></li>
+	</ul>
+	
+	<div style="border-radius:10px;width:100px;height:100px;background:#000;">
+		<div style="border-radius:10px;width:100px;height:inherit;background:#f30;">border-radius无法继承，可以在父元素上写 overflow:hidden; 就不需要在子元素上重复定义圆角了</div>
+	</div>
+</body>
+</html>

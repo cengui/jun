@@ -1,0 +1,281 @@
+﻿<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+</head>
+<body>
+	
+	<canvas id="tutorial" width="500" height="500"></canvas>
+	<div>
+		绘制比例：
+		<select name="" onchange="change1(this)">
+			<option value="1">1:1</option>
+			<option value="2" selected>1:2</option>
+			<option value="5">1:5</option>
+			<option value="10">1:10</option>
+			<option value="20">1:20</option>
+			<option value="50">1:50</option>
+			<option value="100">1:100</option>
+		</select>
+		
+		刻度间隔：
+		<select name="" onchange="change2(this)">
+			<option value="10">10</option>
+			<option value="30" selected>30</option>
+			<option value="60">60</option>
+			<option value="120">120</option>
+		</select>
+		
+		显示某个象限：
+		<select name="" onchange="change3(this)">
+			<option value="0" selected>居中</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select>
+	</div>
+	<script>
+		function change1(elem){
+			ctx.setProportion( parseInt(elem.value) );
+			var st = new Date().getTime();
+			ctx.init();
+			console.log("init", new Date().getTime()-st);
+			
+			st = new Date().getTime();
+			ctx.build();
+			console.log("build", new Date().getTime()-st);
+			
+			st = new Date().getTime();
+			par.draw(ctx);
+			console.log("draw", new Date().getTime()-st);
+		}
+		
+		function change2(elem){
+			//alert(parseInt(elem.value));
+			ctx.setCalibration( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+			par.draw(ctx);
+		}
+		
+		function change3(elem){
+			//alert(parseInt(elem.value));
+			ctx.onlyQuadrant( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+			par.draw(ctx);
+		}
+		
+		
+		var canvas = document.getElementById('tutorial');
+		//var ctx = ;
+		
+		function Canvas(context, width, height){
+			
+			this.context = context;
+			this.width = width || 500;
+			this.height = height || 500;
+			this.calibration = 30;//刻度
+			this.proportion = 2;//绘制比例
+			this.jx = 250;//width/2; 0坐标点的x位置
+			this.jy = 250;//height/2; 0坐标点的y位置
+				
+			this.init();
+			
+		}
+		Canvas.prototype = {
+			constructor:Canvas,
+			init:function(){
+				this.context.clearRect(0,0,this.width, this.height);
+				//this.width *= this.proportion;
+				//this.height *= this.proportion;
+				this.context.moveTo(0,0);
+			},
+			setProportion:function(proportion){//整数
+				this.proportion = proportion;
+			},
+			setCalibration:function(calibration){
+				this.calibration = calibration;//刻度
+			},	
+			onlyQuadrant:function(quadran){//显示某一象限 1， 2， 3， 4
+				if(quadran == 0){
+					this.jx = this.width/2;
+					this.jy = this.height/2;
+				}
+				
+				if(quadran == 1){
+					this.jx = 50;
+					this.jy = 450;
+				}
+				if(quadran == 2){
+					this.jx = 450;
+					this.jy = 450;
+				}
+				if(quadran == 3){
+					this.jx = 450;
+					this.jy = 50;
+				}
+				if(quadran == 4){
+					
+					this.jx = 50;
+					this.jy = 50;
+				}
+			},
+			printPoint:function(x,y,width,height){
+				this.drawRect(this.getx(x), this.gety(y), width || 2, height || 2);
+			},
+			printLine:function(x, y, sx, sy){
+				this.drawLine(this.getx(x), this.gety(y), this.getx(sx),this.gety(sy));
+			},
+			setFillColor:function(color){
+				this.context.fillStyle = color;
+			},
+			setStrokeColor:function(color){
+				this.context.strokeStyle = color;
+			},
+			drawRect:function(x,y,width, height, coloc){
+				coloc = coloc || "#000";
+				this.context.fillStyle = coloc;
+				this.context.beginPath();
+				this.context.fillRect(x, y, width, height);
+				this.context.stroke();
+			},
+			drawLine:function(x, y, sx, sy){//目标x y 开始sx sy
+				this.context.beginPath();
+				if(sx !== undefined && sy !== undefined ){
+					this.context.moveTo(sx,sy);
+				}
+				//this.context.beginPath();
+				this.context.lineTo(x, y);
+				this.context.stroke();
+			},
+			fillText:function(text, x, y){
+				this.context.textBaseline = "middle";
+				this.context.fillText(text, x, y);
+			},
+			build:function(){
+				var width = this.width;
+				var height = this.height;
+				//this.context.save();
+				this.setStrokeColor('#000000');
+				//this.drawLine(this.getx(0), this.gety(this.jy-height), this.getx(0), this.gety(this.jy*this.proportion));// y轴
+				//this.drawLine(this.getx(width-this.jx), this.gety(0), this.getx(-this.jx*this.proportion), this.gety(0));// x轴
+				//console.log(this.jx, this.height/this.proportion, this.jx, 0);
+				this.drawLine(this.jx, this.height, this.jx, 0);// y
+				this.drawLine(0, this.jy, this.width,  this.jy);// x
+				this.fillText("O", this.jx+5 , this.jy+10);//原点坐标 0
+				this.buildCoordinate(this.calibration * this.proportion);// +x height/2
+				
+			},
+			buildCoordinate:function(calibration){//calibration 最小刻度
+				
+				var sx = 0;
+				var sy = 0;
+				
+				// len = 中心点到4个最远点的最大绝对值 / 最小间隔单位
+				var width = this.width * this.proportion;
+				var height = this.height * this.proportion;
+				var len = Math.max(
+							Math.max( Math.abs(this.getx(0) - width), Math.abs(this.getx(0) - 0) ), //x轴绝对最大值
+							Math.max( Math.abs( this.gety(0) - height ), Math.abs( this.gety(0) - 0 ) ) //y轴绝对最大值
+						) / calibration;
+						
+				//最大的一个象限能显示的点数
+				this.setFillColor('#d8d8d8');
+				for(var i=1; i<=len;i++){
+				
+					sx = this.getx(calibration*i);//第一象限
+					sy = this.gety(0);
+					this.drawLine(sx, sy, sx, sy-5);
+					this.context.textBaseline = "middle";
+					this.context.textAlign = "center";
+					this.fillText(calibration*i, sx, sy+10);
+					
+					
+					sx = this.getx(0);//第4象限
+					sy = this.gety(-calibration*i);
+					this.drawLine(sx, sy, sx-5, sy);
+					this.context.textAlign = "left";
+					this.fillText(calibration*i, sx+5, sy);
+					
+					sx = this.getx(-calibration*i);//第3象限
+					sy = this.gety(0);
+					this.drawLine(sx, sy, sx, sy-5);
+					this.context.textAlign = "center";
+					this.fillText(calibration*i, sx, sy+10);
+					
+					sx = this.getx(0);//第2象限
+					sy = this.gety(calibration*i);
+					this.drawLine(sx, sy, sx-5, sy);
+					this.context.textAlign = "left";
+					this.fillText(calibration*i, sx+5, sy);
+
+				}
+
+			},
+			getx:function(x){
+				return this.jx+(x/this.proportion);
+			},
+			gety:function(y){
+				return this.jy-(y/this.proportion);
+			}
+		};
+		
+		
+		function Parabola(a,b,c){//抛物线对象
+			//ax^2*bx+c
+			// a>0 开头向上 a<0开口向下 
+			//b 
+			//c >0 原点在y正半轴
+			// c <0 原点在y负半轴
+			this.a = a == undefined ? 0 : a;
+			this.b = b == undefined ? 0 : b;
+			this.c = c == undefined ? 0 : c;
+		};
+		Parabola.prototype = {
+			constructor:Parabola,
+			getfx:function(x){//抛物线方程
+				//ax^2 + bx + c
+				return this.a*(x*x)+this.b*x+this.c;
+				
+			},
+			getpx:function(){//顶点坐标
+				// [-b/2a, (4ac-b)/4a]
+				return {x:-this.b/(2*this.a), y:(4*this.a*this.c-this.b)/(4*this.a)};
+			},
+			symmetryx:function(){//对称轴
+				// [-b/2*a]
+				return -this.b/(2*this.a);
+			},
+			min:function(){
+				return (4*this.a*this.c-this.b*this.b)/(4*this.a);
+				//多了一个*this.b
+			},
+			draw:function(context){// context printPoint //必要绘制点的方法
+				context.build();
+				for(var i=-100; i<300; i++){
+					context.printPoint(i, this.getfx(i));
+				}
+				context.setStrokeColor("#ff0000");
+				context.printLine(this.symmetryx(), this.min(), this.symmetryx(), this.getfx(300));
+			}
+		};
+
+		var par = new Parabola(0.005, 0.5, 0);
+		/**
+		var par = new Parabola();
+		par.getfx = function(x){
+			return Math.sqrt(-4*x);
+		}
+		*/
+		var ctx = new Canvas( canvas.getContext('2d') );
+		par.draw(ctx);
+		//y*y = 4x;
+		//y = Math.sqrt(4x);
+		
+	</script>
+</body>
+</html>

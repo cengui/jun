@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>animation  transition</title>
+	</script>
+	<style  rel="stylesheet">
+	
+		/*
+			transition-property
+			Values: none | all | <property>
+			Initial Value: all
+			Description: Specifies what property triggers an animation. A value of none means there is no transition. A value of all means that every animatable property triggers an animation. Otherwise an animation will only trigger when the exact specified property changes value.
+
+			transition-duration
+			Values: <time>
+			Inital Value: 0
+			Description: Specifies how long the transition should take. The default is 0.
+
+			transition-timing-function
+			Values: ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(x1, y1, x2, y2)
+			Initial Value: ease
+		*/
+
+		/*
+			浏览器前缀
+				IE9 -ms- 
+				chrome,Safari -webkit-
+				opera -o-
+				firefox -moz-
+				linux下某款浏览器 -khtml-
+				
+		*/
+
+		.animation{
+		
+			width:100px;
+			height:20px;
+			background:#000;
+			color:#fff;
+			
+			/*
+			-moz-transition:width 1s ease-out;
+			-webkit-transition:width 1s ease-out;
+			*/
+			
+			/*
+			-moz-transition:width 1s ease-out,color 1s ease-out;
+			-webkit-transition:width 1s ease-out,color 1s ease-out;
+			*/
+			
+			/* 注释掉的代码 和当前的代码等价 */
+			
+			-webkit-transition-property:width,height,color;/*必须使用逗号分隔*/
+			-webkit-transition-duration:1s,2s,2s;/*也可以分别设置时间*/
+			-webkit-transition-timing-function:ease-out,ease-out,ease-out;
+		
+			-moz-transition-property:width,color,height;
+			-moz-transition-duration:1s,2s,3s;
+			-moz-transition-timing-function:ease-out;
+
+		}
+		
+		.animation:hover{
+			width:150px;
+			height:150px;
+			color:#f30;
+		}
+	</style>
+	
+	
+</head>
+<body>
+	
+	
+	
+	<div class="animation">
+		鼠标移动到DIV上
+	</div>
+	<ul>
+		<li><a href="http://www.webkit.org/blog/138/css-animation/">http://www.webkit.org/blog/138/css-animation/</a></li>
+		<li><a href="http://webkit.org/blog/130/css-transforms/">http://webkit.org/blog/130/css-transforms/</a></li>
+		<li><a href="http://webkit.org/blog/386/3d-transforms/">http://webkit.org/blog/386/3d-transforms/</a></li>
+		<li><a href="http://www.w3cplus.com/content/css3-transition">http://www.w3cplus.com/content/css3-transition</a></li>
+	</ul>
+	
+	
+	
+</body>
+</html>
