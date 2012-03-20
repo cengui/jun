@@ -27,6 +27,15 @@
 			<option value="60">60</option>
 			<option value="120">120</option>
 		</select>
+		
+		显示某个象限：
+		<select name="" onchange="change3(this)">
+			<option value="0" selected>居中</option>
+			<option value="1">1</option>
+			<option value="2" selected>2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select>
 	</div>
 	<script>
 		function change1(elem){
@@ -51,6 +60,16 @@
 			ctx.build();
 			par.draw(ctx);
 		}
+		
+		function change3(elem){
+			//alert(parseInt(elem.value));
+			ctx.onlyQuadrant( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+			par.draw(ctx);
+		}
+		
+		
 		var canvas = document.getElementById('tutorial');
 		//var ctx = ;
 		
@@ -71,8 +90,8 @@
 			constructor:Canvas,
 			init:function(){
 				this.context.clearRect(0,0,this.width, this.height);
-				this.width *= this.proportion;
-				this.height *= this.proportion;
+				//this.width *= this.proportion;
+				//this.height *= this.proportion;
 				this.context.moveTo(0,0);
 			},
 			setProportion:function(proportion){//整数
@@ -82,27 +101,28 @@
 				this.calibration = calibration;//刻度
 			},	
 			onlyQuadrant:function(quadran){//显示某一象限 1， 2， 3， 4
+				if(quadran == 0){
+					this.jx = this.width/2;
+					this.jy = this.height/2;
+				}
+				
 				if(quadran == 1){
 					this.jx = 50;
 					this.jy = 450;
 				}
 				if(quadran == 2){
-					this.jx = 50;
-					this.jy = 50;
+					this.jx = 450;
+					this.jy = 450;
 				}
 				if(quadran == 3){
 					this.jx = 450;
 					this.jy = 50;
 				}
 				if(quadran == 4){
-					this.jx = 450;
-					this.jy = 450;
+					
+					this.jx = 50;
+					this.jy = 50;
 				}
-				console.log(this.context);
-				
-				this.context.clearRect(0,0,this.width, this.height);
-				
-				this.build();
 			},
 			printPoint:function(x,y,width,height){
 				this.drawRect(this.getx(x), this.gety(y), width || 2, height || 2);
@@ -124,12 +144,11 @@
 				this.context.stroke();
 			},
 			drawLine:function(x, y, sx, sy){//目标x y 开始sx sy
-				//this.context.beginPath();
 				this.context.beginPath();
 				if(sx !== undefined && sy !== undefined ){
 					this.context.moveTo(sx,sy);
 				}
-			
+				//this.context.beginPath();
 				this.context.lineTo(x, y);
 				this.context.stroke();
 			},
@@ -142,21 +161,26 @@
 				var height = this.height;
 				//this.context.save();
 				this.setStrokeColor('#000000');
-				this.drawLine(this.getx(0), this.gety(this.jy-height), this.getx(0), this.gety(this.jy*this.proportion));// y轴
-				this.drawLine(this.getx(width-this.jx), this.gety(0), this.getx(-this.jx*this.proportion), this.gety(0));// x轴
+				//this.drawLine(this.getx(0), this.gety(this.jy-height), this.getx(0), this.gety(this.jy*this.proportion));// y轴
+				//this.drawLine(this.getx(width-this.jx), this.gety(0), this.getx(-this.jx*this.proportion), this.gety(0));// x轴
+				//console.log(this.jx, this.height/this.proportion, this.jx, 0);
+				this.drawLine(this.jx, this.height, this.jx, 0);// y
+				this.drawLine(0, this.jy, this.width,  this.jy);// x
 				this.fillText("O", this.jx+5 , this.jy+10);//原点坐标 0
 				this.buildCoordinate(this.calibration * this.proportion);// +x height/2
 				
 			},
-			buildCoordinate:function(calibration){//坐标构建起点 终点 最小单位
+			buildCoordinate:function(calibration){//calibration 最小刻度
 				
 				var sx = 0;
 				var sy = 0;
 				
 				// len = 中心点到4个最远点的最大绝对值 / 最小间隔单位
+				var width = this.width * this.proportion;
+				var height = this.height * this.proportion;
 				var len = Math.max(
-							Math.max( Math.abs(this.getx(0) - this.width), Math.abs(this.getx(0) - 0) ), //x轴绝对最大值
-							Math.max( Math.abs( this.gety(0) - this.height ), Math.abs( this.gety(0) - 0 ) ) //y轴绝对最大值
+							Math.max( Math.abs(this.getx(0) - width), Math.abs(this.getx(0) - 0) ), //x轴绝对最大值
+							Math.max( Math.abs( this.gety(0) - height ), Math.abs( this.gety(0) - 0 ) ) //y轴绝对最大值
 						) / calibration;
 						
 				//最大的一个象限能显示的点数
@@ -193,10 +217,10 @@
 
 			},
 			getx:function(x){
-				return (this.jx+(x/this.proportion));
+				return this.jx+(x/this.proportion);
 			},
 			gety:function(y){
-				return (this.jy-(y/this.proportion));
+				return this.jy-(y/this.proportion);
 			}
 		};
 		
