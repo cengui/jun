@@ -11,7 +11,7 @@
 	<div>
 		绘制比例：
 		<select name="" onchange="change1(this)">
-			<option value="2">1:1</option>
+			<option value="1">1:1</option>
 			<option value="2" selected>1:2</option>
 			<option value="5">1:5</option>
 			<option value="10">1:10</option>
@@ -32,7 +32,7 @@
 		<select name="" onchange="change3(this)">
 			<option value="0" selected>居中</option>
 			<option value="1">1</option>
-			<option value="2" selected>2</option>
+			<option value="2">2</option>
 			<option value="3">3</option>
 			<option value="4">4</option>
 		</select>
@@ -195,7 +195,7 @@
 					this.fillText(calibration*i, sx, sy+10);
 					
 					
-					sx = this.getx(0);//第2象限
+					sx = this.getx(0);//第4象限
 					sy = this.gety(-calibration*i);
 					this.drawLine(sx, sy, sx-5, sy);
 					this.context.textAlign = "left";
@@ -203,15 +203,15 @@
 					
 					sx = this.getx(-calibration*i);//第3象限
 					sy = this.gety(0);
-					
 					this.drawLine(sx, sy, sx, sy-5);
+					this.context.textAlign = "center";
 					this.fillText(calibration*i, sx, sy+10);
 					
-					sx = this.getx(0);//第4象限
+					sx = this.getx(0);//第2象限
 					sy = this.gety(calibration*i);
 					this.drawLine(sx, sy, sx-5, sy);
 					this.context.textAlign = "left";
-					this.fillText(calibration*i, sx+5, sy+10);
+					this.fillText(calibration*i, sx+5, sy);
 
 				}
 
