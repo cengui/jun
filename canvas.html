@@ -78,8 +78,8 @@
 		function Canvas(context, width, height){
 			
 			this.context = context;
-			this.width = width || 1000;
-			this.height = height || 500;
+			this.width = width;
+			this.height = height;
 			this.calibration = 30;//刻度
 			this.proportion = 2;//绘制比例
 			this.jx = this.width/2; //0坐标点的x位置
@@ -95,6 +95,9 @@
 				//this.width *= this.proportion;
 				//this.height *= this.proportion;
 				this.context.moveTo(0,0);
+			},
+			clear:function(x, y, width, height){
+				this.context.clearRect(x ||0,y || 0,width || this.width, height || this.height);
 			},
 			setProportion:function(proportion){//整数
 				this.proportion = proportion;
@@ -162,9 +165,8 @@
 			setStrokeColor:function(color){
 				this.context.strokeStyle = color;
 			},
-			drawRect:function(x,y,width, height, coloc){
-				coloc = coloc || "#000";
-				this.context.fillStyle = coloc;
+			drawRect:function(x,y,width, height){
+
 				this.context.beginPath();
 				this.context.fillRect(x, y, width, height);
 				this.context.stroke();
@@ -186,23 +188,19 @@
 				this.context.fillText(text, x, y);
 			},
 			build:function(){
-				//var width = this.width;
-				//var height = this.height;
-				//this.context.save();
-				this.setStrokeColor('#000000');
-				//this.drawLine(this.getx(0), this.gety(this.jy-height), this.getx(0), this.gety(this.jy*this.proportion));// y轴
-				//this.drawLine(this.getx(width-this.jx), this.gety(0), this.getx(-this.jx*this.proportion), this.gety(0));// x轴
-				//console.log(this.jx, this.height/this.proportion, this.jx, 0);
+
+				
 				this.drawLine(this.jx, this.height, this.jx, 0);// y
 				this.drawLine(0, this.jy, this.width,  this.jy);// x
+				this.setFillColor('#d8d8d8');
 				this.fillText("O", this.jx+5 , this.jy+10);//原点坐标 0
-				this.buildCoordinate(this.calibration * this.proportion);// +x height/2
+				this.buildCoordinate();// +x height/2
 				
 			},
-			buildCoordinate:function(calibration){//calibration 最小刻度
+			buildCoordinate:function(){
 				
 				
-				
+				var calibration = this.calibration * this.proportion;//calibration 最小刻度
 				var width = this.width;
 				var height = this.height;
 				
@@ -213,7 +211,7 @@
 						)*this.proportion / calibration;
 		
 				//最大的一个象限能显示的点数
-				this.setFillColor('#d8d8d8');
+				//this.setFillColor('#d8d8d8');
 				var fixed = this.proportion >= 1 ? function(x){//对于绘制比例小于1 处理小位数
 					return x;
 				} : function(x){ return (x).toFixed(1);};
@@ -226,43 +224,47 @@
 				var sy=0; 
 
 				this.context.textBaseline = "middle";
-				
+				this.setFillColor('#d8d8d8');
 				for(var i=1; i<=len;i++){//注释过的代码都是适当优化过的 其实等于没优化
-					j = fixed(calibration*i);
-					
+
+					j = String(fixed(calibration*i));
+					//console.log(typeof j);
 					sx = this.getx(calibration*i);//第一象限
 					sy = this.gety(0);
+					
 					this.drawLine(sx, sy, sx, sy-5);
 					this.context.textAlign = "center";
-					this.fillText(j, sx, sy+10);
+					this.context.fillText(j, sx, sy+10);
+					/***/
 					
 					sx = this.getx(-calibration*i);//第3象限
 					//sy = this.gety(0);
 					this.drawLine(sx, sy, sx, sy-5);
-					//this.context.textAlign = "center";//  上面设置过了
-					this.fillText(j, sx, sy+10);
-					
+					this.context.fillText(j, sx, sy+10);
+					/***/
 					sx = this.getx(0);//第4象限
 					sy = this.gety(-calibration*i);
+					
 					this.drawLine(sx, sy, sx-5, sy);
 					this.context.textAlign = "left";
-					this.fillText(j, sx+5, sy);
-					
+					this.context.fillText(j, sx+5, sy);
+					/***/
 					
 					//sx = this.getx(0);//第2象限
 					sy = this.gety(calibration*i);
+					
 					this.drawLine(sx, sy, sx-5, sy);
-					//this.context.textAlign = "left"; 上面设置过了
-					this.fillText(j, sx+5, sy);
-
+					this.context.fillText(j, sx+5, sy);
+					/***/
 				}
+
 
 			},
 			getx:function(x){
-				return this.jx+(x/this.proportion);
+				return parseInt(this.jx+(x/this.proportion));
 			},
 			gety:function(y){
-				return this.jy-(y/this.proportion);
+				return parseInt(this.jy-(y/this.proportion));
 			}
 		};
 		
@@ -281,8 +283,9 @@
 			constructor:Parabola,
 			getfx:function(x){//抛物线方程
 				//ax^2 + bx + c
-				return this.a*(x*x)+this.b*x+this.c;
+				//return this.a*(x*x)+this.b*x+this.c;
 				//return Math.tan(x)*1000;
+				return 0.00005*(x*x) - 0.1*x;
 				
 			},
 			getpx:function(){//顶点坐标
@@ -299,7 +302,7 @@
 			},
 			draw:function(context){// context printPoint //必要绘制点的方法
 				context.build();
-				for(var i=-200; i<100; i+=1){
+				for(var i=-10000; i<10000; i+=1){
 					context.printPoint(i,this.getfx(i));
 				}
 				context.setStrokeColor("#ff0000");
@@ -308,28 +311,133 @@
 		};
 
 		//var par = new Parabola(0.005, 0.5, 0);
-		var par = new Parabola();
-		par.getfx = function(x){
-			return Math.sin(x);
-		};
-		par.draw = function(context){
-			context.build();
-			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.1){
+		function Trigonometricfunctions(color){this.color = color;}
+		Trigonometricfunctions.prototype = new Parabola();
+		Trigonometricfunctions.prototype.draw = function(context){
+			//context.build();
+			this.color && context.setFillColor(this.color);
+			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.01){
 				//console.log( i );
 				context.printPoint(i,this.getfx(i));
 			}
 		};
-		/**
+		
+		var sin = new Trigonometricfunctions("#000099");
+		sin.getfx = function(x){
+			return Math.sin(x);
+		};
+		sin.draw = function(context){
+			//context.build();
+			this.color && context.setFillColor(this.color);
+			//for(var i=0; i<Math.PI/2; i+=0.01){ 
+			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.01){
+				//console.log( i );
+				context.printPoint(i,this.getfx(i));
+			}
+		};
+
+		var cos = new Trigonometricfunctions("#009900");
+		cos.getfx = function(x){
+			return Math.cos(x);
+		};
+		
+		var tan = new Trigonometricfunctions("#000099");
+		tan.getfx = function(x){
+			return Math.tan(x);
+		};
+		
+		var asin = new Trigonometricfunctions("#990000");
+		asin.getfx = function(x){
+			return Math.asin(x);
+		};
+		asin.draw = function(context){
+			//context.build();
+			this.color && context.setFillColor(this.color);
+			for(var i=-4*Math.PI; i<4*Math.PI; i+=0.01){
+				//console.log( i );
+				context.printPoint(i,this.getfx(i));
+			}
+		};
+
+		var acos = new Trigonometricfunctions("#009900");
+		acos.getfx = function(x){
+			return Math.acos(x);
+		};
+		
+		var atan = new Trigonometricfunctions("#009900");
+		atan.getfx = function(x){
+			return Math.atan(x);
+		};
+		
+		
+		var ctx = new Canvas( canvas.getContext('2d'), 1000,500 );
+		
+		ctx.setProportion(0.01);
+		ctx.init();
+		ctx.build();
+		
+		sin.draw(ctx);
+		cos.draw(ctx);
+		//tan.draw(ctx);
+		
+		
 		var par = new Parabola();
-		par.getfx = function(x){
-			return Math.sqrt(-4*x);
-		}
-		*/
-		var ctx = new Canvas( canvas.getContext('2d'), 500,500 );
+		//par.getfx = function(x){
+		//	return Math.sqrt(-4*x);
+		//}
 		par.draw(ctx);
-		//y*y = 4x;
-		//y = Math.sqrt(4x);
+		
 		
 	</script>
+	<div style="width:100px;height:100px;border:1px solid #000" id="aaaa"></div>
+	
+	<script>
+		function $(id){
+			return document.getElementById(id);
+		}
+		var a = $('aaaa');
+		//到 form 开始是 to 用时间 是t
+		// 200 100 1000
+		//t: current time（当前时间）；
+		//b: beginning value（初始值）；
+		//c: change in value（变化量）；
+		//d: duration  （持续时间）。
+
+		function func1(current, beginning, change, duration){
+			return change/duration * current + beginning;
+			//return (200-100)/100 * t + 100;
+		}
+		function func(current, beginning, change, duration){//来回缓动
+			//return Math.sin(0 - 3.14) + 100;
+			//100 - 200
+			//console.log(Math.sin((3.14 / duration) * current));
+			//console.log(Math.sin((3.14 / change) * current));
+
+			return Math.sin((Math.PI/2/duration) * current) * change + beginning;
+			
+			//current = current/duration;
+			//console.log(current);
+			//console.log(change*current*current);
+		
+			//return change*current*current+beginning;
+		}
+		
+
+		
+		var current = 0;
+		var beginning = 100;
+		var change = 200;//到 200
+		var duration = 100;//毫秒
+		
+		var c = setInterval(function(){
+			//console.log(func(200, 100, j, t+1));
+			
+			a.style.width = func(current+=1, beginning, change, duration)+"px";
+			if(current >= duration){
+				clearInterval(c);
+			}
+		});
+	</script>
+	
 </body>
 </html>
