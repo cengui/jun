@@ -7,14 +7,15 @@
 </head>
 <body>
 	
-	<canvas id="tutorial" width="1000" height="500"></canvas>
+	<canvas id="tutorial" width="1000" height="500">非常抱歉您的高级浏览器不支持 canvas</canvas>
 	<div>
 		绘制比例：
 		<select name="" onchange="change1(this)">
-			<option value="0.01">1:0.01</option>
+			<option value="0.01"  selected>1:0.01</option>
+            <option value="0.05">1:0.05</option>
 			<option value="0.1">1:0.1</option>
 			<option value="1">1:1</option>
-			<option value="2" selected>1:2</option>
+			<option value="2">1:2</option>
 			<option value="5">1:5</option>
 			<option value="10">1:10</option>
 			<option value="20">1:20</option>
@@ -25,9 +26,9 @@
 		刻度间隔：
 		<select name="" onchange="change2(this)">
 			<option value="10">10</option>
-			<option value="30" selected>30</option>
-			<option value="60">60</option>
-			<option value="120">120</option>
+			<option value="20">20</option>
+			<option value="50"  selected>50</option>
+			<option value="100">100</option>
 		</select>
 		
 		显示某个象限：
@@ -38,21 +39,23 @@
 			<option value="3">3</option>
 			<option value="4">4</option>
 		</select>
+        
+        打印内容：
+		<select name="" id="printcontent" onchange="change4(this.value)">
+			<option value="0" selected>Math.sin</option>
+			<option value="1">Math.cos</option>
+			<option value="2">Math.tan</option>
+		</select>
+        
 	</div>
+    <script src="src/FlatSystem.js"></script>
 	<script>
 		function change1(elem){
 			ctx.setProportion( parseFloat(elem.value) );
-			var st = new Date().getTime();
 			ctx.init();
-			console.log("init", new Date().getTime()-st);
-			
-			st = new Date().getTime();
 			ctx.build();
-			console.log("build", new Date().getTime()-st);
+            change4( $('printcontent').value );
 			
-			st = new Date().getTime();
-			par.draw(ctx);
-			console.log("draw", new Date().getTime()-st);
 		}
 		
 		function change2(elem){
@@ -60,7 +63,8 @@
 			ctx.setCalibration( parseInt(elem.value) );
 			ctx.init();
 			ctx.build();
-			par.draw(ctx);
+           change4( $('printcontent').value );
+            
 		}
 		
 		function change3(elem){
@@ -68,255 +72,44 @@
 			ctx.onlyQuadrant( parseInt(elem.value) );
 			ctx.init();
 			ctx.build();
-			par.draw(ctx);
+			change4( $('printcontent').value );
+		}
+        
+        function change4(i){
+        
+            ctx.init();
+			ctx.build();
+            
+            if(i==0){
+                sin.draw(ctx);
+            }
+            
+            if(i==1){
+                cos.draw(ctx);
+            }
+            
+            if(i==2){
+                tan.draw(ctx);
+            }
+			
 		}
 		
 		
 		var canvas = document.getElementById('tutorial');
 		//var ctx = ;
 		
-		function Canvas(context, width, height){
-			
-			this.context = context;
-			this.width = width;
-			this.height = height;
-			this.calibration = 30;//刻度
-			this.proportion = 2;//绘制比例
-			this.jx = this.width/2; //0坐标点的x位置
-			this.jy = this.height/2; //0坐标点的y位置
-				
-			this.init();
-			
-		}
-		Canvas.prototype = {
-			constructor:Canvas,
-			init:function(){
-				this.context.clearRect(0,0,this.width, this.height);
-				//this.width *= this.proportion;
-				//this.height *= this.proportion;
-				this.context.moveTo(0,0);
-			},
-			clear:function(x, y, width, height){
-				this.context.clearRect(x ||0,y || 0,width || this.width, height || this.height);
-			},
-			setProportion:function(proportion){//整数
-				this.proportion = proportion;
-			},
-			setCalibration:function(calibration){
-				this.calibration = calibration;//刻度
-			},	
-			onlyQuadrant:function(quadran){//显示某一象限 1， 2， 3， 4
-				if(quadran == 0){
-					this.jx = this.width/2;
-					this.jy = this.height/2;
-				}
-				
-				if(quadran == 1){
-					this.jx = 50;
-					this.jy = this.height-50;
-				}
-				if(quadran == 2){
-					this.jx = this.width - 50;
-					this.jy = this.height - 50;
-				}
-				if(quadran == 3){
-					this.jx = this.width -50;
-					this.jy = 50;
-				}
-				if(quadran == 4){
-					
-					this.jx = 50;
-					this.jy = 50;
-				}
-			},
-			/**
-				在坐标系统打印一个点
-				x 轴坐标
-				y 轴坐标
-				width 点的宽度
-				height 点的高度
-			*/
-			printPoint:function(x,y,width,height){//默认点阵宽度2
-			
-				x = this.getx(x);
-				y = this.gety(y);
-				
-				if(x < this.width &&  y < this.height){
-					this.drawRect(x, y, width || 2, height || 2);
-					return true;
-				}
-				return false;
-			},
-			/***
-				在坐标系中画一条直线（线段）
-				x 线段结束点 x坐标
-				y 线段结束点 y坐标
-				
-				sx 线段开始点 x坐标 可选 不传递将会使用上次画笔结束点
-				sy 线段开始点 y坐标 可选
-				
-			*/
-			printLine:function(x, y, sx, sy){
-				this.drawLine(this.getx(x), this.gety(y), this.getx(sx),this.gety(sy));
-			},
-			setFillColor:function(color){
-				this.context.fillStyle = color;
-			},
-			setStrokeColor:function(color){
-				this.context.strokeStyle = color;
-			},
-			drawRect:function(x,y,width, height){
-
-				this.context.beginPath();
-				this.context.fillRect(x, y, width, height);
-				this.context.stroke();
-			},
-			/***
-				非公开
-				在画布打印一个点，坐标为真实开始坐标和结束坐标
-			*/
-			drawLine:function(x, y, sx, sy){//目标x y 开始sx sy
-				this.context.beginPath();
-				if(sx !== undefined && sy !== undefined ){
-					this.context.moveTo(sx,sy);
-				}
-				//this.context.beginPath();
-				this.context.lineTo(x, y);
-				this.context.stroke();
-			},
-			fillText:function(text, x, y){
-				this.context.fillText(text, x, y);
-			},
-			build:function(){
-
-				
-				this.drawLine(this.jx, this.height, this.jx, 0);// y
-				this.drawLine(0, this.jy, this.width,  this.jy);// x
-				this.setFillColor('#d8d8d8');
-				this.fillText("O", this.jx+5 , this.jy+10);//原点坐标 0
-				this.buildCoordinate();// +x height/2
-				
-			},
-			buildCoordinate:function(){
-				
-				
-				var calibration = this.calibration * this.proportion;//calibration 最小刻度
-				var width = this.width;
-				var height = this.height;
-				
-				// len = 中心点到4个最远点的最大绝对值 / 最小间隔单位
-				var len = Math.max(
-							Math.max( Math.abs(this.getx(0) - width), Math.abs(this.getx(0) - 0) ), //x轴绝对最大值
-							Math.max( Math.abs(this.gety(0) - height ), Math.abs(this.gety(0) - 0) ) //y轴绝对最大值
-						)*this.proportion / calibration;
-		
-				//最大的一个象限能显示的点数
-				//this.setFillColor('#d8d8d8');
-				var fixed = this.proportion >= 1 ? function(x){//对于绘制比例小于1 处理小位数
-					return x;
-				} : function(x){ return (x).toFixed(1);};
-				
-				
-				
-				var j=0;//中间变量
-				var d = 0;
-				var sx=0;
-				var sy=0; 
-
-				this.context.textBaseline = "middle";
-				this.setFillColor('#d8d8d8');
-				for(var i=1; i<=len;i++){//注释过的代码都是适当优化过的 其实等于没优化
-
-					j = String(fixed(calibration*i));
-					//console.log(typeof j);
-					sx = this.getx(calibration*i);//第一象限
-					sy = this.gety(0);
-					
-					this.drawLine(sx, sy, sx, sy-5);
-					this.context.textAlign = "center";
-					this.context.fillText(j, sx, sy+10);
-					/***/
-					
-					sx = this.getx(-calibration*i);//第3象限
-					//sy = this.gety(0);
-					this.drawLine(sx, sy, sx, sy-5);
-					this.context.fillText(j, sx, sy+10);
-					/***/
-					sx = this.getx(0);//第4象限
-					sy = this.gety(-calibration*i);
-					
-					this.drawLine(sx, sy, sx-5, sy);
-					this.context.textAlign = "left";
-					this.context.fillText(j, sx+5, sy);
-					/***/
-					
-					//sx = this.getx(0);//第2象限
-					sy = this.gety(calibration*i);
-					
-					this.drawLine(sx, sy, sx-5, sy);
-					this.context.fillText(j, sx+5, sy);
-					/***/
-				}
-
-
-			},
-			getx:function(x){
-				return parseInt(this.jx+(x/this.proportion));
-			},
-			gety:function(y){
-				return parseInt(this.jy-(y/this.proportion));
-			}
-		};
 		
 		
-		function Parabola(a,b,c){//抛物线对象
-			//ax^2*bx+c
-			// a>0 开头向上 a<0开口向下 
-			//b 
-			//c >0 原点在y正半轴
-			// c <0 原点在y负半轴
-			this.a = a == undefined ? 0 : a;
-			this.b = b == undefined ? 0 : b;
-			this.c = c == undefined ? 0 : c;
-		};
-		Parabola.prototype = {
-			constructor:Parabola,
-			getfx:function(x){//抛物线方程
-				//ax^2 + bx + c
-				//return this.a*(x*x)+this.b*x+this.c;
-				//return Math.tan(x)*1000;
-				return 0.00005*(x*x) - 0.1*x;
-				
-			},
-			getpx:function(){//顶点坐标
-				// [-b/2a, (4ac-b)/4a]
-				return {x:-this.b/(2*this.a), y:(4*this.a*this.c-this.b)/(4*this.a)};
-			},
-			symmetryx:function(){//对称轴
-				// [-b/2*a]
-				return -this.b/(2*this.a);
-			},
-			min:function(){
-				return (4*this.a*this.c-this.b*this.b)/(4*this.a);
-				//多了一个*this.b
-			},
-			draw:function(context){// context printPoint //必要绘制点的方法
-				context.build();
-				for(var i=-10000; i<10000; i+=1){
-					context.printPoint(i,this.getfx(i));
-				}
-				context.setStrokeColor("#ff0000");
-				context.printLine(this.symmetryx(), this.min(), this.symmetryx(), this.getfx(300));
-			}
-		};
 
 		//var par = new Parabola(0.005, 0.5, 0);
+        /**
+            三角函数
+        */
 		function Trigonometricfunctions(color){this.color = color;}
-		Trigonometricfunctions.prototype = new Parabola();
 		Trigonometricfunctions.prototype.draw = function(context){
 			//context.build();
 			this.color && context.setFillColor(this.color);
-			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.01){
+			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.05){
 				//console.log( i );
 				context.printPoint(i,this.getfx(i));
 			}
@@ -325,15 +118,6 @@
 		var sin = new Trigonometricfunctions("#000099");
 		sin.getfx = function(x){
 			return Math.sin(x);
-		};
-		sin.draw = function(context){
-			//context.build();
-			this.color && context.setFillColor(this.color);
-			//for(var i=0; i<Math.PI/2; i+=0.01){ 
-			for(var i=-2*Math.PI; i<2*Math.PI; i+=0.01){
-				//console.log( i );
-				context.printPoint(i,this.getfx(i));
-			}
 		};
 
 		var cos = new Trigonometricfunctions("#009900");
@@ -345,52 +129,24 @@
 		tan.getfx = function(x){
 			return Math.tan(x);
 		};
-		
-		var asin = new Trigonometricfunctions("#990000");
-		asin.getfx = function(x){
-			return Math.asin(x);
-		};
-		asin.draw = function(context){
-			//context.build();
-			this.color && context.setFillColor(this.color);
-			for(var i=-4*Math.PI; i<4*Math.PI; i+=0.01){
-				//console.log( i );
-				context.printPoint(i,this.getfx(i));
-			}
-		};
 
-		var acos = new Trigonometricfunctions("#009900");
-		acos.getfx = function(x){
-			return Math.acos(x);
-		};
+        
+        
+		var ctx = new FlatSystem( canvas.getContext('2d'), 1000,500 );
 		
-		var atan = new Trigonometricfunctions("#009900");
-		atan.getfx = function(x){
-			return Math.atan(x);
-		};
-		
-		
-		var ctx = new Canvas( canvas.getContext('2d'), 1000,500 );
-		
-		ctx.setProportion(0.01);
+        ctx.setProportion(0.01);
+        ctx.setCalibration(50);
 		ctx.init();
 		ctx.build();
 		
 		sin.draw(ctx);
-		cos.draw(ctx);
+		//cos.draw(ctx);
 		//tan.draw(ctx);
-		
-		
-		var par = new Parabola();
-		//par.getfx = function(x){
-		//	return Math.sqrt(-4*x);
-		//}
-		par.draw(ctx);
-		
+        
+	
 		
 	</script>
-	<div style="width:100px;height:100px;border:1px solid #000" id="aaaa"></div>
-	
+
 	<script>
 		function $(id){
 			return document.getElementById(id);
@@ -403,11 +159,11 @@
 		//c: change in value（变化量）；
 		//d: duration  （持续时间）。
 
-		function func1(current, beginning, change, duration){
+		function func1(current, beginning, change, duration){//平滑
 			return change/duration * current + beginning;
 			//return (200-100)/100 * t + 100;
 		}
-		function func(current, beginning, change, duration){//来回缓动
+		function func(current, beginning, change, duration){//渐慢
 			//return Math.sin(0 - 3.14) + 100;
 			//100 - 200
 			//console.log(Math.sin((3.14 / duration) * current));
@@ -422,21 +178,45 @@
 			//return change*current*current+beginning;
 		}
 		
+		function func3(current, beginning, change, duration){//渐慢
+            // 0 -> 1.7  --->
+            // Math.PI/2
+            //current -= duration;
+			return (Math.sin((Math.PI/2/duration-Math.PI/2) * current) + 1 )* change + beginning;
+		}
+		
+		
+		function func2(current, beginning, change, duration){//渐快 高级方法
+			current = current/duration;
+			return change*current*current+beginning;
+		}
+		function func4(current, beginning, change, duration){//渐快 高级方法
+			current = current/duration;
+			return -change*(current*current*current*current*current-2)*current+beginning;
+		}
 
-		
-		var current = 0;
-		var beginning = 100;
-		var change = 200;//到 200
-		var duration = 100;//毫秒
-		
-		var c = setInterval(function(){
-			//console.log(func(200, 100, j, t+1));
+		function huaxian(){
+			var current = 0;
+			var beginning = 0;
+			var change = 555;//到 200
+			var duration = 100;//毫秒
 			
-			a.style.width = func(current+=1, beginning, change, duration)+"px";
-			if(current >= duration){
-				clearInterval(c);
-			}
-		});
+			var c = setInterval(function(){
+				//console.log(func(200, 100, j, t+1));
+				
+				a.style.width = func4(current+=1, beginning, change, duration)+"px";
+				
+				//ctx.printPoint(current, func(current, beginning, change, duration));
+				//ctx.printPoint(current, func1(current, beginning, change, duration));
+				//ctx.printPoint(current, func2(current, beginning, change, duration));
+                //ctx.printPoint(current, func4(current, beginning, change, duration));
+				ctx.printPoint(current, func3(current, beginning, change, duration));
+				if(current >= duration){
+					clearInterval(c);
+				}
+			});
+		}
+		//huaxian();
 	</script>
 	
 </body>
