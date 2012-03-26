@@ -9,6 +9,15 @@
 	<h1>使用 canvas 在平面坐标系中打印三角函数图像</h1>
 	<canvas id="tutorial" width="1000" height="500">非常抱歉您的高级浏览器不支持 canvas</canvas>
 	<div>
+
+        打印内容：
+		<select name="" id="printcontent" onchange="change4(this.value)">
+			<option value="0" selected>Math.sin</option>
+			<option value="1">Math.cos</option>
+			<option value="2">Math.tan</option>
+		</select>
+
+    
 		绘制比例：
 		<select name="" onchange="change1(this)">
 			<option value="0.01"  selected>1:0.01</option>
@@ -40,12 +49,7 @@
 			<option value="4">4</option>
 		</select>
         
-        打印内容：
-		<select name="" id="printcontent" onchange="change4(this.value)">
-			<option value="0" selected>Math.sin</option>
-			<option value="1">Math.cos</option>
-			<option value="2">Math.tan</option>
-		</select>
+        
         
 	</div>
     <script src="src/FlatSystem.js"></script>

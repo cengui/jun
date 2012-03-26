@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1>使用 canvas 在平面坐标系中打印各种动画图像</h1>
-	<canvas id="tutorial" width="1000" height="500">非常抱歉您的高级浏览器不支持 canvas</canvas>
+	<canvas id="tutorial" width="1000" height="350">非常抱歉您的高级浏览器不支持 canvas</canvas>
 	<div>
 		绘制比例：
 		<select name="" onchange="change1(this)">
@@ -47,8 +47,8 @@
                 动画方式
             </h1>
             <div>
-                <p><br>Tween类型： <br><label><input name="vTween" value="Linear" checked="checked" type="radio"> Linear </label><label><input name="vTween" value="Quad" type="radio"> Quadratic </label><label><input name="vTween" value="Cubic" type="radio"> Cubic </label><label><input name="vTween" value="Quart" type="radio"> Quartic </label><label><input name="vTween" value="Quint" type="radio"> Quintic </label><label><input name="vTween" value="Sine" type="radio"> Sinusoidal </label><br><label><input name="vTween" value="Expo" type="radio"> Exponential </label><label><input name="vTween" value="Circ" type="radio"> Circular </label><label><input name="vTween" value="Elastic" type="radio"> Elastic </label><label><input name="vTween" value="Back" type="radio"> Back </label><label><input name="vTween" value="Bounce" type="radio"> Bounce </label></p>
-                <p>ease类型： <br><label><input name="vEase" value="easeIn" checked="checked" type="radio"> easeIn </label><label><input name="vEase" value="easeOut" type="radio"> easeOut </label><label><input name="vEase" value="easeInOut" type="radio"> easeInOut </label></p>
+                <p><br>Tween类型： <br><label><input name="vTween" value="Linear"  type="radio"> Linear </label><label><input name="vTween" value="Quad" type="radio" checked="checked" > Quadratic </label><label><input name="vTween" value="Cubic" type="radio"> Cubic </label><label><input name="vTween" value="Quart" type="radio"> Quartic </label><label><input name="vTween" value="Quint" type="radio"> Quintic </label><label><input name="vTween" value="Sine" type="radio"> Sinusoidal </label><br><label><input name="vTween" value="Expo" type="radio"> Exponential </label><label><input name="vTween" value="Circ" type="radio"> Circular </label><label><input name="vTween" value="Elastic" type="radio"> Elastic </label><label><input name="vTween" value="Back" type="radio"> Back </label><label><input name="vTween" value="Bounce" type="radio"> Bounce </label></p>
+                <p>ease类型： <br><label><input name="vEase" value="easeIn" checked="checked" type="radio"> easeIn </label><label><input name="vEase" value="easeOut"  type="radio"> easeOut </label><label><input name="vEase" value="easeInOut" type="radio"> easeInOut </label></p>
                 <input type="button" value="运行" onclick="Animate.run()" /> <input type="button" value="清空画布" onclick="ctx.init()" />
             </div>
         </div>
@@ -95,7 +95,7 @@
 		}
         
         var canvas = $('tutorial');
-		var ctx = new FlatSystem( canvas.getContext('2d'), 1000,500 );
+		var ctx = new FlatSystem( canvas.getContext('2d'), 1000,350 );
 		
         ctx.setProportion(2);
         ctx.setCalibration(25);
@@ -322,6 +322,7 @@
                 });
             }
         };
+        Animate.run();
 	</script>
 	
 </body>
