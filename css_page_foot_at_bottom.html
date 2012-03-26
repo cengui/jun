@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>footer keep at the page is bottom</title>
+	
+	<style rel="stylesheet">
+		html,body{margin:0;padding:0;height:100%;}
+		
+		
+		#page{
+			min-height:100%;
+			height: auto !important; 
+			height: 100%; /*IE6不识别min-height*/
+			position:relative;
+		}
+		
+		#content{
+			padding-bottom:30px;
+		}
+		
+		#footer{
+			color:#ccc;height:30px;border-top:1px solid #ccc;
+			width:100%;
+			position:absolute;
+			bottom:0;
+		}
+		
+		
+
+	</style>
+</head>
+<body>
+	<div id="page">
+		<div id="content">hello world
+			hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world<br/>hello world
+		</div>
+		<div id="footer">CopyRight 2011</div>
+	</div>
+</body>
+</html>

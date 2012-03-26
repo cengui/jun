@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<script type="text/javascript" src="../src/Jun.js"></script>
+	<script type="text/javascript" src="../src/Jun.dom.js"></script>
+	<script type="text/javascript" src="../src/Jun.string.js"></script>
+	<script type="text/javascript" src="../src/Jun.array.js"></script>
+	<script type="text/javascript" src="../src/Jun.com.js"></script>
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+	
+	<div id="test1">
+		hello
+		<div id="test1_1"></div>
+		world
+		<div id="test1_2"></div>
+		test1
+	</div>
+	
+		<script type="text/javascript">
+		module("Jun.array");
+		test("Jun.array", function(){
+		
+			var array = [0,1,2,3,4,5,6,7,8,9];
+			same(Jun.array.systemSort([8,2,5,4,3,6,7,1,9,0]), array, "systemSort okay");//IE6这个测试不对，无法返回正确的结果
+			same(Jun.array.bubbleSort([8,2,5,4,3,6,7,1,9,0]), array, "bubbleSort okay" );
+			same(Jun.array.quickSort([8,2,5,4,3,6,7,1,9,0]), array, "quickSort okay" );
+			same(Jun.array.insertSort([8,2,5,4,3,6,7,1,9,0]), array, "insertSort okay" );
+			same(Jun.array.shellSort([8,2,5,4,3,6,7,1,9,0]), array, "shellSort okay" );
+			
+		});
+		
+		module("Jun.string");
+		test("Jun.String", function(){
+			equals(Jun.string.pad("0", 2), "00");
+			equals(Jun.string.pad("1", 2, '4'), "41");
+			equals(Jun.string.pad("0", 3, ' '), "  0");
+			equals(Jun.string.pad("0", 0, ' '), "0");
+		});
+		
+		
+		module("Jun.com");
+		test("Jun.com", function(){
+			
+			same(Jun.com.trim(" nihao "), "nihao");
+			same(Jun.com.trim(" n i h a o "), "n i h a o");
+			try{
+				ok(Jun.com.now());
+			}catch(e){}
+			
+		});
+		
+		module("Jun.dom");
+		test("Jun.dom", function(){
+			var ele = Jun.dom.$('test1');
+			var ele_1 = Jun.dom.$('test1_1');
+			var ele_2 = Jun.dom.$('test1_2');
+			same(Jun.dom.first(ele), ele_1, "Jun.dom.first");
+			same(Jun.dom.first(ele_1), null, "Jun.dom.first");
+			same(Jun.dom.next(ele_1), ele_2,"Jun.dom.next");
+			same(Jun.dom.next(ele_2), null,"Jun.dom.next");
+			same(Jun.dom.prev(ele_2), ele_1,"Jun.dom.prev");
+			same(Jun.dom.prev(ele_1), null,"Jun.dom.prev");
+			
+			same(Jun.dom.last(ele), ele_2,"Jun.dom.last");
+			same(Jun.dom.last(ele_1), null,"Jun.dom.last");
+			
+			same(Jun.dom.hasChilds(ele), true,"Jun.dom.hasChilds");
+			same(Jun.dom.hasChilds(ele_1), false,"Jun.dom.hasChilds");
+			
+			//Jun.dom.remove(ele_1);
+			same(Jun.dom.parent(ele_1), ele,"Jun.dom.parent");
+			
+			
+			Jun.dom.append(ele, "<div id=\"test1_3\"></div>");
+			same(Jun.dom.$('test1_3'), Jun.dom.last(ele),"Jun.dom.append");
+			//Jun.dom.append(ele, ele_1);
+			//same(ele_1, Jun.dom.last(ele),"Jun.dom.append");
+			
+			
+			Jun.dom.after(Jun.dom.$('test1_3'), "<div id=\"test1_4\"></div>");
+			same(Jun.dom.$('test1_4'), Jun.dom.last(ele), "Jun.dom.after");
+			
+			Jun.dom.before(Jun.dom.$('test1_4'), "<div id=\"test1_5\"></div>");
+			same(Jun.dom.next(Jun.dom.$('test1_3')), Jun.dom.$('test1_5'), "Jun.dom.before");
+			
+		//	Jun.dom.append(ele, ele_1);
+		//	same(ele_1, Jun.dom.last(ele),"Jun.dom.append");
+			
+			//Jun.dom.remove(ele_1);
+			//same(Jun.dom.first(ele), ele_2,"Jun.dom.remove");
+			//same(Jun.dom.remove(ele_1), null,"Jun.dom.remove");
+			
+			//same(Jun.dom.remove(ele_1), ele,"Jun.dom.parent");
+		});
+		
+		
+	</script>
+</body>
+</html>
