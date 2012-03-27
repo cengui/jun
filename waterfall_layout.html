@@ -6,19 +6,26 @@
 	<title>Hello Jun</title>
     <style rel="stylesheet">
         root,html,body{padding:0;margin:0;}
-        .doc{}
-        /*  两端对齐必须建立在内容超过一行，上一行会两端对齐 
-            IE6可兼容
-        */
         .container{background:#d8d8d8;text-align:justify;text-justify:inter-ideograph;}
         
-        .casvade-j{width:220px;display:inline-block;vertical-align:top;margin:10px;_display:inline;_zoom:1;}
-        .casvade-i{display:inline-block;border:1px solid #ccc;padding:10px;background:#fff;margin:10px 0;_display:inline;_zoom:1;}
+        .casvade-j{width:220px;display:inline-block;vertical-align:top;margin:10px;}
+        .casvade-i{display:inline-block;border:1px solid #ccc;padding:10px;background:#fff;margin:10px 0;}
+        .casvade-end{display:inline-block;width:100%;}
     </style>
+    <!--[if lte IE 7]>
+        <style rel="stylesheet">
+            .casvade-j,.casvade-i,.casvade-end{display:inline;zoom:1;}
+        </style>
+    <![endif]-->
 </head>
 <body>
 	<div class="doc">
-        <div class="header">header</div>
+        <div class="header">
+             <h1>使用两端对齐布局瀑布流</h1>
+             <p>两端对齐必须建立在内容超过一行，上一行会两端对齐 </p>
+             <p>解决内容超过一行，可以在内容区域末尾插入一个inline-block 宽度设置为100%</p>
+             <p>IE6,ie7可兼容</p>
+        </div>
         <div class="container">
             <div class="casvade-j">
                  <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
@@ -65,7 +72,7 @@
             <!--
                 两端对齐必须建立在内容超过一行，上一行会两端对齐
             -->
-            <div class="casvade-j" style="width:80%;"></div>
+            <div class="casvade-end"></div>
             
         </div>
         <div class="footer">footer</div>
