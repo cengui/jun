@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+</head>
+<body>
+	<script>
+    /**
+    {
+      "player": {
+        "money": 9216.99644665828,
+        "golden": 0.0,
+        "employStatus": 2,
+        "salary": 0.0,
+        "energy": 980,
+        "grade": 1,
+        "titleNo": 1,
+        "title": "小学生",
+        "exp": 0,
+        "nextExp": 50,
+        "grossExp": 0,
+        "house": 0,
+        "employerId": 0,
+        "miniCompanyId": 0
+      },
+      "msgCount": 3,
+      "tasks": 0,
+      "amts": [
+        {
+          "id": 1439052232528896,
+          "time": 1332751363589,
+          "subject": "货币政策委员会公告"
+        },
+        {
+          "id": 1348705602180096,
+          "time": 1329994203239,
+          "subject": "《财富征途》官方Q群，5群218543064"
+        },
+        {
+          "id": 31,
+          "time": 1328289181448,
+          "subject": "官方投资学习交流群"
+        }
+      ],
+      "prompts": [1,2,3]
+    }
+*/
+/*
+    | 1级划分
+    || 2级划分
+    
+*/
+//"123,456|3|4|1,2,3|||4||1,2,3|5"
+
+//[[123,456],4,5,[[1,2,4],[1,2,3]],5]
+
+//{player:[money,golden],msgCount,amts[[id,time,subject]],prompts}
+   function formatData(src, format, isArray){
+    var json = {};
+    //console.log(arguments);
+    if(typeof format == "string"){//直接字面量
+        json[format] = src;
+        return json;
+    }
+    
+    if( isArray ){//数组
+        json = [];
+        for(var i=0; i<src.length; i++){
+            json[i] = [];
+            for(var j=0; j<format.length; j++){
+                json[i][format[j]] = src[i][j];
+            }
+        }
+        return json;
+    }
+    
+    for(var i=0; i<format.length; i++){//Object
+        
+        if(format[i] instanceof Array){
+            
+            if(format[i][0] == true){
+
+                json = formatData(src, format[i].slice(1), true);
+            }else{
+                json[format[i][0]] = formatData(src[i], format[i].slice(1));
+            }
+            
+        }
+        if(typeof format[i] == 'string'){
+            json[format[i]] = src[i];
+        }
+    }
+    
+    return json;
+   }
+   /*
+    原始数据
+    {
+        amts:[
+            {id:1,time:2,subject:4},
+            {id:1,time:2,subject:3}
+        ],
+        player:{
+            money:123,
+            golden:456
+        },
+        msgCount:4,
+        msg:5
+    }
+    
+    简化数据
+        多层嵌套的数组
+    [[123,456],4,[[1,2,4],[1,2,3]],5]
+    
+    格式化规则
+        多层嵌套的数组
+        直接字面量，在格式化代码中表现为一个key
+        Object,在格式化代码中表现为一个数组[]，并且第一项作为key
+        Array,在格式化代码中表现为[],第一项用true 填充
+        
+    反格式化数据
+        formatData(src, format);//src 需要处理的数据， format 格式化规则
+    格式化数据
+        compressionData(src);//src源数据，format压缩规则  
+        返回格式化数据，和格式化规则
+        {json:json, format:format}
+
+        
+        {
+            aaa:12,
+            bbb:111
+        }
+        
+   */
+   
+   var ajaxData = {
+        amts:[
+            {id:1,time:2,subject:4},
+            {id:1,time:2,subject:3}
+        ],
+        player:{
+            money:123,
+            golden:456
+        },
+        msgCount:4,
+        msg:5
+    };
+    
+   function compressionData(src){
+        
+        var json = []
+        var format = [];
+         
+        if(src instanceof Array){
+
+            for(var i=0; i<src.length; i++){
+                var data = compressionData(src[i]) ;
+                json.push(data.json)
+                format.push([true].concat(data.format));
+            }
+            return {json:json, format:format};
+        }
+        
+        if(src instanceof Object){
+           
+            for(var i in src){
+                if( src[i] instanceof Array ){
+                   var data = compressionData(src[i]);
+                   json.push( data.json ); 
+                   format.push([i].concat(data.format));
+                }
+                if( toString.call(src[i]) == "[object Object]" ){
+                    var data = compressionData( src[i] );
+                    json.push(data.json);
+                    format.push([i].concat(data.format));
+                }
+                if(typeof src[i] == "string" || typeof src[i] == "number"){
+                    json.push(src[i]);
+                    format.push(i);
+                }
+            }
+        }
+        
+        return {json:json, format:format};
+   }
+   
+   var format = compressionData(ajaxData);
+   console.log(format.format);
+   console.log(formatData(format.json, format.format));
+  
+   //var a = formatData([[123,456],4,[[1,2,4],[1,2]],5], [['player','money','golden'],'msgCount',["amts",[true,'id','time','subject']], 'msg']);
+
+   
+   
+   //[['player','money','golden'],'msgCount',["amts",[true,'id','time','subject']]]
+   
+    //console.log(a);
+
+</script>
+    
+</body>
+</html>
