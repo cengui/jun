@@ -268,7 +268,13 @@
    4：添加游戏用户ID，客服空间（收听微博按钮后）
    */
    
-   
+   /**
+    {a:1,b:2,c:[{a:1,b:2}]} // {1,2,[{1,2}]}   [a,b,c,a,b]
+   */
+    function formatData2(src, format){
+        var a = format();
+    }
+    formatData2('{1,2,[{1,2}]}', [a,b,c,a,b]);
    
    
    
