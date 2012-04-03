@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+    <style rel="stylesheet">
+        root,html,body{padding:0;margin:0;}
+        .container{background:#d8d8d8;text-align:justify;text-justify:inter-ideograph;}
+        
+        .casvade-j{width:220px;display:inline-block;vertical-align:top;margin:10px;}
+        .casvade-i{display:inline-block;border:1px solid #ccc;padding:10px;background:#fff;margin:10px 0;}
+        .casvade-end{display:inline-block;width:100%;}
+    </style>
+    <!--[if lte IE 7]>
+        <style rel="stylesheet">
+            .casvade-j,.casvade-i,.casvade-end{display:inline;zoom:1;}
+        </style>
+    <![endif]-->
+</head>
+<body>
+	<div class="doc">
+        <div class="header">
+             <h1>使用两端对齐布局瀑布流</h1>
+             <p>两端对齐必须建立在内容超过一行，上一行会两端对齐 </p>
+             <p>解决内容超过一行，可以在内容区域末尾插入一个inline-block 宽度设置为100%</p>
+             <p>IE6,ie7可兼容</p>
+             <p>此方法是从<a href="http://www.zhangxinxu.com/wordpress/" target="_blank">张鑫旭-鑫空间-鑫生活 »</a>学到的</p>
+        </div>
+        <div class="container">
+            <div class="casvade-j">
+                 <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_010.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_005.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+
+            </div>
+            <div class="casvade-j">
+                 <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_010.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_005.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+            </div>
+            <div class="casvade-j">
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_010.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_005.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_010.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_005.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+            </div>
+            <div class="casvade-j">
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_002.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_010.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_005.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_008.jpg" alt="" /></div>
+                <div class="casvade-i"><img src="http://cued.xunlei.com/demos/publ/img/P_024.jpg" alt="" /></div>
+            </div>
+            <!--
+                两端对齐必须建立在内容超过一行，上一行会两端对齐
+            -->
+            <div class="casvade-end"></div>
+            
+        </div>
+        <div class="footer">
+            <h2>参考</h2>
+            <a href="http://www.zhangxinxu.com/wordpress/2012/03/%E5%A4%9A%E6%A0%8F%E5%88%97%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%80%91%E5%B8%83%E6%B5%81%E5%B8%83%E5%B1%80-waterfall-layout/">http://www.zhangxinxu.com/wordpress/2012/03/%E5%A4%9A%E6%A0%8F%E5%88%97%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%80%91%E5%B8%83%E6%B5%81%E5%B8%83%E5%B1%80-waterfall-layout/</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>使用 canvas 在平面坐标系中打印各种动画图像</title>
+</head>
+<body>
+	<h1>使用 canvas 在平面坐标系中打印各种动画图像</h1>
+	<canvas id="tutorial" width="1000" height="350">非常抱歉您的高级浏览器不支持 canvas</canvas>
+	<div>
+		绘制比例：
+		<select name="" onchange="change1(this)">
+			<option value="0.01"  >1:0.01</option>
+            <option value="0.05">1:0.05</option>
+			<option value="0.1">1:0.1</option>
+			<option value="1">1:1</option>
+			<option value="2" selected >1:2</option>
+            <option value="3">1:3</option>
+			<option value="5">1:5</option>
+			<option value="10">1:10</option>
+			<option value="20">1:20</option>
+			<option value="50">1:50</option>
+			<option value="100">1:100</option>
+		</select>
+		
+		刻度间隔：
+		<select name="" onchange="change2(this)">
+			<option value="10">10</option>
+			<option value="20">20</option>
+            <option value="25" selected>25</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+		
+		显示某个象限：
+		<select name="" onchange="change3(this)">
+			<option value="0">居中</option>
+			<option value="1" selected>1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select>
+        
+        <div>
+            <h1>
+                动画方式
+            </h1>
+            <div>
+                <p><br>Tween类型： <br><label><input name="vTween" value="Linear"  type="radio"> Linear </label><label><input name="vTween" value="Quad" type="radio" checked="checked" > Quadratic </label><label><input name="vTween" value="Cubic" type="radio"> Cubic </label><label><input name="vTween" value="Quart" type="radio"> Quartic </label><label><input name="vTween" value="Quint" type="radio"> Quintic </label><label><input name="vTween" value="Sine" type="radio"> Sinusoidal </label><br><label><input name="vTween" value="Expo" type="radio"> Exponential </label><label><input name="vTween" value="Circ" type="radio"> Circular </label><label><input name="vTween" value="Elastic" type="radio"> Elastic </label><label><input name="vTween" value="Back" type="radio"> Back </label><label><input name="vTween" value="Bounce" type="radio"> Bounce </label></p>
+                <p>ease类型： <br><label><input name="vEase" value="easeIn" checked="checked" type="radio"> easeIn </label><label><input name="vEase" value="easeOut"  type="radio"> easeOut </label><label><input name="vEase" value="easeInOut" type="radio"> easeInOut </label></p>
+                <input type="button" value="运行" onclick="Animate.run()" /> <input type="button" value="清空画布" onclick="ctx.init()" />
+            </div>
+        </div>
+        
+	</div>
+    <div style="background:#000;border:1px solid #000;height:100px;width:0;" id="aaaa"></div>
+    <script src="src/FlatSystem.js"></script>
+	<script>
+        function change1(elem){
+			ctx.setProportion( parseFloat(elem.value) );
+			ctx.init();
+			ctx.build();
+            change4( $('printcontent').value );
+			
+		}
+		
+		function change2(elem){
+			//alert(parseInt(elem.value));
+			ctx.setCalibration( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+           change4( $('printcontent').value );
+            
+		}
+		
+		function change3(elem){
+			//alert(parseInt(elem.value));
+			ctx.onlyQuadrant( parseInt(elem.value) );
+			ctx.init();
+			ctx.build();
+			change4( $('printcontent').value );
+		}
+        
+        function change4(i){
+        
+            ctx.init();
+
+            Animate.run();
+			
+		}
+        
+		function $(id){
+			return document.getElementById(id);
+		}
+        
+        var canvas = $('tutorial');
+		var ctx = new FlatSystem( canvas.getContext('2d'), 1000,350 );
+		
+        ctx.setProportion(2);
+        ctx.setCalibration(25);
+        ctx.onlyQuadrant(1);
+		ctx.init();
+		
+
+		
+		//到 form 开始是 to 用时间 是t
+		// 200 100 1000
+		//t: current time（当前时间）；
+		//b: beginning value（初始值）；
+		//c: change in value（变化量）；
+		//d: duration  （持续时间）。
+    /**
+        var tweet = { 自己写的公式
+            beeline:function(current, beginning, change, duration){//平滑
+                return change* (current/duration) + beginning;
+            },
+            sinIn:function(current, beginning, change, duration){
+                return Math.sin(Math.PI/2*(current/duration)) * change + beginning;
+            },
+            sinOut:function(current, beginning, change, duration){
+                //0 -> 1.7
+                //1.7 --> 3.4
+                return (1-Math.sin(Math.PI/2-Math.PI/2*(current/duration))) * change + beginning;
+            },
+            fadeOut:function(current, beginning, change, duration){ //渐快
+               current = current/duration;
+               return change*current*current+beginning;
+            },
+            fadeIn:function(current, beginning, change, duration){//渐慢
+                current = current/duration;
+                return change*current*current+beginning;
+            }
+        };
+     */   
+        var Tween = {
+            Linear: function(t,b,c,d){ return c*t/d + b; },
+            Quad: {
+                easeIn: function(t,b,c,d){
+                    return c*(t/=d)*t + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return -c *(t/=d)*(t-2) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if ((t/=d/2) < 1) return c/2*t*t + b;
+                    return -c/2 * ((--t)*(t-2) - 1) + b;
+                }
+            },
+            Cubic: {
+                easeIn: function(t,b,c,d){
+                    return c*(t/=d)*t*t + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return c*((t=t/d-1)*t*t + 1) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if ((t/=d/2) < 1) return c/2*t*t*t + b;
+                    return c/2*((t-=2)*t*t + 2) + b;
+                }
+            },
+            Quart: {
+                easeIn: function(t,b,c,d){
+                    return c*(t/=d)*t*t*t + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return -c * ((t=t/d-1)*t*t*t - 1) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if ((t/=d/2) < 1) return c/2*t*t*t*t + b;
+                    return -c/2 * ((t-=2)*t*t*t - 2) + b;
+                }
+            },
+            Quint: {
+                easeIn: function(t,b,c,d){
+                    return c*(t/=d)*t*t*t*t + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return c*((t=t/d-1)*t*t*t*t + 1) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if ((t/=d/2) < 1) return c/2*t*t*t*t*t + b;
+                    return c/2*((t-=2)*t*t*t*t + 2) + b;
+                }
+            },
+            Sine: {
+                easeIn: function(t,b,c,d){
+                    return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return c * Math.sin(t/d * (Math.PI/2)) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+                }
+            },
+            Expo: {
+                easeIn: function(t,b,c,d){
+                    return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if (t==0) return b;
+                    if (t==d) return b+c;
+                    if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+                    return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+                }
+            },
+            Circ: {
+                easeIn: function(t,b,c,d){
+                    return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
+                },
+                easeOut: function(t,b,c,d){
+                    return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+                },
+                easeInOut: function(t,b,c,d){
+                    if ((t/=d/2) < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
+                    return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
+                }
+            },
+            Elastic: {
+                easeIn: function(t,b,c,d,a,p){
+                    if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+                    if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
+                    else var s = p/(2*Math.PI) * Math.asin (c/a);
+                    return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+                },
+                easeOut: function(t,b,c,d,a,p){
+                    if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+                    if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
+                    else var s = p/(2*Math.PI) * Math.asin (c/a);
+                    return (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b);
+                },
+                easeInOut: function(t,b,c,d,a,p){
+                    if (t==0) return b;  if ((t/=d/2)==2) return b+c;  if (!p) p=d*(.3*1.5);
+                    if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
+                    else var s = p/(2*Math.PI) * Math.asin (c/a);
+                    if (t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+                    return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+                }
+            },
+            Back: {
+                easeIn: function(t,b,c,d,s){
+                    if (s == undefined) s = 1.70158;
+                    return c*(t/=d)*t*((s+1)*t - s) + b;
+                },
+                easeOut: function(t,b,c,d,s){
+                    if (s == undefined) s = 1.70158;
+                    return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+                },
+                easeInOut: function(t,b,c,d,s){
+                    if (s == undefined) s = 1.70158; 
+                    if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+                    return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+                }
+            },
+            Bounce: {
+                easeIn: function(t,b,c,d){
+                    return c - Tween.Bounce.easeOut(d-t, 0, c, d) + b;
+                },
+                easeOut: function(t,b,c,d){
+                    if ((t/=d) < (1/2.75)) {
+                        return c*(7.5625*t*t) + b;
+                    } else if (t < (2/2.75)) {
+                        return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+                    } else if (t < (2.5/2.75)) {
+                        return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+                    } else {
+                        return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+                    }
+                },
+                easeInOut: function(t,b,c,d){
+                    if (t < d/2) return Tween.Bounce.easeIn(t*2, 0, c, d) * .5 + b;
+                    else return Tween.Bounce.easeOut(t*2-d, 0, c, d) * .5 + c*.5 + b;
+                }
+            }
+        };
+
+        
+        function randomColor( ) {
+            var rand = Math.floor(Math.random( ) * 0xFFFFFF).toString(16);
+            if(rand.length == 6){
+                return rand;
+            }else{
+                return randomColor();
+            }
+        }
+
+        var Animate = {
+            setTween:function(){
+                var vTween = document.querySelectorAll('input[name=vTween]:checked');
+                var vEase = document.querySelectorAll('input[name=vEase]:checked');
+
+            },
+            run:function(){
+                var current = 0;
+                var beginning = 0;
+                var change = 555;//到 200
+                var duration = 500;//毫秒
+                var a = $('aaaa');
+                var vTween = document.querySelector('input[name=vTween]:checked').value;
+                var vEase = document.querySelector('input[name=vEase]:checked').value;
+                
+                var func = typeof Tween[vTween] == "function" ? Tween[vTween] : Tween[vTween][vEase];
+                
+                var color = randomColor();
+
+
+                ctx.setFillColor("#"+color);
+                 
+                var c = setInterval(function(){
+                    //console.log(func(200, 100, j, t+1));
+                    
+                    a.style.width = func(current+=1, beginning, change, duration)+"px";
+                    
+                    ctx.printPoint(current, func(current, beginning, change, duration));
+                    if(current >= duration){
+                        clearInterval(c);
+                    }
+                });
+            }
+        };
+        Animate.run();
+	</script>
+	
+</body>
+</html>

@@ -1,2 +1,4 @@
-/src/  »ù´¡javascipt½¨Éè
-/test/ qunit²âÊÔÒ³Ãæ
+ï»¿/src/  åŸºç¡€javasciptå»ºè®¾
+/test/ qunitæµ‹è¯•é¡µé¢
+
+gh-pages http://jun-lu.github.com/jun
