@@ -122,7 +122,7 @@ FlatSystem.prototype = {
     drawRect:function(x,y,width, height){
 
         this.context.beginPath();
-        this.context.fillRect(x, y, width, height);
+        this.context.fillRect(x-width/2, y-height/2, width, height);
         this.context.stroke();
     },
     /***
