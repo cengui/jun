@@ -9,18 +9,25 @@
 </head>
 <body>
     <div>
-        <canvas width="1000" height="300" id="helloworld"></canvas>
+        <canvas width="1000" height="500" id="helloworld"></canvas>
+        <canvas width="1000" height="500" id="helloworld2"></canvas>
     </div>
     <script>
         function $(id){
             return document.getElementById(id);
         }
-        var ctx = new FlatSystem($('helloworld').getContext("2d"), 1000, 300);
+        var ctx = new FlatSystem($('helloworld').getContext("2d"), 1000, 500);
         ctx.setCalibration(40);
+        ctx.setProportion(2);
         ctx.onlyQuadrant(1);
         ctx.init();
+        var ctx2 = new FlatSystem($('helloworld2').getContext("2d"), 1000, 500);
+        ctx2.setCalibration(40);
+        ctx2.setProportion(2);
+        ctx2.onlyQuadrant(1);
+        ctx2.init();
         
-        function Line(x1,y1, x2,y2){
+        function Line(x1,y1, x2,y2){//开始点，重点 2点决定一条直线（线段）
             this.x1 = x1;
             this.y1 = y1;
             
@@ -32,143 +39,122 @@
             constructor:Line,
             init:function(){
                 
-                this.a = (this.y1-this.y2)/ (this.x1-this.x2);
-                this.b = this.y1 - this.a;
-                this.getY = function(x){
-                    return a*x + b;
-                };
+                if(this.x1-this.x2 == 0 ){//无斜率线段 线段平行于y轴，斜率为0  平行于x轴this.a = 0;
+                    //斜率不存在直线表示为 x = 30;//(30为实数)
+                    this.a = null;
+                    this.b = 0;
+                    this.x = this.x1;
+                    this.fx = function(y){//y可取任何数
+                       return y;
+                    };
+                }else{//正常线段
+                    this.a = (this.y1-this.y2)/(this.x1-this.x2);
+                    this.b = this.y1 - this.a*this.x1;
+                }
+                
+            },
+            fx:function(x){
+                return this.a * x + this.b;
             },
             draw:function(ctx){
                 //console.log(this.x1, this.y1, this.x2, this.y2);
                 ctx.printLine(this.x1, this.y1, this.x2, this.y2);
+            },
+            isOnlinePoint:function(point){// point是否在线段上
+   
+                var a = this.a;
+                var b = this.b;
+               // x1
+                //console.log(a,b);
+                if(a == null){
+                    //x 取值正确 y在线段两点之间
+                    return Math.abs(point.x - this.x) <= 1 && Math.min(this.y1, this.y2) <= point.y && Math.max(this.y1, this.y2) >= point.y;
+                    //return Math.min(x1, x2) <= point.x && Math.max(x1, x2) >= point.x && Math.min(y1, y2) <= point.y && Math.max(y1, y2) >= point.y;
+                }
+                //console.log((Math.abs(point.y -( a * point.x + b ))));
+                return  Math.min(this.x1, this.x2) <= point.x && Math.max(this.x1, this.x2) >= point.x && (Math.abs(point.y -( a * point.x + b )) < 1);
+            },
+            isLineIntersect:function(line){//是否与line线段相交
+                
+                var point = this.getIntersectPoint(line);
+                //console.log(point);
+                ctx2.printPoint(point.x, point.y);
+                if(point){//直线有交点
+                    return this.isOnlinePoint(point) && line.isOnlinePoint(point);
+                }
+                
+                return false;
+            },
+            getIntersectPoint:function(line){//获取焦点 不相交返回false相交返回 交点坐标 必须先确定 isLineIntersect返回值为真 此方法才会正确
+                var a1 = this.a;
+                var b1 = this.b;
+
+                var a2 = line.a;
+                var b2 = line.b;
+                
+               
+                if(a1 == null && a2 == null){//平行于 y
+                    return false;
+                }
+                
+                if( a1/a2 != b1 / b2 ){//直线有交点
+                    /**
+                        y1 = a1*x1 + b1; 
+                        y2 = a2*x1 + b2;
+                        以上两条直线有焦点，那么焦点坐标p(x,y) 如下表示
+                    */
+          
+                    var x,y;
+                    
+                    /**a1  a2不会同时为 null*/
+                    
+                    x = - (b2 - b1) / (a2 - a1);
+                    y = line.fx(x);
+
+                    if(a1 == null){
+                        x = this.x;
+                        y = line.fx(x);
+                    }
+                    
+                    if(a2 == null){
+                        x = line.x;
+                        y = this.fx(x);
+                    }
+                    
+                    return {x:x,y:y};
+                    
+                }
+                
+                return false;
             }
         };
     </script>
 	<script>
-        /**
-            line = {
-                x1:,y1:,x2:,y2:
-            }
-            point = {
-                x1:, y1:
-            }
-			
-			点是否在线段上
-        */
-        function isOnLine(line, point){
         
-            /**
-                y = ax+b;
-                首先根据line的起点和终点 计算出a 和 b的值。(线段所在直线的标准公式)
-                然后吧point 带入 y = ax + b; 等式成立point在直线 y = ax + b 上。
-                然后判断 点x的取值范围如果在线段line的起点x和终点x之间即point在线段line上,否则不在线段line上。
-
-            */
-            var x1 = line.x1;
-            var y1 = line.y1;
-            var x2 = line.x2;
-            var y2 = line.y2;
-                    //y = ax+b;
-			var a = x1-x2 != 0 ? (y1-y2) / (x1-x2) : null;//需要修改斜率不存在的情况
-			var b = y1 - a*x1;
-			
-			
-			//console.log(line);
-			//console.log(point);
-			//console.log(Math.abs(point.y1 -( a * point.x1 + b )) < 1);
-			
-			if(a == null){//斜率没有  y可以取任值 所以不用判断Y了
-				return Math.min(x1, x2) <= point.x1 && Math.max(x1, x2) >= point.x1 && Math.min(y1, y2) <= point.y1 && Math.max(y1, y2) >= point.y1;
-			}
-				
-			
-            return  Math.min(x1, x2) <= point.x1 && Math.max(x1, x2) >= point.x1 && (Math.abs(point.y1 -( a * point.x1 + b )) < 1);
-			/**
-				判断直线是否在点上，误差必须在1px之间，所以要采用绝对值小于1
-			*/
-        };
-        
-		/**
-			线段是否相交
-		*/
-        function isLineIntersect(line1, line2){
-            var x1 = line1.x1;
-            var x2 = line1.x2;
-            
-            var y1 = line1.y1;
-            var y2 = line1.y2;
-            
-            var a1 = x1-x2 != 0 ? (y1-y2)/(x1-x2) : null;
-            var b1 = y1 - a1*x1;
-            
-            
-            //-----------------
-            var x3 = line2.x1;
-            var x4 = line2.x2;
-            
-            var y3 = line2.y1;
-            var y4 = line2.y2;
-            
-            var a2 = (x3-x4) != 0 ? (y3-y4)/(x3-x4) : null;
-            var b2 = y3 - a2*x3;
-            
-           // console.log(a1,b1);
-            //console.log(a2,b2);
-             
-            if( a1/a2 != b1 / b2 ){//直线有交点
-                console.log("直线有焦点");
-                /**
-                    y1 = a1*x1 + b1; 
-                    y2 = a2*x1 + b2;
-                    以上两条直线有焦点，那么焦点坐标p(x,y) 如下表示
-                */
-      
-				var x = -(b2-b1)/(a2-a1);
-				var y = a1 * x + b1;
-				
-				if(a1 == null){
-					x = x1;
-					y = a2 * x2 + b2;
-				}
-				
-				
-				
-                //console.log(x, y);
-				//判断交点坐标是否在两条线段上
-				//console.log(x, y);
-				ctx.printPoint(x, y, 5, 5);
-                return isOnLine(line1, {x1:x, y1:y}) && isOnLine(line2, {x1:x, y1:y});
-                
-            }
-            
-            return false;
-        }
-        
-        
-        
-        function test(){
-            var line = {
-                x1:3,y1:100, x2:3,y2:100
-            };
+        function test(){//普通测试
+            var line = {x1:30,y1:100,x2:200,y2:300};
             
             var point = {
-                x1:2,
-                y1:51
+                x:30,
+                y:110
             };
-            
-            return isOnLine(line, point);
+            var line1 = new Line(line.x1, line.y1, line.x2, line.y2);
+            line1.draw(ctx);
+            ctx.printPoint(point.x, point.y, 5,5);
+            return line1.isOnlinePoint(point);
+
         };
         
         function test2(){
             
             // y = 3x + 5;
             var line = {
-                x1:30,y1:50, x2:30, y2:30
+                x1:400,y1:400, x2:400, y2:-900
             };
             
             // y = 0.5x + 10;
             var line2 = {
-               x1:20, y1:20, x2:500,y2:20
+               x1:20, y1:20, x2:2000,y2:20
             };
             /**
 			var line2 = {
@@ -176,12 +162,13 @@
             };
             */
 			
-            new Line(line.x1,line.y1, line.x2, line.y2).draw(ctx);
-            new Line(line2.x1,line2.y1, line2.x2, line2.y2).draw(ctx);
-            
-            return isLineIntersect(line, line2);
+            var linObj1 = new Line(line.x1,line.y1, line.x2, line.y2);
+            var linObj2 = new Line(line2.x1,line2.y1, line2.x2, line2.y2);
+            linObj1.draw(ctx);
+            linObj2.draw(ctx);
+            return linObj1.isLineIntersect(linObj2);
         };
-        
+       // test2();
 		
 		
 		/**
@@ -194,6 +181,7 @@
 			this.context = ctx;
 			this.elem = [];
 			this.setInter = null;
+            this.dps = 30;
 		}
 		AnimateCtx.prototype = {
 			constructor:AnimateCtx,
@@ -201,7 +189,7 @@
 				var _this = this;
 				this.setInter = setInterval(function(){
 					_this.draw();
-				}, 600);
+				}, this.dps);
 			},
 			clear:function(){
 				this.context.clear();
@@ -227,47 +215,87 @@
 			this.y = y || 10;
 			this.width = width || 10;
 			this.height = height || 10;
-			this.g = 0.6;
+			this.g = 0.6;//重力加速度 设置为10 1000毫秒 10/1000 * 60(60毫秒动画刷新一次)
 			this.t = 0;
 			this.interval = null;
+            this.action = 1;
+            this.elasticity = 0.9;//弹力恢复系数0 - 1
+            this.k = -Math.PI/3;//小球的运动斜率0 --- Math.PI/2
+            this.b = y - this.k*x;//根据斜率算出直线b
+            this.dps = 30;
+            this.lidu = 5;
 			//this.init();
 		};
 		SmallBall.prototype = {
 			constructor:SmallBall,
-			init:function(){
-				
-				_this.t++;
-				var h = _this.y - 0.5*_this.g*(_this.t*_this.t);
-				if( _this.isIntersect(h) ){//撞
-					console.log(1);
-					//_this.y = this.y;
-				}else{
-					console.log(2);
-					_this.y = h;
-				}
-					
+            easeOut: function(t,b,c,d){
+                return -c * ((t=t/d-1)*t*t*t - 1) + b;
+            },
+			init:function(){//直线运动
+                this.t += this.action;
+                this.x += 3; //可以直接给x递增
+                //x* x = -2py; 抛物线的方程
+                //x = Math.sqrt(-2*p*y);
+                //this.x += 0.5*this.lidu*(this.t*this.t);
+                var gt = 0.5*this.g*(this.t*this.t) * this.action;//加速度
+
+				var h = this.y - gt;
+                //var x = Math.floor(h / this.k)+this.b;
+                   
+                if( this.isIntersect(this.x,h) && this.action > 0 ){
+                    this.y = new Line(this.x,this.y, this.x, h).getIntersectPoint(new Line(20,20,2000,20)).y;
+                    //this.x = x = Math.floor(this.y / this.k)+this.b;
+                    this.action = -this.action;
+                    this.t = Math.floor( this.t*this.elasticity );
+                    if(this.t == 0){
+                        this.stop();
+                    }
+                }else{
+                    this.y = h;
+                }
+                
+                if(this.t <= 0){
+                    this.action = -this.action;
+                }
+
+                //this.x = x;
+
+               
 			},
+           // init:function(){
+                //x2=-2py 抛物线
+                //for();
+           // },
 			draw:function(ctx){
-				var _this = this;
-				
+                //this.init();
 				ctx.printPoint(this.x, this.y, this.width, this.height);
 			},
 			move:function(){
-				this.x += 10;
+				//this.x += 10;
+                var _this = this;
+                this.interval = setInterval(function(){
+                    _this.init();
+                }, this.dps);
 			},
-			isIntersect:function(h){
-				var line1 ={//新线
-					x1:this.x, y1:this.y, x2:this.x,y2:h
+            stop:function(){
+                clearInterval(this.interval);
+            },
+			isIntersect:function(x, h){
+               
+				var line1 ={//物体运动线
+					x1:this.x, y1:this.y, x2:x,y2:h
 				};
 
-				var line2 = {
-					x1:20, y1:20, x2:500,y2:20
+				var line2 = {//墙壁
+					x1:20, y1:20, x2:2000,y2:20
 				};
-				
-				
-				new Line(line1.x1,line1.y1, line1.x2, line1.y2).draw(ctx);
-
-				return isLineIntersect(line1, line2);
+                
+                var lineObj1 = new Line(line1.x1,line1.y1, line1.x2, line1.y2);
+                var lineObj2 = new Line(line2.x1,line2.y1, line2.x2, line2.y2);
+                
+                lineObj1.draw(ctx2);
+                
+                return lineObj1.isLineIntersect(lineObj2);
 			}
 		};
 		
@@ -276,13 +304,17 @@
 		
 		
 		var smallBallMove = new AnimateCtx(ctx);
-		var smallBall = new SmallBall(30, 500, 10, 10);
-		var line1 = new Line(20, 20, 500, 20);
+		var smallBall = new SmallBall(200, 500, 10, 10);
+            //smallBall.init();
+            smallBall.move();
+ 
+		var line1 = new Line(20, 20, 2000, 20);
 		smallBallMove.init();
 		smallBallMove.addElem(smallBall);
+
         smallBallMove.addElem(line1);
 		
-		
+		/***/
 		
         
     </script>
