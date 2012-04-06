@@ -139,7 +139,7 @@ FlatSystem.prototype = {
         this.context.stroke();
     },
     fillText:function(text, x, y){
-        this.context.fillText(text, x, y);
+        this.context.fillText(text, this.getx(x), this.gety(y));
     },
     build:function(){//构建坐标系
 
@@ -212,6 +212,11 @@ FlatSystem.prototype = {
         }
 
 
+    },
+    isIn:function(x, y){
+        var x = this.getx(x);
+        var y = this.gety(y);
+        return x>=0 && x <= this.width && y>=0 && y<= this.height;
     },
     /**
         获取真实x坐标
