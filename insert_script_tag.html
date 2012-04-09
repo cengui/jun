@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Hello Jun</title>
+</head>
+<body>
+    <div id="test1"></div>
+    <table>
+        <tbody id="test2"></tbody>
+    </table>
+	<script>
+        window.onload = function(){
+            document.getElementById('test1').innerHTML = "_11<script defer>function a(){alert(1)};alert('hi');</scr"+"ipt>";
+        };
+        
+        document.getElementById('test2').innerHTML = "111";
+    </script>
+</body>
+</html>
