@@ -223,14 +223,14 @@
 			this.y =  y || 10;
             
 			this.r = 10;//半径
-			this.g = -1;//重力加速度 设置为10 1000毫秒 10/1000 * 60(60毫秒动画刷新一次)
+			this.g = -6;//重力加速度 设置为10 1000毫秒 10/1000 * 60(60毫秒动画刷新一次)
 			this.t = 0;
 			this.interval = null;
-            this.elasticity = 0.9;//弹力恢复系数0 - 1
+            this.elasticity = 0.5;//弹力恢复系数0 - 1
             this.dps = 30;
             this.ut = 0;
-            this.u = 100;//抛出力
-            this.deg = 89;
+            this.u = 20;//抛出力
+            this.deg = 50;
             this.z = 0.01;//空气阻力
             //this.k = this.getK(this.deg);
 			//this.init();
@@ -245,6 +245,8 @@
             this.ux = Math.cos( this.k ) * this.u; //x轴分力
             this.uy = Math.sin( this.k ) * this.u; //y轴分力
             
+            this.sx = this.x;
+            this.sy = this.y;
             this.init(this.ux, this.uy, this.k);
 		};
 		SmallBall.prototype = {
@@ -252,7 +254,7 @@
             easeOut: function(t,b,c,d){
                 return -c * ((t=t/d-1)*t*t*t - 1) + b;
             },
-            init:function(ux, uy, k){
+            init1:function(ux, uy, k){
                // console.log(ux, uy, k);
                 //this.g = -1;//重力加速度 设置为10 1000毫秒 10/1000 * 60(60毫秒动画刷新一次)
                 
@@ -261,15 +263,13 @@
                  
                 this.ux = ux; //x轴分力
                 this.uy = uy; //y轴分力
-                
-               
 
-                this.t = Math.floor(-Math.sqrt(Math.abs(this.uy / (0.5 * this.g)), 2));//时间t的最小值
+                this.t = 0;//Math.floor(-Math.sqrt(Math.abs(this.uy / (0.5 * this.g)), 2));//时间t的最小值
                 
                 this.sx = -this.t * this.ux + this.x;//抛射起点
                 this.sy = this.y;//抛射起点
             },
-            _throw:function(){
+            _throw1:function(){
                 this.t++;
                 // x = ux * t + sx;
                 var x = Math.floor(this.ux * this.t + this.sx);
@@ -284,14 +284,17 @@
                     this.y = isIntersect.y;
                     //this.ux = ;
                     //console.log(this.g,this.uy, this.sy, this.y);
-                    //var uy = Math.sqrt(0.5 * (this.g+this.uy) * (this.sy - this.y));//* 弹力恢复系数
-                    //var ux = this.ux;
-                    //console.log(ux, uy, uy/ux);
-                    //this.init(ux, uy, Math.tan(uy/ux));
+                    var uy = this.uy * this.elasticity;//Math.sqrt(0.5 * (this.g+this.uy) * (this.sy - this.y));//* 弹力恢复系数
+                    var ux = this.ux;
+                    if(uy < 1){
+                        this.stop();
+                        return ;
+                    }
+                    this.init(ux, uy, Math.tan(uy/ux));
                     //a = Math.tan(uy/ux);
                    // console.log(uy);
                     //if(uy == 0){
-                        this.stop();
+                    //    this.stop();
                     //}
                 }else{
                     this.x = x;
@@ -299,6 +302,36 @@
                 }
                 //console.log(x, y);
                 ctx2.printPoint(x, y);
+            },
+            init:function(){
+                this.t = 0;
+                this.ht = 0;
+            },
+            _throw:function(){
+                this.t++;
+                var x = this.ux * this.t;
+                var y = this.uy * this.t + 0.5 * this.g * Math.pow(this.t, 2);
+                if( Math.abs(y) < 1 ){
+                    this.ht = t;
+                }
+                var isIntersect = this.isIntersect(this.sx + x, this.sy + y);
+                this.x = this.sx + x;
+                this.y = this.sy + y;
+                
+                if( isIntersect && this.t > 1){
+                    
+                    this.x = isIntersect.x;
+                    this.y = isIntersect.y;
+                    this.sx = this.x;
+                    this.sy = this.y;
+                    
+                    //this.uy = Math.abs( 0.5 * this.g * Math.pow(this.t-this.ht, 2) ) * this.elasticity;
+                    this.uy = this.uy * this.elasticity;
+                   //console.log(this.uy);
+                    this.t = 0;
+                    //this.stop();
+                }
+                ctx2.printPoint(this.x, this.y);
             },
             getK:function(deg){
                 return deg/180 * Math.PI;
@@ -341,7 +374,7 @@
 		
 		/***/
 		var smallBallMove = new AnimateCtx(ctx);
-		var smallBall = new SmallBall(200, 500, 10, 10);
+		var smallBall = new SmallBall(200, 100, 10, 10);
             //smallBall.init();
             smallBall.move();
  
