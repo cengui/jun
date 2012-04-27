@@ -1,0 +1,296 @@
+﻿<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>不交叉链接任意多个已知点</title>
+</head>
+<body>
+	<h1>不交叉链接任意多个已知点</h1>
+	<canvas id="tutorial" width="1000" height="500">非常抱歉您的高级浏览器不支持 canvas</canvas>
+    <div>随机点个数：<input type="number" value="20" id="pointCount" /></div>
+    <div>
+        <input type="button" value="X轴优先链接" onclick="xConnection()" />
+        <input type="button" value="Y轴优先链接" onclick="yConnection()"/>
+        <input type="button" value="螺旋链接" onclick="zConnection()"/>
+        <input type="button" value="重新随机" onclick="f5()"/>
+        
+    </div>
+    <script src="src/FlatSystem.js"></script>
+    
+    <script>
+        //通过两点来表示直线
+        function Line(x1,y1, x2,y2){//开始点，终点 2点决定一条直线（线段）
+            this.x1 = x1;
+            this.y1 = y1;
+            
+            this.x2 = x2;
+            this.y2 = y2;
+            this.init();
+        }
+        Line.prototype = {
+            constructor:Line,
+            init:function(){
+                //平行于x轴斜率为 0
+                //平行于y轴 斜率为 null tan 90度 斜率不存在，但是他可以无限大
+                if(this.x1-this.x2 == 0 ){
+                    //斜率不存在直线表示为 x = 30;//(30为实数)
+                    this.a = null;//斜率
+                    this.b = 0;
+                    this.x = this.x1;
+                    this.fx = function(y){//y可取任何数
+                       return y;
+                    };
+                }else{//正常线段
+                    this.a = (this.y2-this.y1)/(this.x2-this.x1);
+                    this.b = this.y1 - this.a*this.x1;
+                }
+                
+            },
+            fx:function(x){
+                return this.a * x + this.b;
+            },
+            draw:function(ctx){
+                ctx.printLine(this.x1, this.y1, this.x2, this.y2);
+            }
+        };
+    </script>
+	<script>
+    
+        /**
+            初始化坐标系
+        */
+        var tutorial = document.getElementById('tutorial').getContext('2d');//;
+		var flatSystem = new FlatSystem(tutorial, 1000, 500);
+        flatSystem.setCalibration(40);
+        flatSystem.setProportion(1);
+        flatSystem.onlyQuadrant(1);
+        flatSystem.init();
+        
+        
+        
+        
+        /***
+            一个随机点链接类
+        */
+        function PointLineSystem(number){
+            this.pointList = null;
+            this.number = number || 100;
+        };
+        PointLineSystem.prototype = {
+            // 给出任意一点，计算当前点与所有点的斜率
+            cupK:function(point){
+                
+                //var list = [{x:0,y:0,p:1}]; 起点
+                var pointList = this.pointList;
+                var list = [];
+                var p = null;
+                var i = 0;
+                while((p = getNextPoint(point, pointList)) != null){
+
+                    list.push( p );
+                    point = p; 
+                }
+                return list;
+                
+                
+                function getNextPoint(point, pointList){
+                    var nextPoint = null;
+                    var queryOrder = getQueryOrder(point.p);//;[1,4,3,2,1,4,3,2]
+                    var allList = [
+                        [],//重合
+                        [],//第1
+                        [],//第2
+                        [],//第3
+                        []//第4
+                    ];
+                    /**
+                        计算所有点像对于当前点的象限位置
+                    */
+                    for(var i=0; i<pointList.length; i++){
+                        allList[getQuadrant(point, pointList[i])].push(pointList[i]);
+                    }
+                    
+                    /***
+                        根据上一点的顺序 按照 1 4 3 2的象限顺序循环取斜率最大
+                    */
+                    for(var i=0; i<queryOrder.length; i++){
+                        
+                        if(allList[ queryOrder[i] ].length){
+
+                            nextPoint = getMaxP(point, allList[ queryOrder[i] ]);
+                            if(nextPoint){//如果在当前象限找到可用值就返回，否则循环找下一个象限
+                                nextPoint.p = queryOrder[i];
+                                 return nextPoint;
+                            }
+                           
+                            
+                        }
+                    }
+                    return nextPoint;
+                };
+                
+                /**
+                    根据当前点的象限计算查找象限顺序
+                    q:1,2,3,4
+                */
+                function getQueryOrder(q){//获取查询象限顺序
+                    var queryOrder = [1,4,3,2,1,4,3,2];
+                    for(var i=0; i<queryOrder.length;i++){
+                        if(q == queryOrder[i]){
+                            return queryOrder.slice(i, i+4);
+                        }
+                    }
+                    return [1,4,3,2];
+                }
+                
+                function getMaxP(point, pointList){
+                    var pointList = pointList;//this.pointList;
+                    var max = null;
+                  
+                    for(var i=0; i<pointList.length; i++){
+                        if(pointList[i].is == false){
+                            var line = new Line(0, 0, pointList[i].x-point.x, pointList[i].y-point.y);
+                            pointList[i].a = line.a;
+
+                            //两点相对斜率为null 平行于y
+                            //找出Y轴距离(绝对值)最短的点
+                            if(line.a == null){
+                                if(max != null && max.a == null){
+                                    if(Math.abs(line.y-point.y) < Math.abs(max.y-point.y)){
+                                        max = line;
+                                    }
+                                }else{
+                                    max = line;
+                                }
+                            }else if(max == null || (line.a != null && line.a > max.a)){
+                                max = pointList[i];
+                            }
+                        }
+                    }
+                    if(max){
+                        max.is = true;
+                    }
+                    return max;
+                };
+
+                function getQuadrant(point, point1){
+                
+                    if(point1.x - point.x >= 0 && point1.y - point.y >= 0){
+                        return 1;
+                    }else if(point1.x - point.x <= 0 && point1.y - point.y >= 0){
+                        return 2;
+                    }else if(point1.x - point.x <= 0 && point1.y - point.y <= 0){
+                        return 3;
+                    }else if(point1.x - point.x >= 0 && point1.y - point.y <= 0){
+                        return 4
+                    }
+                    
+                    return 0;//重合
+                }
+                
+            },
+            minXorder:function(){
+               var pointList = this.pointList;
+               pointList.sort(function(a, b){
+                    return a.x - b.x;
+               });
+               return pointList;
+            },
+            minYorder:function(){
+               var pointList = this.pointList;
+               pointList.sort(function(a, b){
+                    return a.y - b.y;
+               });
+               return pointList;
+            },
+            printPointLines:function(flatSystem, pointList, length){
+                var pointList = pointList || this.pointList;
+                flatSystem.setStrokeColor("#ccc");
+                var len = length || pointList.length;
+                for(var i=1; i<len; i++){
+                    flatSystem.printLine(pointList[i-1].x, pointList[i-1].y, pointList[i].x, pointList[i].y );
+                }
+            },
+            randomPoint:function(){
+                var pointList = [];
+                var point;
+                var len = this.number;
+                for(var i=0; i<len; i++){
+                    point = {
+                        x:parseInt(Math.random()*900),//x范围
+                        y:parseInt(Math.random()*400),//y范围
+                        is:false
+                    };
+                    
+                    pointList.push( point );
+                    
+                };
+                
+                this.pointList = pointList;
+            },
+            printPointList:function(flatSystem){
+                var pointList = this.pointList;
+                var point = null;
+                for(var i=0; i<pointList.length; i++){
+                    point = pointList[i];
+                    point.is = false;
+                    flatSystem.setFillColor("#f30");
+                    flatSystem.printPoint(point.x, point.y, 4,4);
+                    flatSystem.fillText(point.x+","+point.y, point.x+10, point.y+10);
+                };
+            }
+        };
+        
+        var pointLineSystem = new PointLineSystem(20);
+            pointLineSystem.randomPoint();
+            pointLineSystem.printPointList(flatSystem);
+        
+        /**
+            x优先链接
+        */
+        function xConnection(){
+            flatSystem.init();
+            pointLineSystem.printPointList(flatSystem);
+            
+            pointLineSystem.minXorder();
+            pointLineSystem.printPointLines(flatSystem);
+        }
+        
+        /**
+            y有优先链接
+        */
+        function yConnection(){
+            flatSystem.init();
+            pointLineSystem.printPointList(flatSystem);
+            
+            pointLineSystem.minYorder();
+            pointLineSystem.printPointLines(flatSystem);
+        }
+        
+        /**
+            螺旋链接
+        */
+        function zConnection(){
+            flatSystem.init();
+            pointLineSystem.printPointList(flatSystem);
+           
+            var list = pointLineSystem.cupK({x:0,y:0});
+            pointLineSystem.printPointLines(flatSystem, list);
+        }
+        
+        function f5(){
+            var val = document.getElementById('pointCount').value;
+            pointLineSystem.number = parseInt(val) || 20;
+            
+            flatSystem.init();
+            pointLineSystem.randomPoint();
+            pointLineSystem.printPointList(flatSystem);
+            zConnection();
+        }
+        
+	</script>
+
+	
+</body>
+</html>

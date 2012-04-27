@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>求最大公约数</title>
+</head>
+<body>
+	<script>
+        /**
+           欧几里德  辗转相除法
+        */
+        
+        function getCommonDivisor1(a, b){
+            var c = b == 0 ? a : b;
+            
+            while(c != 0){
+                b = c;
+                c = a % b;
+                a = b;
+            }
+            
+            return b;
+        }
+        
+        /**
+           九章算术  更相减损法
+        */
+        
+        function getCommonDivisor(a, b, i){
+            if(a%2==0 && b%2==0){
+                return getCommonDivisor(a/2, b/2, i ? i++ : 2);
+            }
+            
+            var c = a-b;
+            
+            if(c == b){
+                return i ? c * i : c;
+            }
+            
+            if(c > b){
+                return getCommonDivisor(c, b, i ? i++ : 2);
+            }
+            
+            if( c < b){
+                return 1;
+            }
+            
+        }
+        
+        function isNnumber(a){
+            return -a == Math.abs(a);
+        }
+        
+    </script>
+</body>
+</html>
