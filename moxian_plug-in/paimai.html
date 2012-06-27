@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="none,noindex,nofollow" />
+<title>魔线网 - 拍卖</title>
+<link rel="stylesheet" href="css/reset.css" />
+<link  rel="stylesheet" href="css/admin.css"/>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.md5.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/api_user.js"></script>
+
+<link rel="stylesheet" href="css/all.css" />
+
+</head>
+
+<body>
+<div id="doc" class="y-t1">
+	<div id="hd">
+		<div class="top-user">
+			当前登陆账户：<strong id="curuser" class="em">--</strong>, 
+			魔币数量：<strong id="curmobi" class="em">--</strong> <input type="button" id="updateCurUser"  value="更新" />
+			
+		</div>
+	</div>
+    <div class="bd">
+    	<div class="bd-in clear">
+        	<div class="main">
+            	<div class="main-in" style="min-height:700px;">
+					<style type="text/css">
+						.mopai-details{height:388px;line-height:20px;margin-top:10px;}
+						.picshow{width:192px;padding:0 10px;overflow:hidden;}
+						.picshow h2{text-align:center;font-size:14px;font-weight:bold;line-height:30px;}
+						.picshow .picbig{width:192px;height:270px;border:1px solid #e3e4de;margin-bottom:10px;}
+						.picshow .picbig img{padding:5px;max-width:170px;}
+									   .picshow .pictitle{word-wrap: break-word;word-break: break-all;overflow: hidden;height: 81px;}
+									   .picshow .checktest{padding-top:40px;}
+			
+									 
+						.mopai-main .sidebar-tab{width:223px;border:1px solid #999;height:408px;}
+						.sidebar-tab .sidebar-tabmenu li{float:left;width:111px;height:36px;text-align:center;line-height:36px;border:solid #999;border-width:0 1px 1px 0}
+						.sidebar-tab .sidebar-tabmenu li.last{border-right:0}
+						.sidebar-tab .sidebar-tabmenu li.on{border-bottom:0;font-weight:bold;color:#7058a4;}
+										.tabbox-list ol.list10 li{height:29px;line-height:29px;}
+										.tabbox-list ol{max-height:330px;min-height:330px;overflow;auto;border: 1px solid #CCC;}
+										.tabbox-list li{height:42px;*height:40px;_height:42px;line-height:42px;border-bottom:1px solid #ccc;}
+										.tabbox-list li.first{height:28px;line-height:28px;text-align:center;}
+										.tabbox-list li .nub{width:40px;text-align:center;float:left;}
+										.tabbox-list li .picpost{overflow:hidden;line-height:18px;}
+										.tabbox-list li .picpost h3{padding-top:2px;}
+										.mopai-main .picpop,.mopai-main .picpopr{width:234px;height:84px;background:url(http://rs.moxian.com/resource//common_info/images/mopai_popbg.gif) no-repeat 0 0;position:absolute;overflow:hidden;color:#666;line-height:20px;z-index:1;}
+										.mopai-main .picpopr{background:url(http://rs.moxian.com/resource//common_info/images/mopai_popbg.gif) no-repeat 0 -84px;}
+										.mopai-main .picpop .picpopbox{padding:13px 10px 0 15px;}
+										.mopai-main .picpopr .picpopbox{padding:13px 15px 0 32px;}
+										.mopai-main .picpopbox img,.mopai-main .picpopboxr img{float:left;margin-right:5px;}
+										.tabbox-list .more{line-height:31px;overflow:hidden;height:31px;}
+										.tabbox-list li img{float:left;margin-top:5px;border:1px solid #ccc;margin-right:5px;}
+										.tabbox-list li .price{width:48%;float:left;text-align:center;}
+										.tabbox-list li .ranking{width:48%;text-align:center;float:right;}
+						.item-no{color:#666;}
+					</style>
+					<div class="content">
+						<div class="#">
+							<div class="p-l-10">商品ID：<input type="text" name="" value="39" id="curgid" /> <input type="button" value="读取" id="getGoodsInfo" /></div>
+							<div>
+								<div class="mopai-details">
+									<div class="picshow d-i-b" style="width:220px;vertical-align: top;">
+										<p class="picbig"><img id="goodsImg" src="http://rs.moxian.com/upload/apps/mopai/834/images/2012/06/201206041215362882.jpg"></p>
+										<h2 id="goodsTitle">T恤？</h2>
+										<div id="endTime" class="em" style="text-align: center;font-size:34px;font-weight:700;height:50px;">--</div>
+									</div>
+									<div class="sidebar-tab d-i-b" style="width:200px;" >
+											<div class="sidebar-tabbox clearfix">
+												<div id="leve_list" class="tabbox-list" style="display: block; ">
+													<ol class="list10" id="topPriceList">
+														<li class="biaoti"><span class="ranking">排名</span><span class="price">价格</span></li>
+														<li class="item"><span class="price" style="color: rgb(70, 158, 150); ">100.00</span>
+														<span class="ranking" style="color: rgb(70, 158, 150); ">1</span></li>
+													</ol>
+													<div class="m-t-10">
+														<input  style="width:50px;" type="text" value="1" name="" id="topListp" />
+														<input class="m-l-10" type="button" id="updatetopListp" value="更新" />
+														Max:<input value="0" type="text" style="width:30px;" id="topListpMax" />
+													</div>
+												</div>
+											</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div  style="border-top:1px solid #d8d8d8;">
+							<div style="margin-top:10px;">
+								失败: <input type="text" style="width:700px;" name="" id="errorList" value="" />
+							</div>
+							<div  style="border-top:1px solid #d8d8d8;margin-top:10px;">
+								<div class="m-t-10 d-i-b" style="border-right:1px solid #d8d8d8;padding:10px;" >
+									<div>价格: <input type="text" name="" id="price0min" /></div><br/>
+									<div>　　　<input type="button" value="出价" id="price0sub" /></div>
+								</div>
+								<div class="m-t-10 d-i-b m-l-10" style="border-right:1px solid #d8d8d8;padding:10px;" >
+									<div>最小价格: <input type="text" name="" id="price1min" /></div><br/>
+									<div>最大价格: <input type="text" name="" id="price1max" /></div><br/>
+									<div>　　步长: <input type="text" name="" id="price1tep" value="3" /></div><br/>
+									<div>　　间隔: <input type="text" name="" value="3500" id="price1time" /></div><br/>
+									<div>剔除条件: <input type="text" name="" value="0" id="price1t" /></div><br/>
+									<div>　　　　　<input type="button" value="依次出价" id="price1sub" /> <input type="button" value="停止出价" id="stop1sub" /></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="user-list">
+						<div><input type="button" value="查看账户列表" id="viewUserList" /></div>
+						
+						<ul id="userlist" class="hide">
+							<li>
+								<input type="text" value="jelle.lu@gmail.com" id="" />
+								<input type="text" value="l123456" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, jun_0ooo, 13682637304, 鲁军
+								</div>
+								<input type="button" class="login" value="登陆" data-id="4899" />  <input type="button" class="update" value="更新" data-id="4899" />
+							</li>
+							<li>
+								<input type="text" value="317591243@qq.com" id="" />
+								<input type="text" value="l123456789" id="" />
+								<div class="info">
+									<span class="em mobi">--</span>, 室长, 18665300176, 谭思毅
+									
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5200" />  <input type="button" class="update" value="更新" data-id="5200" />
+							</li>
+							<li>
+								<input type="text" value="ludaiqian@126.com" id="" />
+								<input type="text" value="12345678" id="" />
+								<div class="info">
+									<span class="em mobi">--</span>, 张小程, 13104851022, 鲁谦
+									
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5195" />  <input type="button" class="update" data-id="5195" value="更新" />
+							</li>
+							<li>
+								<input type="text" value="909696966@qq.com" id="" />
+								<input type="text"  value="l123456" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, 雅思, 18682132445, 鲁代乾
+									
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5192" />  <input type="button" class="update" data-id="5192" value="更新" />
+							</li>
+							<li>
+								<input type="text" value="806361192@qq.com" id="" />
+								<input type="text" value="l123456789" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, tom_li1, 13424376580, 老虎
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5202" />  <input type="button" class="update" data-id="5202" value="更新" />
+							</li>
+							<li>
+								<input type="text" value="308938872@qq.com" id="" />
+								<input type="text" value="l123456789" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, 守喉幸福, 13510368960, 谭雅丽
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5249" />  <input type="button" class="update" data-id="5249" value="更新" />
+							</li>
+							
+							<li>
+								<input type="text" value="164370785@qq.com" id="" />
+								<input type="text" value="l123456789" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, 小晴晴, 18781718898, 敬小晴
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5250" />  <input type="button" class="update" data-id="5250" value="更新" />
+							</li>
+							
+							<li>
+								<input type="text" value="393659258@qq.com" id="" />
+								<input type="text" value="l123456" id="" />
+								
+								<div class="info">
+									<span class="em mobi">--</span>, tellli, 15919483914, 李宁
+								</div>
+								<input type="button" class="login" value="登陆" data-id="5286" />  <input type="button" class="update" data-id="5286" value="更新" />
+							</li>
+							 
+						</ul>
+						
+					</div>
+               </div>
+            </div>
+        	<div class="side">
+				<dl class="nav">
+					<dt>功能选择</dt>
+					<dd><a href="index.html">眼疾手快刷分</a></dd>
+					<dd   class="on"><a href="paimai.html">拍卖</a></dd>
+				</dl>
+				
+				<div class="log" >
+					<div class="log-title">Log</div>
+					<div class="log-context" id="log">
+					</div>
+					<div class="log-op"><input type="button" value=" Clear Log " onclick="page.clearLog()" /></div>
+				</div>
+			</div>
+        </div>
+    </div>
+   <!-- <div class="fd">fd</div>-->
+
+</div>
+
+<script type="text/javascript" src="js/page_main.js"></script>
+<script type="text/javascript">
+	//http://moxian.com/apps/aution/gateway.php
+	function BaseGoodsModel(){};
+	BaseGoodsModel.prototype = new BaseModel();
+	Common.mix(BaseGoodsModel.prototype, {
+		getPath:function(url){
+			return "http://moxian.com/"+url;
+		},
+		getGoods:function(gid){
+			Common.post(this.getPath("apps/aution/gateway.php"), {act:"goods_id", gid:gid}, this.ajaxResultFunction(arguments));
+		},
+		getMyTopList:function(gid, p){
+			Common.post(this.getPath("apps/aution/gateway.php"), {act:"paing_goods_top_mx", gid:gid, p:p}, this.ajaxResultFunction(arguments));
+		},
+		gujia:function(gid, a_price){
+			Common.post(this.getPath("apps/aution/gateway.php?rn="+new Date().getTime()), {act:"gujia", a_goods_id:gid, a_price:a_price, type:0}, this.ajaxResultFunction(arguments));
+		}
+	});
+	
+	
+	Common.page = {
+		gid:0,
+		timeout:null,
+		priceList:[],
+		erorList:[],
+		pushErrorList:function(price){
+			Common.page.erorList.push( Math.round(price * 100) );
+			$('#errorList').val( Common.page.erorList.join(',') );
+		},
+		clearErrorList:function(){
+			Common.page.erorList = [];
+			$('#errorList').val("");
+		},
+		getGoodInfo:function( gid ){
+			var model = new BaseGoodsModel();
+			var ctrl = new BaseController();
+			ctrl.update = function(data){
+				if(data && data.gid){
+					Common.page.gid = data.gid;
+					$('#goodsImg').attr('src', "http://rs.moxian.com/"+data.g_photo);
+					
+					$('#goodsTitle').html('<a href="http://moxian.com/apps/loadapp.php?app=mopai_large" target="_blank">'+data.g_name+'</a>' + Common.page.gid);
+					$('#endTime').text( Common.countDown(data.g_end * 1000) );
+					Common.page.getMyPriceTopList(Common.page.gid, 1);
+				}
+			};
+			model.addObserver( ctrl );
+			model.getGoods(gid);
+		},
+		getMyPriceTopList:function(gid, p){
+			var model = new BaseGoodsModel();
+			var ctrl = new BaseController();
+			ctrl.init = function(){
+				$('#topPriceList .item').remove();
+				$('#topListpMax').val(0);
+			};
+			ctrl.update = function(data){
+				if(data && data.info){
+					//Common.page.gid = data.gid;
+					//$('#goodsImg').attr('src', "http://rs.moxian.com/"+data.g_photo);
+					//$('#goodsTitle').text(data.g_name);
+					var html = "";
+					$('#topListpMax').val(data.info.pagetotal);
+					for(var i=0; i<data.data.length; i++){
+						if(data.data[i].top){
+							html += '<li class="item">\
+								<span class="price" style="color: rgb(70, 158, 150); ">'+ data.data[i].a_price +'</span>\
+								<span class="ranking" style="color: rgb(70, 158, 150); ">'+ data.data[i].top +'</span>\
+							</li>';
+						}else{
+							html += '<li class="item item-no">\
+								<span class="price" style="text-decoration: line-through; ">'+ data.data[i].a_price +'</span>\
+								<span class="ranking">—</span>\
+							</li>';
+						}
+					};
+					
+					$('#topPriceList').append( html );
+				}else if(data){
+					console.log(data.errno, data.msg);
+				}else{
+					console.log("未知错误", data);
+				}
+			};
+			ctrl.init();
+			model.addObserver( ctrl );
+			model.getMyTopList(gid, p);
+			
+		},
+		gujia:function(gid, a_price){
+			var model = new BaseGoodsModel();
+			var ctrl = new BaseController();
+			ctrl.update = function(data){
+				if(data && data.result){
+					console.log("本次出价:"+ a_price);
+					Common.page.priceList.push( a_price );
+				}else if(data && data.result == false){
+					console.log("失败:"+ data.reason);
+				}else{
+					Common.page.pushErrorList(a_price);
+					console.log("失败:"+ a_price);
+				}
+			};
+			model.addObserver( ctrl );
+			model.gujia(gid, a_price);
+		},
+		jieduangujia:function(min, max, tep, time, t){
+			//var i = min;
+			Common.page.clearErrorList();
+			
+			var x = max;
+			var price = min;
+			Common.page.timeout = setInterval(function(){
+				price += tep;
+				
+				if(t != 0 && price%t == 0){//被t整除的剔除掉
+					return ;
+				}
+				
+				if(price < max){
+					Common.page.gujia(Common.page.gid, price/100);
+				}else{
+					console.log("min:", min, "max:", max, "tep:", tep, "time:", time, "over");
+					clearInterval( Common.page.timeout );
+					Common.page.chujiaErrorList(time);
+				}
+			}, time);
+		},
+		chujiaErrorList:function(time){
+			var i = -1;
+			var errorList = Common.page.erorList;
+			console.log(errorList);
+			Common.page.clearErrorList();
+			if(errorList.length > 0){
+				console.log("出价错误列表");
+				Common.page.timeout = setInterval(function(){
+					if(++i < errorList.length){
+						Common.page.gujia(Common.page.gid, errorList[i]/100);
+					}else{
+						console.log("出价错误列表结束");
+						clearInterval( Common.page.timeout );
+						Common.page.chujiaErrorList(time);
+					}
+				}, time);
+			}
+		},
+		clearout:function(){
+			clearInterval( Common.page.timeout );
+		}
+	};
+	
+	$('#getGoodsInfo').click(function(){
+		var gid = $('#curgid').val();
+		Common.page.getGoodInfo( gid );
+	});
+	
+	$('#updatetopListp').click(function(){
+		var p = parseInt( $('#topListp').val() );
+		Common.page.getMyPriceTopList(Common.page.gid, p);
+	});
+	
+	$('#stop1sub').click(function(){
+		Common.page.clearout();
+		console.log("已经停止");
+	});
+	
+	$('#price1sub').click(function(){
+		var min = parseInt($('#price1min').val());
+		var max = parseInt($('#price1max').val());
+		var tep = parseInt($('#price1tep').val());
+		var time = parseInt($('#price1time').val());
+		var t = parseInt($('#price1t').val());
+		console.log("min:", min, "max:", max, "tep:", tep, "time:", time, "t", t, "start");
+		
+		Common.page.jieduangujia(min, max, tep, time, t);
+		
+	});
+	
+	
+	$('#price0sub').click(function(){
+		var price = parseInt( $('#price0min').val() );
+		console.log("price:", price, "start");
+		Common.page.gujia(Common.page.gid, price/100);
+	});
+	
+	//可以动态更新魔币
+	page.updateUserInfoRegEvent();
+</script>
+
+
+</body>
+</html>
