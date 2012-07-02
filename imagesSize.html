@@ -1,0 +1,108 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>###</title>
+</head>
+<body>
+	
+	<div id="box" style="display:inline-block;">
+		<!--<img id="img" src="http://www.planeart.cn/demo/imgReady/vistas24.jpg?a=4" alt="" />-->
+	</div>
+	
+	<div id="log" style="position:absolute;left:0;top:0;border:1px solid #000;background:#fff;"></div>
+	
+</body>
+<script type="text/javascript">
+		window.console = {
+			log:function(text){
+				var div = document.createElement('DIV');
+				div.innerHTML = text;
+				$('log').appendChild( div );
+			}
+		};
+	
+		function $(id){
+			return document.getElementById( id );
+		}
+		
+		/**
+			来自于唐斌的快速获取图片尺寸
+		*/
+		
+		function ImagesSize( urls ){
+			//this.callback = callback;
+			this.timePag = 100;
+			this.init(urls);
+		};
+		ImagesSize.prototype = {
+			constructor:ImagesSize,
+			init:function(urls){
+				var i=0;
+				if(typeof urls == "string"){
+					this.newImagesReady( urls );
+				}else{
+					for(; i<urls.length; i++ ){
+						this.newImageReady( urls[i] );
+					}
+				}
+			},
+			newImageReady:function(url){
+				var _this = this;
+				var img = new Image();
+				img.timeId = 0;
+				//img.onload = function(){};
+				//img.onabort = function(){};
+				//img.onunload = function(){};
+				
+				img.onerror = function(){
+					_this.onerror(img);
+					_this.clearTimer(img, 'error');
+				};
+				
+				img.src = url;
+
+				if( img.complete ){
+					this.onready( img );
+					this.clearTimer( img );
+					return ;
+				};
+				
+				this.interVal( img );
+			},
+			interVal:function(img){
+				var _this = this;
+				img.timeId = setInterval(function(){
+					if(img.width !== 0 || img.height !== 0){
+						_this.onready( img );
+						_this.clearTimer( img );
+					}
+				}, this.timePag);
+			},
+			onready:function(){},
+			onerror:function(){},
+			/*onload:function(){},
+			onabort:function(){},*/
+			clearTimer:function(img, tip){
+				clearInterval(img.timeId);
+				img = null;
+			}
+		};
+		
+		
+		
+		var time = new Date().getTime();
+		//var imgsize = new ImagesSize("http://cued.xunlei.com/demos/publ/img/P_0391.jpg?1");
+		var imgsize = new ImagesSize(["http://www.planeart.cn/demo/imgReady/vistas24.jpg?a=5", "http://cued.xunlei.com/demos/publ/img/P_039.jpg"]);
+		imgsize.onready = function(img, tip){
+			console.log("onready");
+			console.log("width:"+img.width);
+			console.log("height:"+img.height);
+			console.log("tip:"+tip);
+			console.log("time:"+(new Date().getTime() - time));
+		};
+		
+		
+	</script>
+	
+</html>
