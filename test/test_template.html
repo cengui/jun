@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+     <script src="../src/jquery-1.6.js"></script>
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+    <script type="text/javascript" src="../src/Jun.template.js"></script>
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+	
+	
+		<script type="text/javascript">
+        
+        
+        var tmplArray = [];
+		module("Template test");
+        /**
+            formatData(src, format);
+            compressionData(src);
+        */
+        /***/
+		test("1:Template ObjectJSON test", function(){
+		
+            var tmpl = "<h3><%=data.name%></h3>";
+			var data = {name:"lujun"};
+            var a = new Template(tmpl, data);
+            console.log("1:",a.func);
+            a.read();
+			tmplArray.push(a);
+		});
+        
+        
+        test("2:Template ArrayJSON test", function(){
+		
+            var tmpl = '<ul>\
+                <%for(var i=0; i<data.length; i++){%>\
+                    <li><%=data[i]%></li>\
+                <%}%>\
+            </ul>';
+            
+			var data = ["hello", "world","hello", "world"];
+            
+            var a = new Template(tmpl, data);
+            console.log("2:",a.func);
+            a.read();
+			tmplArray.push(a);
+		});
+        
+        
+        test("3:Template JSON 嵌套", function(){
+		
+            var tmpl = '<ul>\
+                <% for (var i = 0, l = data.list.length; i < l; i ++) { %>\
+                    <li><%=data.list[i].index%>. 用户: <%=data.list[i].user%>/ 网站：<%=data.list[i].site%></li>\
+                <% } %>\
+            </ul>'
+            
+			var data = {
+                list:[
+                    {
+                        index: 1,
+                        user: '<strong style="color:red">糖饼</strong>',
+                        site: 'http://www.planeart.cn',
+                        weibo: 'http://weibo.com/planeart',
+                        QQweibo: 'http://t.qq.com/tangbin'
+                    }
+                ]
+            }
+            
+            var a = new Template(tmpl, data);
+            console.log("3:",a.func);
+            a.read();
+            tmplArray.push(a);
+		});
+        
+        
+        test("4:Template 字符串测试", function(){
+		
+            var tmpl = '<ul>\
+                <%for(var i=0; i<data.length; i++){%>\
+                    <li><%=data[i]+"add string"%></li>\
+                <%}%>\
+            </ul>';
+            
+			var data = ["hello", "world","hello", "world"];
+            
+            var a = new Template(tmpl, data);
+            console.log("4:",a.func);
+            a.read();
+			tmplArray.push(a);
+		});
+        
+        
+        test("5:Template js 3元运算符测试", function(){
+		
+            var tmpl = '<ul>\
+                <%for(var i=0; i<data.length; i++){%>\
+                    <li><%=data[i]%2 == 0 ? "偶数" : "奇数";%></li>\
+                <%}%>\
+            </ul>';
+            
+			var data = [1,2,3,4,5,6,7,8,9,9,10];
+            
+            var a = new Template(tmpl, data);
+            console.log("5:",a.func);
+            a.read();
+			tmplArray.push(a);
+		});
+        
+        
+        test("6:Template js 多重嵌套测试", function(){
+		
+            var tmpl = '\
+            <p><%=data.name%></p>\
+            <p><%=data.site%></p>\
+            <ul>\
+                <%for(var i=0; i<data.list.length; i++){%>\
+                    <%if(typeof data.list[i] == "number"){%>\
+                        <li><%=data.list[i]%2 == 0 ? "偶数" : "奇数";%></li>\
+                    <%}else if(Object.prototype.toString.call(data.list[i]) == "[object Array]"){%>\
+                        <%for(var j=0; j<data.list[i].length; j++){%>\
+                        <li><%=data.list[i][j];%></li>\
+                        <%}%>\
+                    <%}else{%>\
+                        <li>\
+                            <p><%=data.list[i].name%></p>\
+                            <p><%=data.list[i].site%></p>\
+                        </li>\
+                    <%}%>\
+                <%}%>\
+            </ul>';
+            
+			var data = {name:"lujun", site:"http://www.baidu.com", list:[1,2,3,4,5,6,7,8,9,9,10, {name:"lujun", site:"http://www.baidu.com"}, [1,2,3,4]]};
+            
+            var a = new Template(tmpl, data);
+            console.log("6:",a.func);
+            a.read();
+			tmplArray.push(a);
+		});
+        
+        console.log("可以调用：tmplArray[i].read()查看输出");
+        /**
+        test("Template 效率测试", function(){
+		
+            var tmpl = '<ul>\
+                <% for (var i = 0, l = data.list.length; i < l; i ++) { %>\
+                    <li><%=data.list[i].index%>. 用户: <%=data.list[i].user%>/ 网站：<%=data.list[i].site%></li>\
+                <% } %>\
+            </ul>'
+            
+			var data = {
+                list:[
+                    {
+                        index: 1,
+                        user: '<strong style="color:red">糖饼</strong>',
+                        site: 'http://www.planeart.cn',
+                        weibo: 'http://weibo.com/planeart',
+                        QQweibo: 'http://t.qq.com/tangbin'
+                    }
+                ]
+            }
+            
+            var time = new Date().getTime();
+            for(var i=0; i<5000; i++){
+                var a = new Template(tmpl, data);
+                a.read();
+            }
+			console.log("run time:", new Date().getTime() - time);
+		});
+        
+        
+        
+        
+        test("Template 替换 tag", function(){
+		
+            var tmpl = '<ul>\
+                <<%for(var i=0; i<data.length; i++){%>>\
+                    <li><<%=data[i]%>></li>\
+                <<%}%>>\
+            </ul>';
+            
+			var data = ["hello", "world","hello", "world"];
+            
+            var a = new Template(tmpl, data);
+            a.openTag = "<<%";
+            a.closeTag = "%>>";
+            a.init();
+            console.log(a.func);
+            a.read();
+			
+		});
+        
+        */
+        
+
+	</script>
+    
+</body>
+</html>
