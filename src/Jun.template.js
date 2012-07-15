@@ -37,8 +37,11 @@ Template.prototype = {
         }
         
         html.push('html+="'+ html2 +'";return html;');
-        return new Function("data", html.join(""));
-        
+		try{
+			return new Function("data", html.join(""));
+        }catch(e){
+			console.log(e);
+		}
     },
     
     buildFuncBody:function(){
@@ -73,7 +76,11 @@ Template.prototype = {
         }
         
         html.push('html+="'+ tmpl +'";return html;');
-        return new Function("data", html.join(""));
+        try{
+			return new Function("data", html.join(""));
+        }catch(e){
+			return function(){};
+		}
         
     },
     
