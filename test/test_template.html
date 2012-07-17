@@ -144,9 +144,15 @@
             console.log("6:",a.func);
             a.read();
 			tmplArray.push(a);
+
 		});
         
+        
+
+        
         console.log("可以调用：tmplArray[i].read()查看输出");
+        
+        
         /**
         test("Template 效率测试", function(){
 		
@@ -202,6 +208,36 @@
         
 
 	</script>
-    
+    <script type="text/javascript">
+        /*
+        var tmpl = '<ul>\
+            <%for(var i=0; i<data.length; i++){%>\
+                <li><%=data[i]%></li>\
+            <%}%>\
+        </ul>';
+        
+        var data = [1,2,3,4,5,6,7,8,9,9,'<script type="text/javascript">alert("xss")</sc'+'ript>'];
+        
+        var a = new Template(tmpl, data);
+        console.log("5:",a.func);
+        a.read();
+        tmplArray.push(a);*/
+    </script>
+    <script type="text/javascript">
+        //html5
+        //'<script type="text/javascript">function a(){ varc = 1;}</sc'+'ript>'
+        /**
+        var script = document.createElement('script');
+        script.type = "text/javascript";
+        script.text = "function a(){ varc = 1;}";
+        iframe = '<iframe frameborder="0"></iframe>';
+        var div = document.getElementsByTagName('div')[0];//document.createElement("DIV");
+        div.innerHTML = '<sc'+'ript type="text/javascript">function a(){ varc = 1;}</sc'+'ript>';
+        document.body.appendChild( div );
+        //var head = div.getElementsByTagName('iframe')[0].contentDocument.getElementsByTagName('head')[0];
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(script); */
+    </script>
+   
 </body>
 </html>
