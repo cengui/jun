@@ -87,10 +87,11 @@ p {text-align: center; font-size:12px;color:#454545;}
 		triangles[10] = createTriangle(stage.ctx, balls[4], balls[0], balls[3], 0xcccc66);
 		triangles[11] = createTriangle(stage.ctx, balls[4], balls[3], balls[7], 0xcccc66);
 		/**/
-		//stage.addEventListener('mousemove', function (x, y) {
-		//	angleY = (x - vpx) * .0005;
-        //    angleX = (y - vpy) * .0005;
-		//});
+		stage.addEventListener('mousemove', function (x, y) {
+			//console.log(angleY);
+			angleY = (x - vpx) * .0005;
+            angleX = (y - vpy) * .0005;
+		});
 		
 		function randomColor () {
 			return 'rgba('+Math.floor(Math.random()*256)+', '+Math.floor(Math.random()*256)+', '+Math.floor(Math.random()*256)+', 0.5)';
@@ -111,11 +112,11 @@ p {text-align: center; font-size:12px;color:#454545;}
 				triangles[j].draw();
 			}
 		};
-		stage.start = function(){
-			this.isStart = true;
-			this.render();
-			this.onRefresh();
-		};
+		//stage.start = function(){
+		//	this.isStart = true;
+		//	this.render();
+		//	this.onRefresh();
+		//};
 		
 		stage.moveLeft = function(){
 			var _this = this;

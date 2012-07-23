@@ -18,57 +18,131 @@ p {text-align: center; font-size:12px;color:#454545;}
 		var vpy = canvas.height / 2;
 		
 		
-		function Rect(ctx, x, y, z){
+		function Rect(stage, x, y, z){
 			var width = 100;
-			this.ctx = ctx;
+			this.stage = stage;
+			this.ctx = stage.ctx;
 			this.width = width;
 			this.cube = [
+				//前后 z轴不边
+				//-155, -155, -155
+				[x, y ,z],
+				[x+width, y ,z],
+				[x+width, y+width ,z],
+				
+				[x, y+width ,z]
+			];
+			/**
+			this.cube = [
 				//右上
-				[x, y ,z],
-				[x-width, y ,z],
-				[x, y-width ,z],
+				//-155, -155, -155
+				[-155, -155, -155],
+				[-55, -155 ,-155],
+				[-55, -55 ,-155],
 				//右下
-				[x, y ,z],
-				[x, y-width ,z],
-				[x-width, y-width ,z]
-			]
+				[-155, -155, -155],
+				[-55, -55 ,-155],
+				[-155, -55 ,-155]
+			];
+			*/
+			this.balls = [];
 			this.triangle = [];
 			this.init();
 		};
 		Rect.prototype = {
 			init:function(){
 				var cube = this.cube;
-				var point3D = null;
-				var point3Ds = [];
+				//var ball = null;
+				balls = this.balls;
 				//CVS.createTriangle;
 				for(var i=0; i<cube.length; i++){
-					point3D = CVS.createPoint3D(this.ctx, function(){
+					var ball = CVS.createPoint3D(this.ctx, function(){
 						this.xpos = cube[i][0];
 						this.ypos = cube[i][1];
 						this.zpos = cube[i][2];
 						this.width = 0;
 						this.draw = function(){};
 					});
-					point3D.setVanishPoint(vpx, vpy);
-					point3D.setCenterPoint(0, 0, 600);
-					//stage.addChild(point3D);
-					point3Ds.push(point3D);
+					ball.setVanishPoint(vpx, vpy);
+					ball.setCenterPoint(0, 0, 600);
+					stage.addChild(ball);
+					balls.push(ball);
 				}
-				
-				this.triangle.push( CVS.createTriangle(this.ctx, point3Ds[0], point3Ds[1], point3Ds[2], 0x6666cc) );
-				this.triangle.push( CVS.createTriangle(this.ctx, point3Ds[3], point3Ds[4], point3Ds[5], 0x6666cc) );
+				this.triangle.push( CVS.createTriangle(this.ctx, balls[0], balls[1], balls[2], 0x6666cc, false) );
+				this.triangle.push( CVS.createTriangle(this.ctx, balls[0], balls[2], balls[3], 0x6666cc, false) );
+				stage.addChild(this);
 			},
 			draw:function(){
-				this.triangles[0].draw();
-				this.triangles[1].draw();
+				this.setRotateXY(0.05 , 0);
+				this.triangle[0].draw();
+				this.triangle[1].draw();
 			},
-			render:function(){}
+			render:function(){
+				this.draw();
+			},
+			setRotateXY:function(angleX, angleY){
+				for(var i=0; i<this.balls.length; i++){
+					this.balls[i].rotateX(angleX);
+					this.balls[i].rotateY(angleY);
+				}
+			},
+			setRotateX:function(angleX){
+				for(var i=0; i<this.balls.length; i++){
+					this.balls[i].rotateX(angleX);
+				}
+			},
+			setRotateY:function(angleY){
+				for(var i=0; i<this.balls.length; i++){
+					this.balls[i].rotateY(angleY);
+				}
+			}
+			
 		};
 		
-		var a = new Rect(-155, 155, -155);
-		a.draw();
-		//stage.addChild(new Rect(-155, 155, -155));
 		
-		//stage.start();
+		function Rects(stage){
+			//前后
+			this.stage = stage;
+			this.before = [
+				[-155, -155, -155],
+				[-155, -50, -155],
+				[-155, 55, -155],
+				
+				[-50, -155, -155],
+				[-50, -50, -155],
+				[-50, 55, -155],
+				
+				[55, -155, -155],
+				[55, -50, -155],
+				[55, 55, -155]
+			];
+			this.after = [];
+			this.rects = [];
+			this.init();
+		}
+		
+		Rects.prototype = {
+			init:function(){
+				var after = this.after;
+				var before = this.before;
+				var rects = this.rects;
+				for(var i=0; i<before.length; i++){
+					after.push([before[i][0], before[i][1], -before[i][2]]);
+					rects.push(new Rect(this.stage, before[i][0], before[i][1], before[i][2]));
+					rects.push(new Rect(this.stage, before[i][0], before[i][1], -before[i][2]));
+				}
+			}
+		};
+		//var a = new Rect(stage.ctx, -155, 155, -155);
+		//a.draw();
+		
+		//前面
+		//var rect = new Rect(stage, -155, -155, -155);
+		//stage.addChild(rect);
+		var rects = new Rects(stage);
+		
+		
+		
+		stage.start();
 	</script>
 </html>

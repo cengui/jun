@@ -369,6 +369,7 @@
 			!!this.CONFIG.isClear && this.clear();
 			// »­ÎèÌ¨
 			//console.log(this.children)
+			//var t = new Date().getTime();
 			this.draw();
 			// »­ÎèÌ¨ÔªËØ
 			for (var i=0; i<this.children.length; i++) {
@@ -377,6 +378,7 @@
 				this.children[i].render();
 				this.ctx.translate(-this.children[i].x, -this.children[i].y);
 			}
+			//console.log(new Date().getTime() - t);
 		},
 		clear: function (x, y, w, h) {
 			if (x !== undefined && y !== undefined && w !== undefined && h !== undefined) {
@@ -826,9 +828,9 @@
 				this.color = color;
 				this.light = null;
 				this.draw = function (g) {
-				  if (isBackface()) {
-					return;
-				  }
+				  //if (isBackface()) {
+				//	return;
+				  //}
 				  g = g || this.ctx;
 				  //Depth example doesn't set a light, use flat color.
 				  g.beginPath();
