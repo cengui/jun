@@ -45,6 +45,11 @@ p {text-align: center; font-size:12px;color:#454545;}
 				[-155, -55 ,-155]
 			];
 			*/
+			this.x = 0;
+			this.y = 0;
+			this.width = 0;
+			this.height = 0;
+			
 			this.balls = [];
 			this.triangle = [];
 			this.init();
@@ -65,7 +70,7 @@ p {text-align: center; font-size:12px;color:#454545;}
 					});
 					ball.setVanishPoint(vpx, vpy);
 					ball.setCenterPoint(0, 0, 600);
-					stage.addChild(ball);
+					//stage.addChild(ball);
 					balls.push(ball);
 				}
 				this.triangle.push( CVS.createTriangle(this.ctx, balls[0], balls[1], balls[2], 0x6666cc, false) );
@@ -73,9 +78,14 @@ p {text-align: center; font-size:12px;color:#454545;}
 				stage.addChild(this);
 			},
 			draw:function(){
-				this.setRotateXY(0.05 , 0);
+				this.setRotateXY(0.01 , 0);
 				this.triangle[0].draw();
 				this.triangle[1].draw();
+				/**
+				this.x = balls[0].screenX;
+				this.y = balls[0].screenY;
+				this.width = balls[3].screenX - balls[0].screenX;
+				this.height = balls[3].screenY - balls[0].screenY;*/
 			},
 			render:function(){
 				this.draw();
