@@ -54,11 +54,6 @@
 					y = e.clientY - self.canvas.offsetTop;
 				self.fireEvent("click", x, y);
 			}, false);
-			this.canvas.addEventListener('mousemove', function(e){
-				var x = e.clientX - self.canvas.offsetLeft,
-					y = e.clientY - self.canvas.offsetTop;
-				self.fireEvent("mousemove", x, y);
-			}, false);
 		},
 		start:function(){
 			this.playing = true;
@@ -84,10 +79,13 @@
 		},
 		draw:function(){
 			//var t = new Date().getTime();
-			this.clear();
+			//this.clear();
 			var ctx = this.ctx;
 			//depth
-			this.ondraw();
+			//this.childList.sort(function (a, b) { return  b.depth - a.depth });
+			
+			jc.clear("canvas");
+			jc.start("canvas", true);
 			for(var i=0; i<this.childList.length; i++){
 				this.childList[i].draw(ctx);
 			}
@@ -110,15 +108,13 @@
 		},
 		fireEvent:function(type, x, y){
 			
-			if(this.eventList[type]){
-				this.eventList[type][0](x, y);
-			}
 			for(var i=0; i<this.childList.length; i++){
-				if(this.childList[i].eventList && this.childList[i].eventList[type] && this.childList[i].isEvent && this.childList[i].isEvent(x, y)){
-					this.childList[i].eventList[type][0](x, y);
+				if(this.childList[i].eventList[type] && this.childList[i].isEvent && this.childList[i].isEvent(x, y)){
+					console.log(this.childList[i]);
+					this.childList[i].fireEvent(type);
 				}
 			}
-		}
+		},
 	});	
 
 
@@ -146,10 +142,7 @@
 		this.focalLength = 250;
 		
 		this.ctx = null;
-		/**
-		this.angleX = 0;
-		this.angleY = 0;
-		*/
+		
 		option && extenx(this, option);
 		
 		Object.defineProperties(this, {
@@ -164,6 +157,7 @@
 			  }
 			}
 		});
+		return 
 	};
 	Point.prototype = {
 		setVanishPoint:function(vpx, vpy){
@@ -224,7 +218,7 @@
 	
 
 	//三角形	
-	function Triangle(pointa, pointb, pointc, color){ // Angle == Math.PI
+	function Triangle(pointa, pointb, pointc, color){
 		this.pointA = pointa;
 		this.pointB = pointb;
 		this.pointC = pointc;
@@ -234,13 +228,8 @@
 	extend(Triangle.prototype, {
 		draw:function(ctx){
 			//this.rotateX(0.01);
-			
 			//this.rotateY(0.01);
-			
-			if(this.isBackface()){
-				//return ;
-			}
-			
+			/***
 			var g = ctx,
 				pointA = this.pointA,
 				pointB = this.pointB,
@@ -251,12 +240,24 @@
 			g.moveTo(pointA.screenX, pointA.screenY);
 			g.lineTo(pointB.screenX, pointB.screenY);
 			g.lineTo(pointC.screenX, pointC.screenY);
-			//g.lineTo(pointA.screenX, pointA.screenY);
+			g.lineTo(pointA.screenX, pointA.screenY);
 			g.closePath();
 			g.fillStyle = color;
-			g.fill();
-			g.strokeStyle = color;
-			g.stroke();
+			g.fill();*/
+
+			this.rotateX(0.01);
+			
+			
+			jc.line([
+				[this.pointA.screenX, this.pointA.screenY],
+				[this.pointB.screenX, this.pointB.screenY],
+				[this.pointC.screenX, this.pointC.screenY]
+			],'#55ff00',1).click(function(){alert(1)});
+			
+			
+			jc.start("canvas");
+		
+		
 		},
 		rotateX:function(angleX){
 			this.pointA.rotateX(angleX);
@@ -269,33 +270,20 @@
 			this.pointC.rotateY(angleY);
 		},
 		isEvent:function(x, y){//事件处理
-			//console.log(x, y)
-			return true;
-		},
-		setColor:function(color){
-			this.color = color;
-		},
-		isBackface:function() {
-			//see http://www.jurjans.lv/flash/shape.html
 			
-			var pointA = this.pointA;
-			var pointB = this.pointB;
-			var pointC = this.pointC;
-			/***/
-			var cax = pointC.screenX - pointA.screenX,
-				cay = pointC.screenY - pointA.screenY,
-				bcx = pointB.screenX - pointC.screenX,
-				bcy = pointB.screenY - pointC.screenY;
-			return cax * bcy > cay * bcx;
-
+			return true;
 		}
 	});
 	Object.defineProperties(Triangle.prototype, {
 		'depth': {
 		  get: function () {
-			//var zpos = Math.min(this.pointA.zpos, this.pointB.zpos, this.pointC.zpos);
-			var zpos = this.pointA.zpos + this.pointB.zpos + this.pointC.zpos;
-			//var zpos = (this.pointB.screenX - this.pointA.screenX) + (this.pointC.screenX - this.pointA.screenX) * (this.pointA.screenY - this.pointC.screenY) / 2; 
+			/*
+			var zpos = Math.min(
+				this.pointA.zpos+this.pointA.ypos+this.pointA.xpos, 
+				this.pointB.zpos+this.pointB.ypos+this.pointB.xpos, 
+				this.pointC.zpos+this.pointC.ypos+this.pointC.xpos);
+			// */
+			var zpos = Math.min(this.pointA.zpos, this.pointB.zpos, this.pointC.zpos);
 			return zpos;
 		  }
 		}
@@ -306,76 +294,20 @@
 		this.triangleA = triangleA;
 		this.triangleB = triangleB;
 		
-		this.depth = null;
-		this.angle = 0;
-		
-		this.x = 0;
-		this.y = 0;
-		this.width = 0;
-		this.height = 0;
-		this.zpos = 0;
-		this.color = null;
-		
 		option && extend(this, option);
-		
-		this.init();
 	};
 	
 	Polygon4.prototype = {
 		init:function(){
-		
-		},
-		setRotateY:function(angle){
-			this.triangleA.rotateY(angle);
-			this.triangleB.rotateY(angle);
 			
 		},
-		setRotateX:function(angle){
-			this.triangleA.rotateX(angle);
-			this.triangleB.rotateX(angle);
-		},
 		draw:function(ctx){
-			if(this.depth != -1){
-				this.triangleA.draw(ctx);
-				this.triangleB.draw(ctx);
-			}
-		},
-		setDepth:function(depth){
-			this.depth = depth;
-		},
-		setColor:function(color){
-			this.triangleA.setColor(color);
-			this.triangleB.setColor(color);
-		},
-		update:function(){}
-	};
-	Object.defineProperties(Polygon4.prototype, {
-		'x': {
-		  get: function () {
-			return Math.min(this.triangleA.pointA.screenX, this.triangleB.pointC.screenX);//背面被转到正面 x取 triangleB 的c
-		  }
-		},
-		'y': {
-		  get: function () {
-			return Math.min(this.triangleA.pointA.screenY, this.triangleB.pointC.screenY);//
-		  }
-		},
-		'width': {
-		  get: function () {
-			return Math.abs(Math.max(this.triangleA.pointB.screenX,this.triangleA.pointB.screenX) - this.x);
-		  }
-		},
-		'height': {
-		  get: function () {
-			return Math.abs(Math.max(this.triangleB.pointB.screenY,this.triangleA.pointB.screenY) - this.y);
-		  }
-		},
-		'zpos': {
-			get:function () {
-				return this.triangleA.pointA.zpos + this.triangleA.pointB.zpos + this.triangleA.pointC.zpos;
-			}
+			//this.triangleA.rotateX(0.01);
+			//this.triangleB.rotateX(0.01);
+			this.triangleA.draw(ctx);
+			this.triangleB.draw(ctx);
 		}
-	});
+	};
 	
 	window.June = {
 		point:Point,
