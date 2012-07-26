@@ -17,32 +17,38 @@ BaseRect.prototype = {
 		for(var i=0; i<cube.length; i++){
 			var point = new June.point(cube[i][0], cube[i][1], cube[i][2]);
 			point.setVanishPoint(300, 200);
-			point.setCenterPoint(0, 0, 100);
+			point.setCenterPoint(0, 0, 300);
 			//stage.addChild(ball);
 			balls.push(point);
 		};
 		var tg1 = new June.triangle(balls[0], balls[1], balls[2], this.color);
-		var tg2 = new June.triangle(balls[3], balls[4], balls[5], this.color);
+		var tg2 = new June.triangle(balls[3], balls[5], balls[4], this.color);
 		//depth
-		var polygon4 = this.polygon4 = new June.polygon4(tg1, tg2);
+		var polygon4 = this.polygon4 = new June.polygon4(tg1, tg2, {color:this.color});
 		//this.polygon4.setDepth(this.depth);
 		//stage.addChild(this.polygon4);
-		tg1.addEvent("click", function(x, y){
+		polygon4.addEvent("click", function(x, y){
+			
 			//console.log(polygon4);
 			//console.log(x, y)
 			//console.log(polygon4.x, polygon4.y, polygon4.width, polygon4.height, polygon4.zpos);
 			
-			if(polygon4.zpos < -300 && polygon4.x < x && polygon4.y < y  && polygon4.x+polygon4.width > x && polygon4.y+polygon4.height > y){
-				console.log(polygon4);
-				console.log(x, y)
-				console.log(polygon4.x, polygon4.y, polygon4.width, polygon4.height, polygon4.zpos);
-				polygon4.setColor("#000");
-				polygon4.draw(stage.ctx);
-			}
-			
+			//if(polygon4.zpos < -300 && polygon4.x < x && polygon4.y < y  && polygon4.x+polygon4.width > x && polygon4.y+polygon4.height > y){
+				//console.log(polygon4);
+				//console.log(x, y)
+				//console.log(polygon4.x, polygon4.y, polygon4.width, polygon4.height, polygon4.zpos);
+			//	this.setColor("#000");
+				//polygon4.draw(stage.ctx);
+				
+			//	console.log(polygon4);
+				//var img = document.getElementById("applogo");
+				//stage.ctx.drawImageFromRect(img, 0, 0, img.width, img.height, polygon4.x, polygon4.y, polygon4.width, polygon4.height);
+			//}
+			this.setColor("#000");
 		});
-		stage.addChild(tg1);
-		stage.addChild(tg2);
+		//stage.addChild(tg1);
+		//stage.addChild(tg2);
+		stage.addChild(polygon4);
 	},
 	setCube:function(x, y , z){//需要覆盖的方法
 		throw "undefined setCube";

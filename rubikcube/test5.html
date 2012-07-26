@@ -14,12 +14,33 @@
 </head>
 <body>
 	<canvas id="canvas" width="600" height="400"></canvas>
-	
+	<img src="images/applogo.png" id="applogo" alt="" />
 	<script type="text/javascript">
+	
+		var apps = [
+			{
+			app_height: "0",
+			app_id: "27",
+			app_name: "心情日志",
+			app_picture: "images/applogo.png",
+			app_url: "http://app.hk.moxian.com:8000/mxpost/web/blog_large.html",
+			app_url_show: "http://app.hk.moxian.com:8000/mxpost/web/blog_large.html"
+			}
+		];
+	
+		
+		var img = null;
+		
+		for(var i=0; i < apps.length; i++){
+			img = new Image();
+			img.src = "images/applogo.png";
+			apps[i].app_img = img;
+		}
+		
 		var canvas = document.getElementById('canvas');
 		var stage = new June.stage(canvas, 600, 400);
 		
-		
+		//stage.ctx;
 		function Rects(stage, rect){
 			//前后
 			this.stage = stage;
@@ -92,7 +113,7 @@
 			
 			[-155, -155, -55],
 			[-50, -155, -55],
-			[55, -155, -55],
+			[55, -155, -55]
 			
 		];
 		updown.upDownInit();
@@ -135,30 +156,16 @@
 		leftRight.leftRightInit();
 		// */
 		
-	
-		function getDepth(angle){
-			var angle = Math.abs((180/Math.PI)*angle) % 360;
-			
-			if( angle < 45){ // angle > -45 &&
-				return 0;
-			}else if(angle > 45 && angle < 135){
-				return 1;
-			}else if(angle > 135 && angle < 225){
-				return 3
-			}else if(angle > 315 && angle < 360){
-				return 2;
-			}
-		}
 		
 		var angleY = 0;//Math.PI/4;//Math.PI/4;//Math.PI/4;
-		var angleX = 0;Math.PI/4;
+		var angleX = 0;//Math.PI/4;
 		
 		var countangleY = 0;
 		var countangleX = 0;
 		// */
 		stage.addEvent('mousemove', function (x, y) {
 			angleY = (x - 300) * .0005;
-            //angleX = (y - 200) * .0005;
+            angleX = (y - 200) * .0005;
 			
 			//countangleY += angleY;
 		});

@@ -28,8 +28,11 @@
 		removeEvent:function(type, func){
 			
 		},
-		fireEvent:function(type){},
-		
+		fireEvent:function(type, x, y){
+			for(var i=0,el =this.eventList[type], l=el.length; i<l; i++){
+				el[i].call(this, x, y);
+			}
+		}
 	};
 
 	
@@ -115,7 +118,8 @@
 			}
 			for(var i=0; i<this.childList.length; i++){
 				if(this.childList[i].eventList && this.childList[i].eventList[type] && this.childList[i].isEvent && this.childList[i].isEvent(x, y)){
-					this.childList[i].eventList[type][0](x, y);
+					//this.childList[i].eventList[type][0].call(this.childList[i], x, y);
+					this.childList[i].fireEvent(type, x, y);
 				}
 			}
 		}
@@ -143,7 +147,7 @@
 		this.ypos = y;
 		this.zpos = z;
 		
-		this.focalLength = 250;
+		this.focalLength = 600;
 		
 		this.ctx = null;
 		/**
@@ -320,59 +324,116 @@
 		
 		this.init();
 	};
-	
-	Polygon4.prototype = {
+	extend(Polygon4.prototype, new Event);
+	extend(Polygon4.prototype, {
 		init:function(){
 		
 		},
-		setRotateY:function(angle){
+		rotateY:function(angle){
 			this.triangleA.rotateY(angle);
 			this.triangleB.rotateY(angle);
 			
 		},
-		setRotateX:function(angle){
+		rotateX:function(angle){
 			this.triangleA.rotateX(angle);
 			this.triangleB.rotateX(angle);
 		},
 		draw:function(ctx){
-			if(this.depth != -1){
-				this.triangleA.draw(ctx);
-				this.triangleB.draw(ctx);
-			}
+			//var img = apps[0].app_img;
+			//stage.ctx.drawImageFromRect(img, 0, 0, img.width, img.height, this.x, this.y, this.width, this.height);
+			//this.triangleA.draw(ctx);
+			//this.triangleB.draw(ctx);
+			//return  ;
+			var g = ctx,
+				pointAA = this.triangleA.pointA,
+				pointAB = this.triangleA.pointB,
+				pointAC = this.triangleA.pointC,
+				pointBA = this.triangleB.pointA,
+				pointBB = this.triangleB.pointB,
+				pointBC = this.triangleB.pointC,
+				color = this.color;
+			//Depth example doesn't set a light, use flat color.
+			g.beginPath();
+			g.moveTo(pointAA.screenX, pointAA.screenY);
+			g.lineTo(pointAB.screenX, pointAB.screenY);
+			g.lineTo(pointAC.screenX, pointAC.screenY);
+			//g.closePath();
+			//g.lineTo(pointBA.screenX, pointBA.screenY);
+			g.lineTo(pointBB.screenX, pointBB.screenY);
+			//g.lineTo(pointBC.screenX, pointBC.screenY);
+			//g.lineTo(pointA.screenX, pointA.screenY);
+			g.closePath();
+			g.fillStyle = color;
+			g.fill();
+			g.strokeStyle = color;
+			g.stroke();
+			
+			
 		},
 		setDepth:function(depth){
 			this.depth = depth;
 		},
 		setColor:function(color){
+			this.color = color;
 			this.triangleA.setColor(color);
 			this.triangleB.setColor(color);
 		},
+		isEvent:function(x, y){
+			if(this.zpos < -300 && this.x < x && this.y < y  && this.x+this.width > x && this.y+this.height > y){
+				return true;
+			}
+			return false;
+		},
 		update:function(){}
-	};
+	});
 	Object.defineProperties(Polygon4.prototype, {
 		'x': {
 		  get: function () {
-			return Math.min(this.triangleA.pointA.screenX, this.triangleB.pointC.screenX);//背面被转到正面 x取 triangleB 的c
+			return Math.min(
+				this.triangleA.pointA.screenX,
+				this.triangleA.pointC.screenX,
+				this.triangleB.pointA.screenX,
+				this.triangleB.pointC.screenX
+			);
 		  }
 		},
 		'y': {
 		  get: function () {
-			return Math.min(this.triangleA.pointA.screenY, this.triangleB.pointC.screenY);//
+			//return Math.min(this.triangleA.pointA.screenY, this.triangleB.pointC.screenY);//
+			return Math.min(
+				this.triangleA.pointA.screenY,
+				this.triangleA.pointC.screenY,
+				this.triangleB.pointA.screenY,
+				this.triangleB.pointC.screenY
+			);
 		  }
 		},
 		'width': {
 		  get: function () {
-			return Math.abs(Math.max(this.triangleA.pointB.screenX,this.triangleA.pointB.screenX) - this.x);
+			//return Math.abs(Math.max(this.triangleA.pointB.screenX,this.triangleA.pointB.screenX) - this.x);
+			return Math.max(
+				this.triangleA.pointB.screenX,
+				this.triangleB.pointB.screenX
+			) - this.x;
 		  }
 		},
 		'height': {
 		  get: function () {
-			return Math.abs(Math.max(this.triangleB.pointB.screenY,this.triangleA.pointB.screenY) - this.y);
+			//return Math.abs(Math.max(this.triangleB.pointB.screenY,this.triangleA.pointB.screenY) - this.y);
+			return Math.max(
+				this.triangleA.pointB.screenY,
+				this.triangleB.pointB.screenY
+			) - this.y;
 		  }
 		},
 		'zpos': {
 			get:function () {
 				return this.triangleA.pointA.zpos + this.triangleA.pointB.zpos + this.triangleA.pointC.zpos;
+			}
+		},
+		'depth':{
+			get:function(){
+				return this.triangleA.depth + this.triangleB.depth;
 			}
 		}
 	});
