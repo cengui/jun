@@ -27,23 +27,8 @@ BaseRect.prototype = {
 		var polygon4 = this.polygon4 = new June.polygon4(tg1, tg2, {color:this.color});
 		//this.polygon4.setDepth(this.depth);
 		//stage.addChild(this.polygon4);
-		polygon4.addEvent("click", function(x, y){
+		polygon4.addEvent("mouseover", function(x, y){
 			
-			//console.log(polygon4);
-			//console.log(x, y)
-			//console.log(polygon4.x, polygon4.y, polygon4.width, polygon4.height, polygon4.zpos);
-			
-			//if(polygon4.zpos < -300 && polygon4.x < x && polygon4.y < y  && polygon4.x+polygon4.width > x && polygon4.y+polygon4.height > y){
-				//console.log(polygon4);
-				//console.log(x, y)
-				//console.log(polygon4.x, polygon4.y, polygon4.width, polygon4.height, polygon4.zpos);
-			//	this.setColor("#000");
-				//polygon4.draw(stage.ctx);
-				
-			//	console.log(polygon4);
-				//var img = document.getElementById("applogo");
-				//stage.ctx.drawImageFromRect(img, 0, 0, img.width, img.height, polygon4.x, polygon4.y, polygon4.width, polygon4.height);
-			//}
 			this.setColor("#000");
 		});
 		//stage.addChild(tg1);

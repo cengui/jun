@@ -40,7 +40,7 @@
 	function Stage(canvas, width, height){
 		
 		this.childList = [];
-		this.eventList = {};
+		//this.eventList = {};
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
 		this.playing = false;
@@ -52,15 +52,19 @@
 	extend(Stage.prototype, {
 		init:function(){
 			var self = this;
+			
 			this.canvas.addEventListener('click', function(e){
 				var x = e.clientX - self.canvas.offsetLeft,
 					y = e.clientY - self.canvas.offsetTop;
 				self.fireEvent("click", x, y);
 			}, false);
+			
 			this.canvas.addEventListener('mousemove', function(e){
 				var x = e.clientX - self.canvas.offsetLeft,
 					y = e.clientY - self.canvas.offsetTop;
 				self.fireEvent("mousemove", x, y);
+				self.fireEvent("mouseover", x, y);
+				//self.fireEvent("mouseout", x, y);
 			}, false);
 		},
 		start:function(){
@@ -116,9 +120,8 @@
 			if(this.eventList[type]){
 				this.eventList[type][0](x, y);
 			}
-			for(var i=0; i<this.childList.length; i++){
+			for(var i=0; i<this.childList.length; i++){//console.log(type, x, y);
 				if(this.childList[i].eventList && this.childList[i].eventList[type] && this.childList[i].isEvent && this.childList[i].isEvent(x, y)){
-					//this.childList[i].eventList[type][0].call(this.childList[i], x, y);
 					this.childList[i].fireEvent(type, x, y);
 				}
 			}
