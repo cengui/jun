@@ -131,9 +131,15 @@
 
 	//一个点
 	function Point(x, y, z, option){
-		this.x = 0;
-		this.y = 0;
+		/**记录初始坐标*/
+		this.sx = x;
+		this.sy = y;
+		this.sz = z;
 		
+		/** 记录当前坐标 */
+		this.x = x;
+		this.y = y;
+		this.z = z;
 		
 		//旋转中心点
 		this.vpx = 0;
@@ -153,10 +159,8 @@
 		this.focalLength = 600;
 		
 		this.ctx = null;
-		/**
-		this.angleX = 0;
-		this.angleY = 0;
-		*/
+		
+		
 		option && extenx(this, option);
 		
 		Object.defineProperties(this, {
@@ -182,12 +186,17 @@
 			this.cy = y;
 			this.cz = z;
 		},
+		update:function(){/**更新当前坐标点*/
+			this.sx = this.xpos;
+			this.sy = this.ypos;
+			this.sz = this.zpos;
+		},
 		// 绕x轴旋转
 		rotateX: function (angleX) {
 			var cosx = Math.cos(angleX),
 				sinx = Math.sin(angleX),
-				y1 = this.ypos * cosx - this.zpos * sinx,
-				z1 = this.zpos * cosx + this.ypos * sinx;
+				y1 = this.sy * cosx - this.sz * sinx,
+				z1 = this.sz * cosx + this.sy * sinx;
 			this.ypos = y1;
 			this.zpos = z1;
 		},
@@ -195,8 +204,8 @@
 		rotateY: function (angleY) {
 			var cosy = Math.cos(angleY),
 				siny = Math.sin(angleY),
-				x1 = this.xpos * cosy - this.zpos * siny,
-				z1 = this.zpos * cosy + this.xpos * siny;
+				x1 = this.sx * cosy - this.sz * siny,
+				z1 = this.sz * cosy + this.sx * siny;
 			this.xpos = x1;
 			this.zpos = z1;
 		},
@@ -204,8 +213,8 @@
 		rotateZ: function (angleZ) {
 			var cosz = Math.cos(angleZ),
 				sinz = Math.sin(angleZ),
-				x1 = this.xpos * cosz - this.ypos * sinz,
-				y1 = this.ypos * cosz + this.xpos * sinz;
+				x1 = this.sx * cosz - this.sy * sinz,
+				y1 = this.sy * cosz + this.sx * sinz;
 			this.xpos = x1;
 			this.ypos = y1;
 		},
@@ -275,6 +284,11 @@
 			this.pointB.rotateY(angleY);
 			this.pointC.rotateY(angleY);
 		},
+		update:function(){
+			this.pointA.update();
+			this.pointB.update();
+			this.pointC.update();
+		},
 		isEvent:function(x, y){//事件处理
 			//console.log(x, y)
 			return true;
@@ -341,6 +355,11 @@
 			this.triangleA.rotateX(angle);
 			this.triangleB.rotateX(angle);
 		},
+		update:function(){
+			//console.log('update');
+			this.triangleA.update();
+			this.triangleB.update();
+		},
 		draw:function(ctx){
 			//var img = apps[0].app_img;
 			//stage.ctx.drawImageFromRect(img, 0, 0, img.width, img.height, this.x, this.y, this.width, this.height);
@@ -373,6 +392,30 @@
 			
 			
 		},
+		draw2:function(ctx){
+			//var img = apps[0].app_img;
+			//stage.ctx.drawImageFromRect(img, 0, 0, img.width, img.height, this.x, this.y, this.width, this.height);
+			//this.triangleA.draw(ctx);
+			//this.triangleB.draw(ctx);
+			//return  ;
+			var g = ctx,
+				pointAA = this.triangleA.pointA,
+				pointAB = this.triangleA.pointB,
+				pointAC = this.triangleA.pointC,
+				pointBA = this.triangleB.pointA,
+				pointBB = this.triangleB.pointB,
+				pointBC = this.triangleB.pointC,
+				color = this.color;
+			//Depth example doesn't set a light, use flat color.
+			if(this.zpos < -400){
+				//console.log(img.width, img.height, pointAA.screenX, pointAA.screenY, pointAA.screenY-pointAA.screenX, pointBB.screenX-pointAA.screenX);
+				g.drawImageFromRect(img, 0, 0, img.width, img.height, this.x, this.y, this.width, this.height);
+			}else{
+				this.draw2(ctx);
+			}
+			
+			
+		},
 		setDepth:function(depth){
 			this.depth = depth;
 		},
@@ -386,8 +429,7 @@
 				return true;
 			}
 			return false;
-		},
-		update:function(){}
+		}
 	});
 	Object.defineProperties(Polygon4.prototype, {
 		'x': {

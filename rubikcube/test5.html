@@ -14,6 +14,12 @@
 </head>
 <body>
 	<canvas id="canvas" width="600" height="400"></canvas>
+	<div style="text-align:center;">
+		<input type="button" value="ä¸Š" onclick="stage.up()" />
+		<input type="button" value="ä¸‹" onclick="stage.down()"/>
+		<input type="button" value="å·¦" onclick="stage.left()"/>
+		<input type="button" value="å³" onclick="stage.right()"/>
+	</div>
 	<img src="images/applogo.png" id="applogo" alt="" />
 	<script type="text/javascript">
 	
@@ -21,7 +27,7 @@
 			{
 			app_height: "0",
 			app_id: "27",
-			app_name: "ĞÄÇéÈÕÖ¾",
+			app_name: "å¿ƒæƒ…æ—¥å¿—",
 			app_picture: "images/applogo.png",
 			app_url: "http://app.hk.moxian.com:8000/mxpost/web/blog_large.html",
 			app_url_show: "http://app.hk.moxian.com:8000/mxpost/web/blog_large.html"
@@ -42,7 +48,7 @@
 		
 		//stage.ctx;
 		function Rects(stage, rect){
-			//Ç°ºó
+			//å‰å
 			this.stage = stage;
 			this.data = null;
 			this.after = [];
@@ -100,7 +106,7 @@
 		};
 		
 		//*
-		//ÉÏÏÂ
+		//ä¸Šä¸‹
 		var updown = new Rects(stage, UpDownRect);
 		updown.data = [
 			[-155, -155, 155],
@@ -119,7 +125,7 @@
 		updown.upDownInit();
 		
 		
-		// Ç°ºó
+		// å‰å
 		var frontBack = new Rects(stage, FrontBackRect);
 		frontBack.data = [
 			[-155, -155, -155],
@@ -137,7 +143,7 @@
 		frontBack.frontBackInit();
 		
 		//*
-		//×óÓÒ
+		//å·¦å³
 		var leftRight = new Rects(stage, LeftRightRect);
 		leftRight.data = [
 			[155, -155, -155],
@@ -164,10 +170,8 @@
 		var countangleX = 0;
 		// */
 		stage.addEvent('mousemove', function (x, y) {
-			//angleY = (x - 300) * .0005;
-           angleX = (y - 200) * .0005;
-			
-			//countangleY += angleY;
+			angleY = (x - 300) * .0005;
+            angleX = (y - 200) * .0005;
 		});
 		
 		stage.ondraw = function(){};
@@ -175,24 +179,69 @@
 		stage.draw = function(){
 			//var t = new Date().getTime();
 			this.clear();
-
-			for(var i=0; i<this.childList.length; i++){ //Ğı×ª
-				this.childList[i].rotateY(angleY);
-				this.childList[i].rotateX(angleX);
-			}
 			
-			this.childList.sort(function (a, b) {//ÅÅĞò
+			this.childList.sort(function (a, b) {//æ’åº
 				return b.depth - a.depth
 			});
 			
-			var ctx = this.ctx;//ÖØ»­
+			var ctx = this.ctx;//é‡ç”»
 			for(var i=0; i<this.childList.length; i++){
 				this.childList[i].draw(ctx);
 			}
 			//console.log(new Date().getTime() -t );
 		};
 		
+		stage.rotation = function(angleX, angleY){
+			//var angleX = 0.10;
+			//var angleY = 0.10;
+			var countangleX = 0;
+			var countangleY = 0;
+			var _this = this;
+			var id = setInterval(function(){
+				countangleX += angleX;
+				countangleY += angleY;
 
+				countangleX = Math.abs(countangleX) > Math.PI/2 ? Math.PI/2 * (countangleX > 0 ? 1 : -1) : countangleX;
+				countangleY = Math.abs(countangleY) > Math.PI/2 ? Math.PI/2 * (countangleY > 0 ? 1 : -1) : countangleY;
+
+				for(var i=0; i<_this.childList.length; i++){ //æ—‹è½¬
+					if(countangleY != 0){
+					_this.childList[i].rotateY(countangleY);
+					}else{
+					_this.childList[i].rotateX(countangleX);
+					}
+				}
+				_this.draw();
+				
+				if(Math.abs(countangleX) == Math.PI/2 || Math.abs(countangleY) == Math.PI/2){
+					for(var i=0; i<_this.childList.length; i++){ //æ—‹è½¬
+						_this.childList[i].update();
+					}
+					clearInterval(id);
+				}
+				
+			}, 30)
+		};
+		
+		stage.up = function(){
+			
+			stage.rotation(-0.10, 0);
+		};
+		
+		stage.down = function(){
+			
+			stage.rotation(0.10, 0);
+		};
+		
+		stage.left = function(){
+			
+			stage.rotation(0, -0.10);
+		};
+		
+		stage.right = function(){
+			
+			stage.rotation(0, 0.10);
+		};
 		
 		stage.start();
 		setTimeout(function(){

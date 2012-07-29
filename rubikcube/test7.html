@@ -1,0 +1,92 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+		html {overflow:hidden}
+		body {position: absolute; margin:0; padding:0;width:100%; height:100%}
+		canvas {display:block;border:2px solid #ccc; margin:10px auto;}
+		p {text-align: center; font-size:12px;color:#454545;}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="600" height="400"></canvas>
+	<img src="images/applogo.png" id="applogo" alt="" />
+	
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext("2d");
+		
+		
+		var img = new Image();
+			
+			
+			img.onload = function(){
+				//ctx.save();
+				var sin = Math.PI/6;  
+			    var cos = Math.PI/6;
+				
+				ctx.save();
+				//ctx.translate(100, 100); //平移圆点
+				ctx.transform(1, 0, 0.3, 1, 0, 0);
+				ctx.drawImage(img, 0, 0);
+				var data = ctx.getImageData(0, 0 ,200 ,200);
+				ctx.restore();
+				
+				
+				
+				
+				ctx.save();
+				//ctx.translate(100, 100); //平移圆点
+				ctx.transform(2, 0, -0.3, 1, 0, 0);
+				ctx.putImageData(data, 100, 200, 0, 0, 200, 200);
+				
+				ctx.restore();
+
+				//ctx.get
+				//ctx.setTransform(cos, sin, -sin, cos, 0, 0);  
+				//ctx.drawImage(img, 200, 100);
+				
+				//ctx.restore();
+				
+				//ctx.transform(0,0,0.3,0.5);
+				//var imgdata  =	ctx.createImageData(img, 0, 0 ,img.width, img.height);
+			}
+			//ctx.
+			img.src = "images/juner.png";
+			
+			
+			//ctx.save();
+				//ctx.transform(0,0,1,1);
+				//ctx.drawImage(img, 0, 0);
+			//ctx.restore();
+			
+			
+			function draw() {  
+			  var canvas = document.getElementById("canvas");  
+			  var ctx = canvas.getContext("2d");  
+			  
+			  var sin = Math.sin(Math.PI/6);  
+			  var cos = Math.cos(Math.PI/6);  
+			  ctx.translate(200, 200);  
+			  var c = 0;  
+			  
+			  
+			  
+			  for (var i=0; i <= 12; i++) {  
+				c = Math.floor(255 / 12 * i);  
+				ctx.fillStyle = "rgb(" + c + "," + c + "," + c + ")";  
+				ctx.fillRect(0, 0, 100, 10);  
+				ctx.transform(cos, sin, -sin, cos, 0, 0);  
+			  }  
+			//ctx.setTransform(-1, 0, 0, 1, 200, 200);  
+			  ctx.fillStyle = "rgba(255, 128, 255, 0.5)";  
+			  ctx.fillRect(0, 50, 100, 100);  
+			  
+			}
+			//draw();
+		
+	</script>
+</body>
+</html>
