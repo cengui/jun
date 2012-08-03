@@ -1,0 +1,133 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>html5 File  and FileReader</title>
+<link href="html/ui.css" _mce_href="html/ui.css" rel="stylesheet" />
+</head>
+<body>
+<style type="text/css">
+.box{background:#f8f8f8;border:1px solid #CCC;padding:10px;-webkit-box-shadow:#000 0px 0px 4px;-moz-box-shadow:#000 0px 0px 4px;
+     -webkit-border-radius:2px;font-family: 'Segoe UI', Calibri, 'Myriad Pro', Myriad, 'Trebuchet MS', Helvetica, Arial, sans-serif;
+	 }
+.bl{ font-weight:700;}
+.dl{ padding:10px; border-top:1px dotted #999;}
+.dl dd{ padding:0; margin:0;}
+.log{border:1px solid #CCC; background:#f8f8f8; width:200px; position:absolute; right:10px; top:10px;}
+.log li{border:1p dotted #CCC;word-wrap:break-word;word-break:break-all; margin:0px; padding:0;}
+.log ul{margin:0px; padding:0; list-style:none;}
+</style>
+<style  type="text/css" _mce_bogus="1">
+.box{background:#f8f8f8;border:1px solid #CCC;padding:10px;-webkit-box-shadow:#000 0px 0px 4px;-moz-box-shadow:#000 0px 0px 4px;
+     -webkit-border-radius:2px;font-family: 'Segoe UI', Calibri, 'Myriad Pro', Myriad, 'Trebuchet MS', Helvetica, Arial, sans-serif;
+	 }
+.bl{ font-weight:700;}
+.dl{ padding:10px; border-top:1px dotted #999;}
+.dl dd{ padding:0; margin:0;}
+.log{border:1px solid #CCC; background:#f8f8f8; width:200px; position:absolute; right:10px; top:10px;}
+.log li{border:1p dotted #CCC;word-wrap:break-word;word-break:break-all; margin:0px; padding:0;}
+.log ul{margin:0px; padding:0; list-style:none;}
+</style>
+	<div class="box" id="baseInfo">
+    	<h2>（把图片拖拽到这里）利用 FileReader 获取文件 base64 编码</h2>
+        <div></div>
+    </div>
+    <div class="log">
+    	<ul id="log">
+        </ul>
+    </div>
+    
+<script type="text/javascript" >
+(function(){
+	window.dataValue = 0;
+	var html = '        <dl class="dl">\
+            <dd>fileName: $fileName$</dd>\
+            <dd>fileType: $fileType$</dd>\
+            <dd>fileSize: $fileSize$</dd>\
+			<dd><img src="$data$" /></dd>\
+            <dd>fileBase64: <br/>\
+                <div style="width:100%; height:100px;">$fileBase64$</div>\
+            </dd>\
+        </dl>\
+	'
+	var log = function(msg){
+		//console['log'](msg);
+		document.getElementById('log').innerHTML += '<li>'+ msg +'</li>';
+	}
+	
+	
+	
+	var DP = function(){
+		var defConfig = {
+			dropWrap : window
+		}
+		this.init.apply(this, [defConfig]);
+		this.file = null;
+	}
+	
+	DP.prototype = {
+		init:function(args){
+			var dropWrap = args.dropWrap;
+			var _this = this;
+			dropWrap.addEventListener("dragenter", this._dragenter, false);  
+			dropWrap.addEventListener("dragover", this._dragover, false);  
+			dropWrap.addEventListener('drop', function(e){_this.readFile.call(_this,e)} , false);
+			log('window drop bind--ok');
+		},
+		
+		_dragenter:function(e){e.stopPropagation();e.preventDefault();},
+		_dragover:function(e){e.stopPropagation();e.preventDefault();},
+		
+		readFile:function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var dt = e.dataTransfer;
+			var files = dt.files;
+			for(var i = 0; i< files.length;i++){
+				var HTML = html.slice();
+				HTML = this.writeHeader(files[i], HTML);
+				this.read(files[i], HTML);
+			}
+		},
+		
+		read:function(file, h){
+			var type = file.type;
+			var reader = new FileReader();
+			reader.onprogress = function(e){
+				if (e.lengthComputable){
+					log('progress: ' + Math.ceil(100*e.loaded/file.size) +'%')
+				}
+			};
+			
+			reader.onloadstart = function(e){
+				log('onloadstart: ok');
+			};
+			
+			reader.onloadend = function(e){
+				var _result = e.target.result;
+				//console['log'](e.target);
+				log('Data URI--ok');
+				var d = document.createElement('div');
+				h = h.replace('$fileBase64$', _result);
+				if(/image/.test(file.type)){
+					h = h.replace('$data$',_result);
+				}
+				d.innerHTML = h;
+				document.getElementById('baseInfo').appendChild(d);
+			};
+			
+			reader.readAsDataURL(file); // base 64 编码
+			return;
+		},
+		
+		writeHeader:function(file, h){
+			log(file.fileName + '+' + (file.size/1024));
+			return h.replace('$fileName$', file.fileName).replace("$fileSize$",(file.size/1024)+'KB').replace("$fileType$",file.type);
+		}
+	}
+	
+	new DP();
+})()	
+</script>
+</body>
+</html>

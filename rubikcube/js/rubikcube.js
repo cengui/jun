@@ -1,4 +1,5 @@
-;(function(){	
+;(function(){
+		
 	function extend(a, b){
 		for(var i in b){
 			a[i] = b[i];
@@ -51,7 +52,9 @@
 	extend(Stage.prototype, {
 		init:function(){
 			var self = this;
-			
+			//var $(canvas).offset();
+			var offsetLeft = $(canvas).offset().left;
+			var offsetTop = $(canvas).offset().top;
 			this.event = {x:-1, y:-1};
 			
 			/**
@@ -64,9 +67,9 @@
 			
 			
 			this.canvas.addEventListener('mousemove', function(e){
-				var x = e.clientX - self.canvas.offsetLeft,
-					y = e.clientY - self.canvas.offsetTop;
-					
+				var x = e.clientX - offsetLeft,
+					y = e.clientY - offsetTop;
+
 				self.fireEvent("mouseout", x, y);
 				self.fireEvent("mousemove", x, y);
 				self.fireEvent("mouseover", x, y);
@@ -75,23 +78,23 @@
 			}, false);
 			
 			this.canvas.addEventListener('mouseout', function(e){
-				var x = e.clientX - self.canvas.offsetLeft,
-					y = e.clientY - self.canvas.offsetTop;
+				var x = e.clientX - offsetLeft,
+					y = e.clientY - offsetTop;
 				self.fireEvent("mouseout", x, y);
 				//self.fireEvent("mouseout", x, y);
 			}, false);
 			
 			this.canvas.addEventListener('mousedown', function(e){
-				var x = e.clientX - self.canvas.offsetLeft;
-				var y = e.clientY - self.canvas.offsetTop;
+				var x = e.clientX - offsetLeft;
+				var y = e.clientY - offsetTop;
 				self.event.x = x;
 				self.event.y = y;
 				self.fireEvent("mousedown", x, y);
 			}, false);
 			
 			this.canvas.addEventListener('mouseup', function(e){
-				var x = e.clientX - self.canvas.offsetLeft;
-				var y = e.clientY - self.canvas.offsetTop;
+				var x = e.clientX - offsetLeft;
+				var y = e.clientY - offsetTop;
 				
 				if(Math.abs(self.event.x - x) < 10 && Math.abs(self.event.y - y) < 10){
 					self.fireEvent("click", x, y);
@@ -369,15 +372,30 @@
 
 //------------------
 
-//$(document).ready(function(){
+$(document).ready(function(){
+/***
+	开始魔方全部逻辑
+*/
+var canvas = document.getElementById('canvas');
+
+if(!(canvas.getContext && canvas.getContext("2d"))){//不支持canvas的浏览器
+	return false;
+}
+
+
+
+var stage = new June.stage(canvas, 230, 230);
+
 
 var PATH = {
 	pic: "http://rs.hk.moxian.com/"
 };
 
 for(var i=0; i<mc_apps.length; i++){
-	mc_apps[i].app_picture_active = mc_apps[i].app_picture.split("|")[1].replace("%PICROOT%", PATH.pic);
-	mc_apps[i].app_picture = mc_apps[i].app_picture.split("|")[0].replace("%PICROOT%", PATH.pic);
+	mc_apps[i].app_picture_active = mc_apps[i].app_picture.split("|")[1].replace("%PICROOT%", PATH.pic).replace(/\\\\/g,"/").replace(/\\/g, "/");
+	mc_apps[i].app_picture = mc_apps[i].app_picture.split("|")[0].replace("%PICROOT%", PATH.pic).replace(/\\\\/g,"/").replace(/\\/g, "/");
+	//console.log(mc_apps[i].app_picture_active);
+	//console.log(mc_apps[i].app_picture);
 }
 var apps = mc_apps;
 var referapp = {
@@ -389,11 +407,7 @@ var referapp = {
 	app_url: "",
 	app_url_show: ""
 };
-/***
-	开始魔方全部逻辑
-*/
-var canvas = document.getElementById('canvas');
-var stage = new June.stage(canvas, 230, 230);
+
 
 
 stage.draw = function(){
@@ -636,8 +650,8 @@ extend(Polygon4.prototype, {
 	isEvent:function(x, y, type){
 	
 		var is = false;
-		
-		if(this.zpos < -300 && this.x < x && this.y < y  && this.x+this.width > x && this.y+this.height > y){
+		//console.log(arguments);
+		if(this.zpos < -400 && this.x < x && this.y < y  && this.x+this.width > x && this.y+this.height > y){
 			is = true;
 		}
 		
@@ -734,10 +748,18 @@ BaseRect.prototype = {
 		
 		polygon4.addEvent("click", function(x, y){
 			if(stage.rotationing){return ;}
+			var self = this;
 			if(_this.index == 4){//刷新魔方的某个面
 				_this.parent.transform(_this.face);
 			}else{
-				console.log(this.app.app_name);
+				moxian.openApp({
+					title:_this.app.app_name,
+					width:_this.app.app_width || 700,
+					height:_this.app.app_height != 0 || 500,
+					href: _this.app.app_url,
+					appid:_this.app.app_id
+				});
+				
 			}
 		});
 		
@@ -930,7 +952,7 @@ Rects.prototype = {
 				}
 			}
 			arr[4] = referapp;
-			console.log(appids);
+			//console.log(appids);
 			return arr;
 		}
 		arr = apps.slice(index*len, (index+1)*len);
@@ -947,13 +969,13 @@ Rects.prototype = {
 		var backapp = this.getapps(3);
 		for(var i=0; i<data.length; i++){
 			after.push([data[i][0], data[i][1], -data[i][2]]);
-			frontRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#FFFFFF",{
+			frontRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#b2b2b2",{
 				index:i,
 				face:"front",
 				parent:this,
 				app:frontapp[i]
 			}));// f30f30
-			backRects.push(new this.rect(this.stage, data[i][0], data[i][1], -data[i][2], "#FFFF00",{
+			backRects.push(new this.rect(this.stage, data[i][0], data[i][1], -data[i][2], "#b2b2b2",{
 				index:i,
 				face:"back",
 				parent:this,
@@ -973,13 +995,13 @@ Rects.prototype = {
 		
 		for(var i=0; i<data.length; i++){
 			after.push([data[i][0], data[i][1], -data[i][2]]);
-			upRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#00FF00",{
+			upRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#a6a6a6",{
 				index:i,
 				face:"up",
 				parent:this,
 				app:upapp[i]
 			}));//
-			downRects.push(new this.rect(this.stage, data[i][0], -data[i][1], data[i][2], "#FFFF00",{
+			downRects.push(new this.rect(this.stage, data[i][0], -data[i][1], data[i][2], "#a6a6a6",{
 				index:i,
 				face:"down",
 				parent:this,
@@ -996,13 +1018,13 @@ Rects.prototype = {
 		var rightapp = this.getapps(2);
 		for(var i=0; i<data.length; i++){
 			after.push([data[i][0], data[i][1], -data[i][2]]);
-			rightRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#E47833",{
+			rightRects.push(new this.rect(this.stage, data[i][0], data[i][1], data[i][2], "#bfbfbf",{
 				index:i,
 				face:"right",
 				parent:this,
 				app:leftapp[i]
 			}));//
-			leftRects.push(new this.rect(this.stage, -data[i][0], data[i][1], data[i][2], "#FF0000",{
+			leftRects.push(new this.rect(this.stage, -data[i][0], data[i][1], data[i][2], "#bfbfbf",{
 				index:i,
 				face:"left",
 				parent:this,
@@ -1099,5 +1121,5 @@ stage.stop();
 setTimeout(function(){
 	stage.faceDraw();
 }, 500);
-
-//})
+window.stage = stage;
+});
