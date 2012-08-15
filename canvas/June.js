@@ -27,5 +27,13 @@
         
 */
 
-
+/**
+	Scene 舞台对象
+		
+	PerspectiveCamera 摄像机
+		
+	CanvasRenderer 渲染
+	
+	CanvasRenderer.reader(Scene, PerspectiveCamera)
+ */
 June = {};
