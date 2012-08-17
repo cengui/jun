@@ -20,7 +20,7 @@ option
     left:100
     overflow: true //true溢出显示  false 溢出隐藏
     url:"",iframe默认加载地址
-    
+    skin:"default" | "classical"
 }
 
 api
@@ -44,6 +44,21 @@ MX.extend(MX.ui, (function(){
 	//var DragElement = MX.ui.DragElement;
 	//var Resize = MX.ui.Resize;
 	
+	var config = {
+		"default":{
+			patchWidth:0,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:0,
+			patchLeft:0,
+			patchRight:0
+		},
+		"classical":{
+			patchWidth:15,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:0,
+			patchLeft:0,
+			patchRight:0
+		}
+	};
+	
     function mxDialog( option ){
                 
         this.isMax = false;        
@@ -61,9 +76,12 @@ MX.extend(MX.ui, (function(){
 		this.overflow = true;
         this.i = mxDialog.count++;
         this.index = mxDialog.index++;
-        
+		this.skin = "default";
+		
         this.ui = {};
+		
         $.extend(this, option);
+		this.skinConfig = $.extend({patchWidth:0,patchHeight:0,patchLeft:0,patchRight:0}, config[this.skin] || {});
     };
     mxDialog.dialogList = [];
     mxDialog.count = 1;
@@ -90,34 +108,36 @@ MX.extend(MX.ui, (function(){
 			/*mxDialog.lang.en*/
 			/*mxDialog.currentLang*/
 			var lang = mxDialog.lang.currentLang;
-			return '<div class="mx-dialog" id="mxDialog_<%=i%>" style="width:<%=width%>px;height:<%=height%>px;left:<%=left%>px;top:<%=top%>px;z-index:<%=index%>">\
-				<div class="mx-dialog-t mx-dialog-change" style="display:none;" data-dir="t"></div>\
-				<div class="mx-dialog-b mx-dialog-change" style="display:none;" data-dir="b"></div>\
-				<div class="mx-dialog-r mx-dialog-change" style="display:none;" data-dir="r"></div>\
-				<div class="mx-dialog-l mx-dialog-change"  style="display:none;" data-dir="l"></div>\
-				<div class="mx-dialog-tr mx-dialog-change"  style="display:none;" data-dir="tr"></div>\
-				<div class="mx-dialog-tl mx-dialog-change" style="display:none;" data-dir="tl"></div>\
-				<div class="mx-dialog-br mx-dialog-change" style="display:none;" data-dir="br"></div>\
-				<div class="mx-dialog-bl mx-dialog-change" style="display:none;" data-dir="bl"></div>\
-				<div class="mx-dialog-title"><div class="mx-dialog-title-in">\
-					<div class="mx-dialog-tool"><a href="###" class="mx-dialog-home" title="'+(lang.home)+'"></a></div>\
-					<h1 class="mx-dialog-h1"><%=title%></h1>\
-					<div class="mx-dialog-buttons">\
-						<%if(isMaximize){%>\
-							<a href="###" class="mx-dialog-maximize" title="'+(lang.maximize)+'"></a>\
-							<a href="###" class="mx-dialog-restore" style="display:none;" title="'+(lang.restore)+'"></a>\
-						<%}%>\
-						<%if(isClose){%>\
-							<a href="###" class="mx-dialog-close" title="'+(lang.close)+'"></a>\
-						<%}%>\
+			return '<div class="mx-dialog mx-dialog-<%=skin%>" id="mxDialog_<%=i%>" style="width:<%=width%>px;height:<%=height%>px;left:<%=left%>px;top:<%=top%>px;z-index:<%=index%>">\
+				<div class="mx-dialog-skin" style="position:absolute;bottom:0;left:0;right:0;top:0;">\
+					<div class="mx-dialog-t mx-dialog-change" style="display:none;" data-dir="t"></div>\
+					<div class="mx-dialog-b mx-dialog-change" style="display:none;" data-dir="b"></div>\
+					<div class="mx-dialog-r mx-dialog-change" style="display:none;" data-dir="r"></div>\
+					<div class="mx-dialog-l mx-dialog-change"  style="display:none;" data-dir="l"></div>\
+					<div class="mx-dialog-tr mx-dialog-change"  style="display:none;" data-dir="tr"></div>\
+					<div class="mx-dialog-tl mx-dialog-change" style="display:none;" data-dir="tl"></div>\
+					<div class="mx-dialog-br mx-dialog-change" style="display:none;" data-dir="br"></div>\
+					<div class="mx-dialog-bl mx-dialog-change" style="display:none;" data-dir="bl"></div>\
+					<div class="mx-dialog-title"><div class="mx-dialog-title-in">\
+						<div class="mx-dialog-tool"><a href="###" class="mx-dialog-home" title="'+(lang.home)+'"></a></div>\
+						<h1 class="mx-dialog-h1"><%=title%></h1>\
+						<div class="mx-dialog-buttons">\
+							<%if(isMaximize){%>\
+								<a href="###" class="mx-dialog-maximize" title="'+(lang.maximize)+'"></a>\
+								<a href="###" class="mx-dialog-restore" style="display:none;" title="'+(lang.restore)+'"></a>\
+							<%}%>\
+							<%if(isClose){%>\
+								<a href="###" class="mx-dialog-close" title="'+(lang.close)+'"></a>\
+							<%}%>\
+						</div>\
+					</div></div>\
+					<div class="mx-dialog-content" style="height:100%;left:0;top:0;">\
+						<iframe class="mx-dialog-iframe" src="<%=url%>" hidefocus frameborder="no" allowtransparency="true" height="100%" width="100%"></iframe>\
 					</div>\
-				</div></div>\
-				<div class="mx-dialog-content" style="width:100%;height:100%;left:0;top:0;">\
-					<iframe class="mx-dialog-iframe" src="<%=url%>" hidefocus frameborder="no" allowtransparency="true" height="100%" width="100%"></iframe>\
 				</div>\
 			</div>';
 		},
-        
+      
         init:function(){
             //$(document.body).css('overflow', 'hidden');
             
@@ -193,13 +213,15 @@ MX.extend(MX.ui, (function(){
                 return false;
             });
             
-            $(window).resize(function(){
+			this.winresize = function(){
                 if( _this.isMax ){
                     _this.setMaximize();
                 }
-            });
+            };
+            $(window).resize( this.winresize );
         },
         updatePos:function(){
+
             this.top = ($(window).height() - this.height) / 2;
             this.left = ($(window).width() - this.width) / 2;
             
@@ -211,11 +233,12 @@ MX.extend(MX.ui, (function(){
         },
         drag:function(){
             var _this = this;
-            this.drag = new MX.kit.DragElement({
+            this.drag = new MX.kit.DragElement($.extend({
                 dragElement:this.ui.h1,
                 moveElement:this.ui.mxDialog,
-                isResize:this.isResize
-            });
+                isResize:this.isResize,
+				isRange:this.isRange
+            }, this.skinConfig));//skinConfig读取变换范围补丁
             
             this.drag.onready = function(){
                 var _this = this;
@@ -286,6 +309,9 @@ MX.extend(MX.ui, (function(){
             if(mxDialog.dialogList.length == 0){
                 this.removeMask();
             }
+			
+			$(window).unbind('resize', this.winresize);
+			
             this.onclose();
             //this.setRemove();
         },
@@ -314,8 +340,8 @@ MX.extend(MX.ui, (function(){
             //$(document.body).css('overflow', 'hidden');
             //var st = $(window).scrollTop();
             //var sl = $(window).scrollLeft();
-            var w = $(window).width() - 5;
-            var h = $(window).height() - 40;
+            var w = $(window).width();
+            var h = $(window).height();
             
             this.isMax = true;
             this.setPos(0,0,w,h);
@@ -330,7 +356,7 @@ MX.extend(MX.ui, (function(){
         
         onclose:function(){},//未提供任何参数
         onready:function(){},//未提供任何参数
-        onresize:function(){}//未提供任何参数
+        onresize:function(){}//
     };
 
 	return {Dialog:mxDialog};

@@ -27,8 +27,46 @@
     <script type="text/javascript" src="js/config.js"></script>
 	
    
+   <style type="text/css">
+	.hidden{display:none;}
+   </style>
 </head>
 <body>
+
+	<div class="mx-dialog-warp hidden" >
+		
+		<div class="mx-dialog mx-dialog-default" style="width: 680px; height: 300px; left: 300px; top: 0px; z-index: 106;">
+			<div class="mx-dialog-skin" style="position:absolute;bottom:0;left:0;right:0;top:0;">
+				<div class="mx-dialog-t mx-dialog-change" style="" data-dir="t"></div>    
+				<div class="mx-dialog-b mx-dialog-change" style="" data-dir="b"></div>    
+				<div class="mx-dialog-r mx-dialog-change" style="" data-dir="r"></div>    
+				<div class="mx-dialog-l mx-dialog-change" style="" data-dir="l"></div>    
+				<div class="mx-dialog-tr mx-dialog-change" style="" data-dir="tr"></div>    
+				<div class="mx-dialog-tl mx-dialog-change" style="" data-dir="tl"></div>    
+				<div class="mx-dialog-br mx-dialog-change" style="" data-dir="br"></div>    
+				<div class="mx-dialog-bl mx-dialog-change" style="" data-dir="bl"></div>    
+				<div class="mx-dialog-title">
+					<div class="mx-dialog-title-in">     
+						<div class="mx-dialog-tool"><a href="###" class="mx-dialog-home" title="主页"></a></div>     
+						<h1 class="mx-dialog-h1">MoXian</h1>     
+						<div class="mx-dialog-buttons">             
+							<a href="###" class="mx-dialog-maximize" title="最大化"></a>       
+							<a href="###" class="mx-dialog-restore" style="display:none;" title="还原"></a>                   
+							<a href="###" class="mx-dialog-close" title="关闭"></a>           
+						</div>    
+					</div>
+				</div>    
+				<div class="mx-dialog-content" style="height:100%;left:0;top:0;">     
+					<iframe class="mx-dialog-iframe" src="http://www.google.com" hidefocus frameborder="no" allowtransparency="true" height="100%" width="100%"></iframe>    
+				</div>
+			</div>		
+		</div>
+		
+		<div style="position: fixed; top: 0px; left: 0px; opacity: 0; background-color: rgb(0, 0, 0); width: 1263px; height: 327px; z-index: auto; display: none; background-position: initial initial; background-repeat: initial initial; "></div>
+		<div style="background:black;width:100%;height:100%;position:fixed;z-index:99;opacity:.5;top:0;left:0;filter:alpha(opacity=50);-moz-opacity:.5;" id="mxDialogMask"></div>
+	</div>
+	
+	
     <div class="doc">
 		<div style="position:fixed;left:444px;top:350px;width:100px;height:100px;background:#f30;" id="movebox">
 			一个可拖动的框	
@@ -39,9 +77,9 @@
 		isMaximize:true,//最大化按钮
 		isResize:true,//伸缩
 		isMove:true,//可移动移动
-		url:'http://www.baidu.com',
-		width:680,
-		height:429,
+		url:'http://www.google.com',
+		width:300,
+		height:300,
 		overflow:false
 	});
 	dialog.init();
@@ -53,14 +91,13 @@
 	
 	<textarea style="height:200px;" >
 	
-	var dialog = new MX.ui.Dialog({
+	dialog = new MX.ui.Dialog({
 		isMaximize:true,//最大化按钮
 		isResize:true,//伸缩
 		isMove:true,//可移动移动
-		url:'http://www.baidu.com',
-		width:680,
-		height:429,
-		overflow:false
+		skin:'classical',
+		//isRange:false,
+		url:"http://www.google.com"
 	});
 	dialog.init();
 	</textarea>
@@ -100,9 +137,9 @@
 				isMaximize:true,//最大化按钮
 				isResize:true,//伸缩
 				isMove:true,//可移动移动
-				url:'http://www.baidu.com',
-				width:680,
-				height:429,
+				url:'http://www.google.com',
+				width:300,
+				height:300,
 				overflow:false
 			});
 			dialog.init();
@@ -113,7 +150,9 @@
 				isMaximize:true,//最大化按钮
 				isResize:true,//伸缩
 				isMove:true,//可移动移动
-				html:'<div style="height:100px;width:100px;"></div>'
+				skin:'classical',
+				//isRange:false,
+				url:"http://www.google.com"
 			});
 			dialog.init();
         }
@@ -147,7 +186,7 @@
         */
     </script>
 	<br/>
-	<iframe src="http://www.baidu.com" hidefocus="" frameborder="1" allowtransparency="true" height="300" width="300" scrolling="no"></iframe>
+	<iframe src="http://www.google.com" hidefocus="" frameborder="1" allowtransparency="true" height="300" width="300" scrolling="no"></iframe>
 	</div>
 </body>
 </html>

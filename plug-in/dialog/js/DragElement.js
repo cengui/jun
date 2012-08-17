@@ -35,9 +35,12 @@ MX.extend(MX.kit, (function(){
         var defalutOption = {
             dragElement:null,
             moveElement:null,
-            isRange:true,
-            isResize:true,
-			offsetTop:35//mx-dialog特有+35;
+            isRange:true,//限定范围
+            isResize:true,//可以改变大小
+			patchWidth:0,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:0,
+			patchLeft:0,
+			patchRight:0
         };
         
         
@@ -47,7 +50,7 @@ MX.extend(MX.kit, (function(){
         this.left = 0;
 		//this.offsetTop = 35;//mx-dialog特有+35;
         $.extend(defalutOption, option);
-        
+ 
         this.option = defalutOption;
         this.events = {};
         
@@ -121,7 +124,7 @@ MX.extend(MX.kit, (function(){
             });
         },
         setMaskIndex:function(index){
-            this.mask.css("z-index", index || MX.ui.mxDialog.index);//MX.mxDialog.index  dialog的全局属性
+            this.mask.css("z-index", index || MX.ui.Dialog.index);//MX.mxDialog.index  dialog的全局属性
         },
         start:function(){
             var dragElement = this.option.dragElement;
@@ -132,8 +135,8 @@ MX.extend(MX.kit, (function(){
             var _this = this, doc = $(document);
             
             var eleOffset = moveElement.offset();
-            this.width = moveElement.width()+7;
-            this.height = moveElement.height()+7 +this.option.offsetTop;//+ 35;//mx-dialog特有+35;
+            this.width = moveElement.width();// + this.option.patchWidth;
+            this.height = moveElement.height();// + this.option.patchHeight;//+ 35;//mx-dialog特有+35;
             
             this.setRangeWindow();
             
@@ -158,10 +161,12 @@ MX.extend(MX.kit, (function(){
             var moveElement = this.option.moveElement;
             var offset = this.offset;
             
+			//console.log(this.offsetLeft, this.offsetRight);
             var x = e.screenX - offset.x - $(window).scrollLeft();
             var y = e.screenY - offset.y - $(window).scrollTop();
             var newPos;
             //console.log(y);
+
             if(this.option.isRange){//限定范围
                 newPos = this.checkBoundary(x, y);
                 x = newPos.x;
@@ -198,7 +203,9 @@ MX.extend(MX.kit, (function(){
         },
         checkBoundary:function(x, y){
             var  range = this.option.range;
-            
+			
+			$('#movebox').text(range[3] +"-"+ this.height);
+			
             x = x>(range[2]-this.width) ? range[2]-this.width : x;
             y = y>(range[3]-this.height) ? range[3]-this.height : y;
             
@@ -238,16 +245,16 @@ MX.extend(MX.kit, (function(){
             this.resize.init();
         },
         setRange:function(x, y, width, height){
-            this.option.isRange = true;
+            //this.option.isRange = true;
             this.option.range = [x, y, width, height];
         },
         setRangeWindow:function(){
-            var st = 0;//$(window).scrollTop();
-            var sl = 0;//$(window).scrollLeft();
-            var w = $(window).width() + sl;
-            var h = $(window).height() + st;
-            
-            this.option.isRange = true;
+            var st = this.option.patchLeft;//this.offsetLeft;//$(window).scrollTop();
+            var sl = this.option.patchRight;//this.offsetTop;//$(window).scrollLeft();
+            var w = $(window).width() - this.option.patchWidth;
+            var h = $(window).height() - this.option.patchHeight;
+           //$('#movebox').text(h +"-"+ $(window).height() +"-"+ this.option.patchHeight);
+            //this.option.isRange = true;
             this.option.range = [sl, st, w, h];
             this.setMask(0, 0, w, h, this.minzIndex);
         },
