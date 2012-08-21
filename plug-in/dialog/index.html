@@ -85,7 +85,7 @@
 	dialog.init();
 	</textarea>
 	<br/><br/>
-	<input type="button" value="弹出" onclick="btn1()" />
+	<input type="button" value="弹出" onclick="btn1()" /> <input type="button" value="弹出" onclick="btn4()" />
 	<br/><br/><br/><br/>
 	
 	
@@ -102,7 +102,7 @@
 	dialog.init();
 	</textarea>
 	<br/><br/>
-	<input type="button" value="弹出" onclick="btn2()" />
+	<input type="button" value="弹出" onclick="btn2()" />  <input type="button" value="弹出" onclick="btn3()" />
 	<br/><br/><br/><br/>
 	
 	
@@ -137,7 +137,7 @@
 				isMaximize:true,//最大化按钮
 				isResize:true,//伸缩
 				isMove:true,//可移动移动
-				url:'http://www.google.com',
+				url:'http://www.baidu.com',
 				width:300,
 				height:300,
 				overflow:false
@@ -151,12 +151,38 @@
 				isResize:true,//伸缩
 				isMove:true,//可移动移动
 				skin:'classical',
+				width:300,
+				height:200,
 				//isRange:false,
-				url:"http://www.google.com"
+				url:"http://www.baidu.com"
 			});
 			dialog.init();
         }
     
+		
+		function btn3(){
+			dialog = new MX.ui.Dialog({
+				isMaximize:true,//最大化按钮
+				isResize:true,//伸缩
+				isMove:true,//可移动移动
+				skin:'classical',
+				//isRange:false,
+				html:'<div style="width:500px;height:500px;background:#f30"></div>'
+			});
+			dialog.init();
+        }
+		
+		
+		function btn4(){
+			dialog = new MX.ui.Dialog({
+				isMaximize:true,//最大化按钮
+				isResize:true,//伸缩
+				isMove:true,//可移动移动
+				//isRange:false,
+				html:'<div style="width:200px;height:500px;background:#f30"></div>'
+			});
+			dialog.init();
+        }
         /**
         var drag = new DragElement({
             dragElement:$('#mxDialogTitle'),

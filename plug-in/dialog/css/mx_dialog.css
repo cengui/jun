@@ -1,40 +1,43 @@
 ﻿.mx-dialog{position:fixed;}/**position:absolute;*/
-.mx-dialog-title{height:33px;overflow:hidden;cursor:default;}
+.mx-dialog-title{position:absolute;top:-35px;width:100%;cursor:default;}
     .mx-dialog-buttons{position:absolute;right:5px;top:8px;}
     .mx-dialog-tool{position:absolute;left:5px;top:5px;}
     .mx-dialog-maximize,.mx-dialog-close,.mx-dialog-restore,.mx-dialog-home{display:inline-block;height:19px;width:21px;}
 .mx-dialog-h1{font-size:14px;cursor:default;margin:0;font-weight:700;}
 
-.mx-dialog-skin{position:absolute;width:100%;left:0;bottom:0;left:0;right:0;}
-.mx-dialog-content{border:1px solid #999;border-top:none;background:#fff;}
+.mx-dialog-skin{height:100%;position:relative;z-index:1;}/*position:absolute;width:100%;left:0;bottom:0;left:0;right:0;*/
+.mx-dialog-content{border:1px solid #999;border-top:none;background:#fff;overflow:auto;}
 .mx-dialog-iframe{display:block;}
 .mx-dialog-overflow-hide{overflow:hidden;}
 
-.mx-dialog-t,.mx-dialog-b,.mx-dialog-r,.mx-dialog-l,.mx-dialog-tr,.mx-dialog-tl,.mx-dialog-br,.mx-dialog-bl{position:absolute;background:url(http://)}
+.mx-dialog-t,.mx-dialog-b,.mx-dialog-r,.mx-dialog-l,.mx-dialog-tr,.mx-dialog-tl,.mx-dialog-br,.mx-dialog-bl{position:absolute;background:url(http://)/**#000;*/}
 .mx-dialog-tr,.mx-dialog-tl,.mx-dialog-br,.mx-dialog-bl{width:5px;height:5px;}
-.mx-dialog-t{height:5px;width:100%;top:-5px;cursor:n-resize;}
+.mx-dialog-t{height:5px;width:100%;top:-5px;cursor:n-resize;top:-40px;}
 .mx-dialog-b{height:5px;width:100%;bottom:-5px;cursor:n-resize;}
-.mx-dialog-r{width:5px;height:100%;right:-5px;top:0;cursor:e-resize;}
-.mx-dialog-l{width:5px;height:100%;left:-5px;top:0;cursor:e-resize;}
+.mx-dialog-r{width:5px;height:100%;right:-5px;top:0;cursor:e-resize;padding-top:35px;top:-35px;}
+.mx-dialog-l{width:5px;height:100%;left:-5px;top:0;cursor:e-resize;padding-top:35px;top:-35px;}
 
-.mx-dialog-tr{right:-5px;top:-5px;cursor:ne-resize}
-.mx-dialog-tl{left:-5px;top:-5px;cursor:nw-resize}
+.mx-dialog-tr{right:-5px;top:-5px;cursor:ne-resize;top:-40px;}
+.mx-dialog-tl{left:-5px;top:-5px;cursor:nw-resize;top:-40px;}
 .mx-dialog-br{right:-5px;bottom:-5px;cursor:nw-resize}
 .mx-dialog-bl{left:-5px;bottom:-5px;cursor:ne-resize}
 
 /**skin-defualt*/
-.mx-dialog-default .mx-dialog-skin{padding-bottom:35px;}
-.mx-dialog-default .mx-dialog-title{border:1px solid #555;border-bottom:none;border-radius:2px 2px 0 0;border-bottom:none;height:34px;cursor:default;
+.mx-dialog-default{}
+.mx-dialog-default .mx-dialog-skin{}
+.mx-dialog-default .mx-dialog-title{cursor:default;}
+.mx-dialog-default .mx-dialog-title-in{border:1px solid #555;border-bottom:none;height:34px;border-radius:2px 2px 0 0;/*border-bottom:1px solid #ccc;*/
 	background:#e7e7e7;
     background:-webkit-linear-gradient( top,#e7e7e7,#f1f1f1);
     background:-moz-linear-gradient( top,#e7e7e7,#f1f1f1);
     background:-o-linear-gradient( top,#e7e7e7,#f1f1f1);
     background:linear-gradient( top,#e7e7e7,#f1f1f1);
 }
-.mx-dialog-default .mx-dialog-title-in{border-bottom:1px solid #ccc;height:32px;}
 .mx-dialog-default .mx-dialog-tool{display:none;}
-.mx-dialog-default .mx-dialog-h1{padding-left:20px;padding-top:10px;border-bottom:1px solid white;height: 21px;}
+.mx-dialog-default .mx-dialog-h1{padding-left:20px;padding-top:10px;border-bottom:1px solid white;height:23px;}
 .mx-dialog-default .mx-dialog-content{border:1px solid #555;border-top:none;}
+.mx-dialog-default .mx-dialog-content-in{}/**border-top:1px solid #ccc;*/
+
 
 .mx-dialog-default .mx-dialog-maximize,.mx-dialog-default .mx-dialog-close,.mx-dialog-default .mx-dialog-restore,.mx-dialog-default .mx-dialog-home{background:url(../images/mx_dialog_sprite.png) no-repeat 0 0;}
 .mx-dialog-default .mx-dialog-maximize{background-position:-34px -59px;}
@@ -52,11 +55,15 @@
 /**
 	没有 放大和缩小按钮
 */
-.mx-dialog-classical .mx-dialog-skin{background:#efefef;border:7px solid #efefef;border-radius:5px;padding-bottom:35px;}
-.mx-dialog-classical .mx-dialog-title{background:#e4e4e4;border:1px solid #cccccc;border-bottom:none;}
+.mx-dialog-classical .mx-dialog-skin-bg{border:7px solid #efefef;position:absolute;height:100%;width:100%;top:-41px;left:-7px;padding-top:34px;border-radius:5px;background:#fff;}
+.mx-dialog-classical .mx-dialog-skin{background:#efefef;border-radius:5px;}/*border:7px solid #efefef;*/
+.mx-dialog-classical .mx-dialog-title{}
+.mx-dialog-classical .mx-dialog-title-in{height:34px;background:#e4e4e4;border:1px solid #cccccc;border-bottom:none;}
+
 .mx-dialog-classical .mx-dialog-tool{display:none;}
-.mx-dialog-classical .mx-dialog-h1{padding-left:20px;padding-top:10px;}
-.mx-dialog-classical .mx-dialog-content{border:1px solid #cccccc;}
+.mx-dialog-classical .mx-dialog-h1{padding-left:20px;padding-top:10px;height:24px;}
+.mx-dialog-classical .mx-dialog-content{border:1px solid #cccccc;background:#fff;}
+
 
 .mx-dialog-classical .mx-dialog-maximize,.mx-dialog-classical .mx-dialog-close,.mx-dialog-classical .mx-dialog-restore,.mx-dialog-classical .mx-dialog-home{background:url(../images/mx_dialog_sprite.png) no-repeat 0 0;}
 .mx-dialog-classical .mx-dialog-maximize{background-position:-34px -59px;display:none;}

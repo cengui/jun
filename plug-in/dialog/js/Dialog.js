@@ -20,7 +20,9 @@ option
     left:100
     overflow: true //true溢出显示  false 溢出隐藏
     url:"",iframe默认加载地址
-    skin:"default" | "classical"
+	html:"",
+    skin:"default" | "classical",
+	
 }
 
 api
@@ -46,16 +48,16 @@ MX.extend(MX.ui, (function(){
 	
 	var config = {
 		"default":{
-			patchWidth:0,//补丁宽度 会添加到 moveElement的宽度上
-			patchHeight:0,
-			patchLeft:0,
-			patchRight:0
+			patchWidth:1,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:2,
+			patchTop:36,
+			patchLeft:1
 		},
 		"classical":{
-			patchWidth:15,//补丁宽度 会添加到 moveElement的宽度上
-			patchHeight:0,
-			patchLeft:0,
-			patchRight:0
+			patchWidth:7,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:7,
+			patchTop:42,
+			patchLeft:7
 		}
 	};
 	
@@ -69,14 +71,16 @@ MX.extend(MX.ui, (function(){
         this.title = "MoXian.com";
         this.minWidth = 100;
         this.minHeight = 100;
-        this.width = 400;
-        this.height = 300;
+        this.width = 100;
+        this.height = 100;
         this.top = 0;
         this.left = 0;
 		this.overflow = true;
         this.i = mxDialog.count++;
         this.index = mxDialog.index++;
 		this.skin = "default";
+		this.url = null;
+		this.html = null;
 		
         this.ui = {};
 		
@@ -108,8 +112,9 @@ MX.extend(MX.ui, (function(){
 			/*mxDialog.lang.en*/
 			/*mxDialog.currentLang*/
 			var lang = mxDialog.lang.currentLang;
-			return '<div class="mx-dialog mx-dialog-<%=skin%>" id="mxDialog_<%=i%>" style="width:<%=width%>px;height:<%=height%>px;left:<%=left%>px;top:<%=top%>px;z-index:<%=index%>">\
-				<div class="mx-dialog-skin" style="position:absolute;bottom:0;left:0;right:0;top:0;">\
+			return '<div class="mx-dialog mx-dialog-<%=kind%> mx-dialog-<%=skin%>" id="mxDialog_<%=i%>" style="width:<%=__widthpx%>;height:<%=__heightpx%>;left:<%=left%>px;top:<%=top%>px;z-index:<%=index%>">\
+				<div class="mx-dialog-skin-bg"></div>\
+				<div class="mx-dialog-skin">\
 					<div class="mx-dialog-t mx-dialog-change" style="display:none;" data-dir="t"></div>\
 					<div class="mx-dialog-b mx-dialog-change" style="display:none;" data-dir="b"></div>\
 					<div class="mx-dialog-r mx-dialog-change" style="display:none;" data-dir="r"></div>\
@@ -132,7 +137,11 @@ MX.extend(MX.ui, (function(){
 						</div>\
 					</div></div>\
 					<div class="mx-dialog-content" style="height:100%;left:0;top:0;">\
-						<iframe class="mx-dialog-iframe" src="<%=url%>" hidefocus frameborder="no" allowtransparency="true" height="100%" width="100%"></iframe>\
+						<%if(html != null){%>\
+							<%=html%>\
+						<%}else{%>\
+							<iframe class="mx-dialog-iframe" src="<%=url%>" hidefocus frameborder="no" allowtransparency="true" height="100%" width="100%"></iframe>\
+						<%}%>\
 					</div>\
 				</div>\
 			</div>';
@@ -141,6 +150,17 @@ MX.extend(MX.ui, (function(){
         init:function(){
             //$(document.body).css('overflow', 'hidden');
             
+			if(this.url){
+				this.kind = "url";
+				this.__widthpx = this.width + "px";
+				this.__heightpx = this.height + "px";
+			}else if(this.html){
+				this.kind = "html";
+				this.__widthpx = "auto";
+				this.__heightpx = "auto";
+			}
+			
+			
             this.updatePos();
 			
             var dialogHTML = Common.tmpl(this.getTpl(), this);
@@ -153,12 +173,19 @@ MX.extend(MX.ui, (function(){
                 maximize:this.ui.mxDialog.find('.mx-dialog-maximize'),
                 restore:this.ui.mxDialog.find('.mx-dialog-restore'),
                 close:this.ui.mxDialog.find('.mx-dialog-close'),
+				context:this.ui.mxDialog.find('.mx-dialog-content'),
                 iframe:this.ui.mxDialog.find('.mx-dialog-iframe'),
                 title:this.ui.mxDialog.find('.mx-dialog-title'),
                 h1:this.ui.mxDialog.find('.mx-dialog-h1'),
                 home:this.ui.mxDialog.find('.mx-dialog-home')
             });
-            
+            if(this.html){
+				this.width = this.ui.context.width();
+				this.height = this.ui.context.height();
+				this.updatePos();
+				this.setPos(this.top, this.left, this.width, this.height);
+			}
+			
             if(this.overflow == false){
 				this.ui.iframe.attr('scrolling', 'no');	
 			}
@@ -221,12 +248,12 @@ MX.extend(MX.ui, (function(){
             $(window).resize( this.winresize );
         },
         updatePos:function(){
-
+			
             this.top = ($(window).height() - this.height) / 2;
             this.left = ($(window).width() - this.width) / 2;
             
-            this.top = this.top < 0 ? 0 :  this.top;
-            this.left = this.left < 0 ? 0 :  this.left;
+            this.top = this.top < this.skinConfig.patchTop ? this.skinConfig.patchTop :  this.top;
+            this.left = this.left < this.skinConfig.patchLeft ? this.skinConfig.patchLeft :  this.left;
             
             //this.top += $(window).scrollTop();
             //this.left += $(window).scrollLeft();
@@ -344,7 +371,7 @@ MX.extend(MX.ui, (function(){
             var h = $(window).height();
             
             this.isMax = true;
-            this.setPos(0,0,w,h);
+            this.setPos(this.skinConfig.patchTop, this.skinConfig.patchLeft, w-this.skinConfig.patchWidth, h-this.skinConfig.patchHeight-36);
             this.ui.maximize.hide();
             this.ui.restore.show();
             

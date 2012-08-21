@@ -39,8 +39,9 @@ MX.extend(MX.kit, (function(){
             isResize:true,//可以改变大小
 			patchWidth:0,//补丁宽度 会添加到 moveElement的宽度上
 			patchHeight:0,
-			patchLeft:0,
-			patchRight:0
+			patchTop:0,
+			patchLeft:0//,
+			//patchTop:0
         };
         
         
@@ -249,8 +250,8 @@ MX.extend(MX.kit, (function(){
             this.option.range = [x, y, width, height];
         },
         setRangeWindow:function(){
-            var st = this.option.patchLeft;//this.offsetLeft;//$(window).scrollTop();
-            var sl = this.option.patchRight;//this.offsetTop;//$(window).scrollLeft();
+            var st = this.option.patchTop;//this.offsetLeft;//$(window).scrollTop();
+            var sl = this.option.patchLeft;//this.offsetTop;//$(window).scrollLeft();
             var w = $(window).width() - this.option.patchWidth;
             var h = $(window).height() - this.option.patchHeight;
            //$('#movebox').text(h +"-"+ $(window).height() +"-"+ this.option.patchHeight);
