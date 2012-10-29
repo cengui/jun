@@ -21,7 +21,7 @@
 	font-size:14px;text-decoration: none;border:none;
 }
 .ui-btn-ok:hover,.ui-btn-cancel:hover,.ui-btn-ok:focus,.ui-btn-cancel:focus{background-position:0 -35px;outline:none;}
-.ui-btn-close{background: url(../images/mxico.png) no-repeat scroll -3px -785px transparent;cursor: pointer;display:inline-block;height: 14px;position: absolute;right: 10px;top: 10px;width: 14px;border:none;outline:none;}
+.ui-btn-close{background: url(../images/mxico.png) no-repeat scroll -3px -1116px transparent;cursor: pointer;display:inline-block;height: 14px;position: absolute;right: 10px;top: 10px;width: 14px;border:none;outline:none;}
 .ui-tip-icon{background:url(../images/moxian-ui-tip.png) no-repeat 0 0;display:inline-block;width:24px;height:24px;
 	vertical-align:middle;margin-right:10px;
 }

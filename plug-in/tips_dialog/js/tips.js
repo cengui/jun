@@ -110,7 +110,7 @@ MX.extend(MX.ui, {
 			};
 			
 			$.extend(this.option, option)
-			
+			console.log( this.option );
 			this.init();
 		}
 		tip.prototype = {

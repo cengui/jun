@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<input type="button" value="拷贝" onclick="copy2('hello world')" />
+	<script type="text/javascript">
+		function copy(text){ //拷贝字符串到剪贴板
+			
+			if(window.clipboardData){
+				window.clipboardData.clearData();   
+				window.clipboardData.setData("Text", text);
+				return true;
+			}
+			
+			return false;
+		}
+		
+		function copy2(text){
+			if( copy(text) ){
+				alert("拷贝成功");
+			}else{
+				alert("您所在浏览器不支持直接拷贝");
+			}
+		}
+	</script>
+</body>
+</html>

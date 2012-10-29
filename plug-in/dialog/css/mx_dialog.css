@@ -3,7 +3,7 @@
     .mx-dialog-buttons{position:absolute;right:5px;top:8px;}
     .mx-dialog-tool{position:absolute;left:5px;top:5px;}
     .mx-dialog-maximize,.mx-dialog-close,.mx-dialog-restore,.mx-dialog-home{display:inline-block;height:19px;width:21px;}
-.mx-dialog-h1{font-size:14px;cursor:default;margin:0;font-weight:700;}
+.mx-dialog-h1{font-size:14px;cursor:default;margin:0;font-weight:700;color:#444;}
 
 .mx-dialog-skin{height:100%;position:relative;z-index:1;}/*position:absolute;width:100%;left:0;bottom:0;left:0;right:0;*/
 .mx-dialog-content{border:1px solid #999;border-top:none;background:#fff;overflow:auto;}
@@ -26,7 +26,7 @@
 .mx-dialog-default{}
 .mx-dialog-default .mx-dialog-skin{}
 .mx-dialog-default .mx-dialog-title{cursor:default;}
-.mx-dialog-default .mx-dialog-title-in{border:1px solid #555;border-bottom:none;height:34px;border-radius:2px 2px 0 0;/*border-bottom:1px solid #ccc;*/
+.mx-dialog-default .mx-dialog-title-in{border:1px solid #555;border-bottom:1px solid #ccc;height:34px;border-radius:2px 2px 0 0;/*border-bottom:1px solid #ccc;*/
 	background:#e7e7e7;
     background:-webkit-linear-gradient( top,#e7e7e7,#f1f1f1);
     background:-moz-linear-gradient( top,#e7e7e7,#f1f1f1);

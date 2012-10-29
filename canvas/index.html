@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
@@ -10,6 +10,8 @@
 	<script type="text/javascript" src="Vector3.js"></script>
 	<script type="text/javascript" src="Matrix4.js"></script>
 	
+	<script type="text/javascript" src="Mesh.js"></script>
+	<script type="text/javascript" src="PerspectiveCamera.js"></script>
 	<script type="text/javascript" src="PlaneGeometry.js"></script>
 	<script type="text/javascript" src="CanvasRenderer.js"></script>
 </head>
@@ -18,36 +20,48 @@
 	
 	<script type="text/javascript">
 		var scene = new June.Scene();
-		var object = new June.Object3D();
 		
-		/**
-		var point = new June.Vector3(-50, 50, 50);
-			object.add( point );
-			point = new June.Vector3(-50, 0, 50);
-			object.add( point );
-			point = new June.Vector3(0, 0, 50);
-			object.add( point );
+		
+		var canmera = new June.PerspectiveCamera(); //摄像机
+			scene.add( canmera );
 			
-		*/	
 		
-		var plane = new June.PlaneGeometry(-50, -50, 50, 50, 50);
-			object.add( plane );
+		var mesh1 = new June.Mesh(  new June.PlaneGeometry(200, 200, "#000") ); // 世界坐标系
+			mesh1.position.x = 0;
+			mesh1.position.y = 0;
+			mesh1.position.z = 0;
+			scene.add( mesh1 );
 		
-			plane = new June.PlaneGeometry(100, 0, 0, 50, 50);
-			object.add( plane );
+
+		var mesh2 = new June.Mesh( new June.PlaneGeometry(100, 100, "#f30") ); // 世界坐标系
+			mesh2.position.x = -30;
+			mesh2.position.y = -30;
+			mesh2.position.z = -30;
+			scene.add( mesh2 );
 			
+		//scene.add( new June.Vector3(20, 20, 100)  );
+		
 		var render = new June.CanvasRenderer( canvas );
 		
 		
 		animate();
+		
+		mesh1.rotation.x = 0.01;
+		mesh2.rotation.x = 0.02;
+		
+		mesh1.rotation.y = 0.01;
+		mesh2.rotation.y = 0.02;
+		
+		mesh1.rotation.z = 0.01;
+		mesh2.rotation.z = 0.02;
 		
 		function animate(){
 			//console.log(1);
 			requestAnimationFrame( animate );
 			
 			render.clear();
-			render.render(scene,  object);
-			object.translateX(0.1);
+			render.render(scene,  canmera);
+			
 			
 			//render.clear();
 		}

@@ -1,0 +1,426 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>圈人功能</title>
+	<style type="text/css">
+	
+			/* yahoo reset */
+			html{color:#000;background:#FFF;}
+			body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}
+			table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}
+			address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
+			li{list-style:none;}caption,th{text-align:left;}
+			h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+			q:before,q:after{content:'';}abbr,acronym {border:0;font-variant:normal;}
+			sup {vertical-align:text-top;}
+			sub {vertical-align:text-bottom;}
+			input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}
+			input,textarea,select{*font-size:100%;}
+			legend{color:#000;}body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+			table {font-size:inherit;font:100%;}
+			pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+	
+		
+		
+	</style>
+	<script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/jquery.Jcrop.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css" />
+	<style type="text/css">
+		
+	.mx-circle-friend{width:180px;border:1px solid #eee;position:absolute;z-index:700;background:#fff;top:0;border-radius:4px;text-align:left;}
+			.mx-circle-friend .context,.mx-circle-friend .title{padding-left:10px;}
+			.mx-circle-friend .title{background:#F0F0F0;line-height:30px;border-bottom:1px solid #ECECEC;}
+			.mx-circle-friend .context{padding-top:10px;padding-bottom:10px;}
+			.mx-circle-friend .input{width:152px;padding:.3em .2em;}
+			
+			.mx-circle-friend .friend-list{min-height:50px;max-height:100px;height:auto !important; height:200px;overflow-y:auto;width:165px;}
+			.mx-circle-friend .friend-list li{line-height:20px;}
+			.mx-circle-friend .friend-list li input{vertical-align:-2px;}
+			.mx-circle-friend .friend-list li label{display:block;}
+				.mx-circle-friend .tip-text{margin:5px 0;}
+				.mx-circle-friend .buttons{margin-top:10px;}
+		
+			.mx-circle-friend .btns{
+						color:#fff;
+						padding:.3em .8em;
+						border:none;
+						border-radius:2px;
+						cursor:pointer;
+						background:-moz-linear-gradient(bottom,#5b8dd1,#3e67a0);
+						background:-webkit-linear-gradient(bottom,#5b8dd1,#3e67a0);
+						background:-o-linear-gradient(bottom,#5b8dd1,#3e67a0);
+						background:linear-gradient(bottom,#5b8dd1,#3e67a0);
+						filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#5b8dd1,endColorstr=#3e67a0);
+				}
+	
+		.mx-circles-wrap{position:absolute;top:0;left:0;}
+			.mx-circles-wrap .cir{position:absolute;background:url('http://');}/*opacity:1;filter:alpha(opacity=100);*/
+			
+			.mx-circles-wrap .cir-border-in{border:1px solid #FFF;height:100%;}
+			.mx-circles-wrap .cir  .cir-in{visibility:hidden;}
+			.mx-circles-wrap .over .cir-in{visibility:visible;}
+			.mx-circles-wrap .cir-border{border:1px solid #666;}
+			.mx-circles-wrap .text-in{background:#fff;display:inline-block;padding:0.3em;border-radius:3px;line-height:1.2em; margin-top:5px;}
+			.mx-circles-wrap .cir .text{
+				opacity:.9;word-break:break-all;word-wrap:break-word;
+				min-width:200px;
+				position:absolute;
+			};
+
+	
+
+
+	</style>
+</head>
+<body>
+	<div style="width:700px;text-align:center;">
+		<img src="http://ww2.sinaimg.cn/mw690/9c2336e7tw1drfynhdj4uj.jpg" alt="" id="images_pop" width="500" height="299" />
+	</div>
+
+	<!--
+	<div class="mx-circle-friend">
+		<div class="title">选择好友或输入圈圈信息</div>
+		<div class="context">
+			<input type="text" class="input" placeholder="输入描述或选择好友" />
+			<div class="tip-text">选择您的好友：</div>
+			<div class="firend-list">
+				<ul>
+					<li><label><input type="radio" name="firend" id="" /> Lujun</label></li>
+				</ul>
+			</div>
+			<div class="buttons">
+				<input type="button" value="确定" />  <input type="button" value="取消" />
+			</div>
+		</div>
+	</div>
+	-->
+	<div id="abc"></div>
+	
+	<script type="text/javascript">
+	
+		/**
+			圈点定义
+					x, y //左上角顶点坐标
+					width, height //宽度和高度
+					
+					宽度高度最小值100,x，y坐标最小值 0
+					
+					
+			new ImagesCircle(id);
+			-initCircle 开始圈人
+			-delCircle 删除一个圈
+			-addCircle 添加一个圈
+				-addCircles 初始化图片所有的圈
+				
+			getCircle 获取当前用户的圈
+				
+			
+		*/
+		
+		/**
+			选择好友
+			
+			opt{
+				onClose:
+			}
+		*/
+		function FriendSelect(wrap, opt){
+			// x, y的偏移量
+			this.px = 5;
+			this.py = 0;
+			this.opt = opt;
+			
+			this.wrap = $(wrap);
+			this.ele = null;
+		}
+		FriendSelect.tmpl = '<div class="mx-circle-friend">\
+			<div class="title">选择好友或输入圈圈信息</div>\
+			<div class="context">\
+				<input type="text" class="input" placeholder="输入描述或选择好友" />\
+				<div class="tip-text">选择您的好友：</div>\
+				<div class="firend-list">\
+					<ul>\
+						<li><label><input type="radio" name="firend" id="" /> Lujun</label></li>\
+					</ul>\
+				</div>\
+				<div class="buttons">\
+					<input type="button" value="确定" />  <input type="button" value="取消" class="esc" />\
+				</div>\
+			</div>\
+		</div>';
+		FriendSelect.prototype = {
+			constructor:FriendSelect,
+			init:function(){
+				var _this = this;
+				this.wrap.append(FriendSelect.tmpl);
+				this.ele = this.wrap.find('.mx-circle-friend');
+				
+				this.ele.find('.esc').click(function(){
+					_this.close();
+				});
+			},
+			hide:function(){
+				this.ele.hide();
+			},
+			show:function(){
+				this.ele.show();
+			},
+			setPos:function(x, y){
+				x += this.px;
+				y += this.py;
+				this.show();
+				this.ele.css({left:x, top:y});
+			},
+			close:function(){
+				this.hide();
+				this.opt.onClose();
+			}
+		};
+		
+		
+		/**
+			圈子
+		*/
+		
+		function Circle(){
+			
+		}
+		
+		Circle.prototype = {
+			constructor:Circle,
+			
+		}
+		
+		/**
+			圈人
+		*/
+		
+		function ImagesCircle( id ){
+		
+			var _this = this;
+			this.img = $(id);
+			this.x = 0;
+			this.y = 0;
+			this.width = 100;
+			this.height = 100;
+			
+			this.minWidth = 100;
+			this.minHeight = 100;
+			
+			this.friendSelect = null;
+			this.jcrop_api = null;
+			
+			this.wrap = null;
+			this.cWrap = null;
+			
+			this.zWidth = 0;
+			this.zHeight = 0;
+			this.proportionX = 1;
+			this.proportionY = 1;
+			this.load = false;
+			
+			this.img.load = function(){
+				_this.load = true;
+			};
+			
+		};
+
+		ImagesCircle.prototype = {
+			constructor:ImagesCircle,
+			timeout:function(fn){
+				if(this.load){
+					fn.call(this);
+				}else{
+					console.log('...');
+					setTimeout(fn, 1000);
+				}
+			},
+			init:function(){
+				
+				var width = this.img.width();
+				var height = this.img.height();
+	
+				this.calculate();
+				this.img.parent().append( $('<div>').css({width:width+"px", height:height+"px", margin:"auto", position:"relative"}) );
+				
+				this.wrap = this.img.parent().find('div').eq(0);
+				this.wrap.append(this.img);
+				this.wrap.append( $('<div class="mx-circles-wrap">') );
+				this.cWrap = this.wrap.find('.mx-circles-wrap');
+			},
+			initCircle:function(){
+				var _this = this;
+				var initSelect = [this.x, this.y, this.width, this.height];
+				var minSize = [this.minWidth, this.minHeight];
+				
+				this.img.Jcrop({
+					setSelect:initSelect,
+					minSize:minSize,
+					onSelect:function(c){//选中
+						if( _this.friendSelect ){
+							_this.friendSelect.setPos(c.x+c.w, c.y);
+						}
+					},
+					onChange:function(c){//移动
+						if( _this.friendSelect ){
+							_this.friendSelect.setPos(c.x+c.w, c.y);
+						}
+					},
+					onRelease:function(){//退出
+						_this.release();
+						if( _this.friendSelect ){
+							_this.friendSelect.hide();
+						}
+					}
+				}, function(){
+					_this.jcrop_api = this;
+					
+					if(_this.friendSelect == null){
+						_this.friendSelect = new FriendSelect(_this.wrap, _this);
+						_this.friendSelect.init();
+						_this.friendSelect.setPos(_this.x+_this.width, _this.y);
+					}
+				});
+				if(_this.jcrop_api){
+					_this.jcrop_api.enable();
+					this.jcrop_api.ui.holder.show();
+					this.img.css({
+						display:"none"
+					});
+				}
+			},
+			calculate:function(){
+				var _this = this;
+				var img = new Image();
+				
+				var width = this.img.width();
+				var height = this.img.height();
+				_this.zload = false;
+				img.onload = function(){
+					_this.zWidth = this.width;
+					_this.zHeight = this.height;
+
+					_this.proportionX = parseInt(_this.zWidth / width * 100)/ 100 || 1;
+					_this.proportionY = parseInt(_this.zHeight / height *100) /100 || 1;
+					_this.zload = true;
+				};
+				img.src = this.img.attr('src');
+			},
+			getCircle:function(){},
+			release:function(){
+				//this.jcrop_api.disable();
+				this.jcrop_api.ui.holder.hide();
+				this.img.css({
+					visibility:"visible",
+					display:"block"
+				});
+			},
+			onClose:function(){
+				this.jcrop_api.release();
+			},
+			
+			/**在图片上画圈的API*/
+			addCircles:function( data ){
+				var _this = this;
+				if(this.zload){
+					for(var i=0; i<data.length; i++){
+						this.addCircle( data[i] );
+					}
+				}else{
+					setTimeout(function(){
+						_this.addCircles( data );
+					});
+				}
+			},
+			addCircle:function(data){
+				var link, itemTextNode;
+				//console.log(this.proportionY);
+				var item = $('<div class="mx-circle-box out">').css({
+					width:data.width,
+					height:data.height,
+					top:(data.y / this.proportionY),
+					left:data.x / this.proportionX
+				});
+				item.mouseover(function(){
+					$(this).addClass('over')
+				});
+				item.mouseout(function(){
+					$(this).removeClass('over')
+				});
+				
+				itemTextNode = $('<span class="mx-circle-text">').css({"margin-top":data.height+5+"px"});
+				if(data.v_mx_id){
+					link = $('<a href="http://www.moxian.com/main/user.php?mx_id='+data.v_mx_id+'" target="_blank">').text( data.tag );
+					itemTextNode.append( link );
+				}else{
+					itemTextNode.text(data.tag);
+				}
+				
+				item.append( itemTextNode );
+				
+				this.cWrap.append(item);
+			},
+			delCircle:function(){
+			
+			}
+		};
+
+		
+		var cdata = [
+			{
+				status:1,
+				x:100,
+				y:100,
+				width:100,
+				height:100,
+				tag:"hello world",
+				v_mx_id:1111
+			},
+			{
+				status:1,
+				x:200,
+				y:100,
+				width:100,
+				height:100,
+				tag:"hello world",
+				v_mx_id:0
+			}
+		];
+		
+		
+
+		var im = new ImagesCircle("#images_pop");
+			im.timeout(function(){
+				im.init();//创建一个DIV包围img 为以下程序提供容器
+				im.addCircles( cdata );
+				im.initCircle(); //开始画圈
+			});
+			
+
+
+		
+		
+		/**
+		var jc = $('#images_pop').Jcrop({
+				setSelect:[0,0,100,100],
+				minSize:[100, 100],
+				onSelect:function(){//开始，和移动停止
+					// this 被指向 api 对象
+					//console.log(this);
+				},
+				onInitBefor:function(){
+					console.log(11);
+				},
+				onRelease:function(){//退出
+					//console.log(22);
+				},
+				onChange:function(){
+					//console.log(this);
+				}
+			});
+		*/
+	</script>
+</body>
+</html>

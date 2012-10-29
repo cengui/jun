@@ -1,17 +1,30 @@
 
 
-June.PlaneGeometry = function(x, y, z, width, height){
+June.PlaneGeometry = function(width, height, color){
 	
-	this.positon = new June.Vector3();
+	var width_half = width / 2;
+	var height_half = height / 2;
 	
+	this.color = color || "#000";
 	this.vectors = [
-		new June.Vector3(x, y , z),
-		new June.Vector3(x+width, y, z),
-		new June.Vector3(x+width, y+height, z),
-		new June.Vector3(x, y+height, z)
+		new June.Vector3(-width_half, -height_half , 0),
+		new June.Vector3(width_half, -height_half, 0),
+		new June.Vector3(width_half, height_half, 0),
+		new June.Vector3(-width_half, height_half, 0)
 	];
 	
-	this.translateX = function( angleX ){
+	
+};
+
+
+
+June.PlaneGeometry.prototype = new June.Object3D();
+June.PlaneGeometry.prototype = {
+	constructor:June.PlaneGeometry,
+	applyMatrix:function( matrix ){
+	
+	},
+	translateX : function( angleX ){
 		var item = null;
 		for(var i=0; i<this.vectors.length; i++){
 			item = this.vectors[i];
@@ -22,9 +35,33 @@ June.PlaneGeometry = function(x, y, z, width, height){
 			item.y = y;
 			item.z = z;
 		}
-	}
-};
+	},
+	// ÈÆyÖáÐý×ª
+	translateY: function (angleY) {
+		var item = null;
+		for(var i=0; i<this.vectors.length; i++){
+			item = this.vectors[i];
+			var cosy = Math.cos(angleY),
+				siny = Math.sin(angleY),
+				x = item.sx * cosy - item.sz * siny,
+				z = item.sz * cosy + item.sx * siny;
+			item.x = x;
+			item.z = z;
+		}
+	},
+	// ÈÆzÖáÐý×ª
+	translateZ: function (angleZ) {
+		var item = null;
+		for(var i=0; i<this.vectors.length; i++){
+			item = this.vectors[i];
+			var cosz = Math.cos(angleZ),
+				sinz = Math.sin(angleZ),
+				x = item.sx * cosz - item.sy * sinz,
+				y = item.sy * cosz + item.sx * sinz;
+			item.x = x;
+			item.y = y;
+		}
+	},
+}
 
-June.PlaneGeometry.prototype = new June.Object3D();
-June.PlaneGeometry.prototype.constructor = June.PlaneGeometry;
 

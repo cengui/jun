@@ -6,27 +6,48 @@ June.CanvasRenderer = function(canvas){
 	var j = 0;
 	var width = 500;
 	var height = 500;
-	this.render = function(scene , object){
+	var camera = null;
+	this.render = function(scene,  canmera){
+	
 		var item = null;
 		var point = null;
-		//console.log(object.child.length);
-		for(var i=0; i<object.child.length; i++){
-			var item = object.child[i]
-			if(item instanceof June.Vector3){
-				var point = scene.getXY( item );
+		camera = scene.children[0];
+		
+		for(var i=1; i<scene.children.length; i++){
+		
+			var item = scene.children[i];
+			var geometry = item.geometry;
+			
+			//console.log( item.position );
+			//item.applyMatrix(  );
+				
+			if(geometry instanceof June.Vector3){
+				point = scene.getXY( geometry );
 				this.drawPoint( point.x, point.y );
 			}
-			if(item instanceof June.PlaneGeometry){
+	
 			
-				var v1 = scene.getXY(item.vectors[0])
-				, v2 = scene.getXY(item.vectors[1])
-				, v3 = scene.getXY(item.vectors[2])
-				, v4 = scene.getXY(item.vectors[3]);
-				this.drawBegin(v1, v2, v3, v4);
+			if(geometry instanceof June.PlaneGeometry){
+				
+				geometry.translateX( item.rotation.x );
+				//console.log(item.rotation.y);
+				//geometry.translateY( item.rotation.y );
+				//geometry.translateZ( item.rotation.z );
+				
+				var v1 = canmera.getXY(geometry.vectors[0].clone().addSelf( item.position ))
+				, v2 = canmera.getXY(geometry.vectors[1].clone().addSelf( item.position ))
+				, v3 = canmera.getXY(geometry.vectors[2].clone().addSelf( item.position ))
+				, v4 = canmera.getXY(geometry.vectors[3].clone().addSelf( item.position ));
+				
+				//console.log( v1, v2, v3, v4 );
+				this.drawBegin(v1, v2, v3, v4, geometry.color);
 			}
+
 		}
 	}
-
+	
+	
+	//画一个点
 	this.drawPoint = function(x, y, width, height){
 	
 		width = width || 2;
@@ -38,17 +59,8 @@ June.CanvasRenderer = function(canvas){
 		
 	};
 	
-	this.drawPoint = function(x, y, width, height){
-	
-		width = width || 2;
-		height = height || 2;
-		ctx.beginPath();
-		ctx.fillRect(x-width/2, y-height/2, width, height);
-		ctx.stroke();
-		
-	};
-	
-	this.drawBegin = function(v1, v2, v3, v4){
+	//画一个封闭的路劲 4个点
+	this.drawBegin = function(v1, v2, v3, v4, color){
 		ctx.beginPath();
 		ctx.moveTo(v1.x, v1.y);
 		ctx.lineTo(v2.x, v2.y);
@@ -56,11 +68,12 @@ June.CanvasRenderer = function(canvas){
 		ctx.lineTo(v4.x, v4.y)
 		//g.lineTo(pointA.screenX, pointA.screenY);
 		ctx.closePath();
-		ctx.fillStyle = "#000";
+		ctx.fillStyle = color;//"#000";
 		ctx.fill();
-		ctx.strokeStyle = "#000";
+		ctx.strokeStyle = color;//"#000";
 		ctx.stroke();
-	}
+	};
+	
 	
 	this.clear = function(){
 		ctx.clearRect(0, 0, width, height);

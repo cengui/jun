@@ -2,27 +2,21 @@
 	Scene
 */
 
-June.Scene = function(){
+June.Scene = function(scene,  canmera){
 	
-	this.width = 500;
-	this.height = 500;
+	this.scene = scene;
+	this.canmera = canmera;
 	
-	this.focalLength = 500;
-	
-	this.centerX = this.width / 2;
-	this.centerY = this.height / 2;
-	
-	
-	
+	this.children = [];
 };
 
 
 June.Scene.prototype = {
-	getXY:function( v ){
+	
+	add:function( object ){
+	
+		this.children.push( object );
 		
-		var x = this.focalLength / (this.focalLength + v.z) * v.x;
-		var y = this.focalLength / (this.focalLength + v.z) * v.y;
-		
-		return {x:x+this.centerX, y:y+this.centerY};
 	}
+	
 };

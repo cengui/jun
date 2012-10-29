@@ -22,6 +22,7 @@ option
     url:"",iframe默认加载地址
 	html:"",
     skin:"default" | "classical",
+	isMask:true //是否有遮罩层
 	
 }
 
@@ -48,16 +49,18 @@ MX.extend(MX.ui, (function(){
 	
 	var config = {
 		"default":{
-			patchWidth:1,//补丁宽度 会添加到 moveElement的宽度上
-			patchHeight:2,
+			plusWidth:2,
+			patchWidth:2,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:3,
 			patchTop:36,
-			patchLeft:1
+			patchLeft:2
 		},
 		"classical":{
-			patchWidth:7,//补丁宽度 会添加到 moveElement的宽度上
-			patchHeight:7,
+			plusWidth:2,
+			patchWidth:8,//补丁宽度 会添加到 moveElement的宽度上
+			patchHeight:8,
 			patchTop:42,
-			patchLeft:7
+			patchLeft:8
 		}
 	};
 	
@@ -68,13 +71,16 @@ MX.extend(MX.ui, (function(){
         this.isMaximize = false;//最大化按钮
         this.isResize = false;//伸缩
         this.isMove = true;//移动
+		this.isMask = true;
         this.title = "MoXian.com";
         this.minWidth = 100;
         this.minHeight = 100;
         this.width = 100;
         this.height = 100;
-        this.top = 0;
-        this.left = 0;
+        this.top = "auto";
+        this.left = "auto";
+		this.right = "auto";
+		this.bottom = "auto";
 		this.overflow = true;
         this.i = mxDialog.count++;
         this.index = mxDialog.index++;
@@ -112,7 +118,7 @@ MX.extend(MX.ui, (function(){
 			/*mxDialog.lang.en*/
 			/*mxDialog.currentLang*/
 			var lang = mxDialog.lang.currentLang;
-			return '<div class="mx-dialog mx-dialog-<%=kind%> mx-dialog-<%=skin%>" id="mxDialog_<%=i%>" style="width:<%=__widthpx%>;height:<%=__heightpx%>;left:<%=left%>px;top:<%=top%>px;z-index:<%=index%>">\
+			return '<div class="mx-dialog mx-dialog-<%=kind%> mx-dialog-<%=skin%>" id="mxDialog_<%=i%>" style="width:<%=__widthpx%>;height:<%=__heightpx%>;left:<%=left%>px;top:<%=top%>px;right:<%=right%>px;bottom:<%=bottom%>px;z-index:<%=index%>">\
 				<div class="mx-dialog-skin-bg"></div>\
 				<div class="mx-dialog-skin">\
 					<div class="mx-dialog-t mx-dialog-change" style="display:none;" data-dir="t"></div>\
@@ -152,16 +158,17 @@ MX.extend(MX.ui, (function(){
             
 			if(this.url){
 				this.kind = "url";
-				this.__widthpx = this.width + "px";
+				this.__widthpx = this.width + this.skinConfig.plusWidth + "px";
 				this.__heightpx = this.height + "px";
 			}else if(this.html){
 				this.kind = "html";
 				this.__widthpx = "auto";
 				this.__heightpx = "auto";
 			}
+
 			
+			this.updatePos();
 			
-            this.updatePos();
 			
             var dialogHTML = Common.tmpl(this.getTpl(), this);
             this.ui.dialogWarp = this.createDialogWarp();
@@ -179,10 +186,13 @@ MX.extend(MX.ui, (function(){
                 h1:this.ui.mxDialog.find('.mx-dialog-h1'),
                 home:this.ui.mxDialog.find('.mx-dialog-home')
             });
+			
             if(this.html){
-				this.width = this.ui.context.width();
+
+				this.width = this.ui.context.width() + 2;
 				this.height = this.ui.context.height();
 				this.updatePos();
+				console.log(this.top, this.left, this.width, this.height);
 				this.setPos(this.top, this.left, this.width, this.height);
 			}
 			
@@ -249,14 +259,19 @@ MX.extend(MX.ui, (function(){
         },
         updatePos:function(){
 			
-            this.top = ($(window).height() - this.height) / 2;
-            this.left = ($(window).width() - this.width) / 2;
-            
-            this.top = this.top < this.skinConfig.patchTop ? this.skinConfig.patchTop :  this.top;
-            this.left = this.left < this.skinConfig.patchLeft ? this.skinConfig.patchLeft :  this.left;
-            
-            //this.top += $(window).scrollTop();
-            //this.left += $(window).scrollLeft();
+			if((this.right != "auto" || this.bottom != "auto") && this.html){
+				return ;
+			}
+			
+			//if(this.left == "auto" || this.top == "auto"){
+
+				this.top = ($(window).height() - this.height) / 2;
+				this.left = ($(window).width() - this.width) / 2;
+
+				this.top = this.top < this.skinConfig.patchTop ? this.skinConfig.patchTop :  this.top;
+				this.left = this.left < this.skinConfig.patchLeft ? this.skinConfig.patchLeft :  this.left;
+            //}
+
         },
         drag:function(){
             var _this = this;
@@ -297,6 +312,12 @@ MX.extend(MX.ui, (function(){
             return mxDialogWarp;
         },
         mask:function(){
+
+			if(!this.isMask){ //是否有遮罩
+				this.ui.maskElement = $('#mxDialogMask');                                                                                                                            
+				return ;
+			}
+
             if($('#mxDialogMask').size()){
                 this.ui.maskElement = $('#mxDialogMask');
                 return ;
@@ -327,19 +348,29 @@ MX.extend(MX.ui, (function(){
             this.ui.mxDialog.hide();
             this.setRemove();
             this.drag && this.drag.stop();
+			var j = 0;
+			
             for(var i=0; i<mxDialog.dialogList.length; i++){
                 if(mxDialog.dialogList[i] == this){
                     mxDialog.dialogList.splice(i, 1);
                     break;
                 };
             }
-            if(mxDialog.dialogList.length == 0){
+			
+			for(var i=0; i<mxDialog.dialogList.length; i++){
+				if(mxDialog.dialogList[i].isMask == true){
+					j = 1; //有实例需要遮罩层
+					break
+				}
+			}
+
+            if(j == 0){
                 this.removeMask();
             }
 			
 			$(window).unbind('resize', this.winresize);
 			
-            this.onclose();
+            this.onclose( mxDialog.dialogList );
             //this.setRemove();
         },
         setOpen:function(){
@@ -353,15 +384,16 @@ MX.extend(MX.ui, (function(){
             //$(document.body).css('overflow', 'auto');
 			
             this.isMax = false;
-            this.setPos(this.top,this.left,this.width-1,this.height-1); // -1配合Chrome 浏览器的BUG
+            this.setPos(this.top,this.left,this.width,this.height); // -1配合Chrome 浏览器的BUG
             this.ui.restore.hide();
             this.ui.maximize.show();
 			var _this = this;
 			
 			//Chrome 浏览器的一个bug iframe刚好不会出现滚动条的高宽需要刷新下UI
-			setTimeout(function(){
-				_this.setPos(_this.top,_this.left,_this.width,_this.height);
-			}, 20);
+			//setTimeout(function(){
+			//	console.log(1);
+				//_this.setPos(_this.top,_this.left,_this.width+2,_this.height+2);
+			//}, 200);
         },
         setMaximize:function(){
             //$(document.body).css('overflow', 'hidden');

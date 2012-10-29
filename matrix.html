@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Matrix</title>
+</head>
+<body>
+	<script type="text/javascript">
+	
+		function Matrix( data ){
+			this.data = null;
+			if(data){
+				this.setData( data );
+			}
+		};
+		Matrix.prototype = {
+			constructor:Matrix,
+			isOkay:function(){
+			
+			},
+			setData:function( data ){
+				this.m = data.length;
+				this.p = data[0].length;
+				this.data = data;
+			},
+			//当前矩阵乘以宁外一个矩阵
+			
+			/**   
+						 1 2 3  			1 2		
+				A(3*3) = 2 1 2   B(3*2) = 	1 3
+						 1 2 3				1 1
+			*/
+			mult:function( matrix ){
+				
+				var data = this.data;
+				var newData = [];
+				var iItem = [];
+				var i=0,j=0, sum=0, p=0;
+				
+				for(i=0; i<data.length; i++){
+					for(p=0; p<matrix.p; p++){
+						sum = 0;
+						for(j=0; j<matrix.data.length; j++){
+							sum += data[i][j] * matrix.data[j][p];
+						}
+						if(!newData[i]){
+							newData[i] = [];
+						}
+						newData[i].push( sum );
+					}
+				};
+				
+				return new this.constructor( newData );
+			},
+			//矩阵加法
+			plus:function( matrix ){
+				if(this.m != matrix.m || this.p != matrix.p){
+					throw "not plus";
+				};
+				var data = this.data;
+				var newData = [];
+				for(var i=0; i<this.m; i++){
+				
+					if(!newData[i]){
+						newData[i] = [];
+					}
+					
+					for(var j=0; j<this.p; j++){
+						newData[i].push( data[i][j] + matrix.data[i][j] );
+					}
+				}
+				
+				return new this.constructor( newData );
+			},
+			/**当前矩阵的逆*/
+			inv:function(){
+				
+			},
+			toString:function(){
+				var data = this.data;
+				var string = "\n", i=0, j=0;
+				for(i=0; i<data.length; i++){
+					for(j=0; j<data[i].length; j++){
+						string += data[i][j]+" ";
+					}
+					string += "\n";
+				}
+				return string;
+			},
+			valueOf:function(){
+				return this.toString();
+			}
+		};
+		
+		var matrix = new Matrix();//Vector
+		matrix.setData(
+			[
+				[1,2,3],
+				[2,1,2],
+				[1,2,3]
+			]
+		);
+		matrix.toString();
+		
+		
+		var matrix2 = new Matrix();
+		matrix2.setData(
+			[
+				[1,2],
+				[1,3],
+				[1,1]
+			]
+		);
+		
+	</script>
+</body>
+</html>
