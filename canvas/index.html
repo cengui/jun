@@ -26,20 +26,26 @@
 			scene.add( canmera );
 			
 		
-		var mesh1 = new June.Mesh(  new June.PlaneGeometry(200, 200, "#000") ); // 世界坐标系
+		var mesh1 = new June.Mesh(  new June.PlaneGeometry(200, 200, "#000") );
 			mesh1.position.x = 0;
 			mesh1.position.y = 0;
 			mesh1.position.z = 0;
 			scene.add( mesh1 );
 		
 
-		var mesh2 = new June.Mesh( new June.PlaneGeometry(100, 100, "#f30") ); // 世界坐标系
+		var mesh2 = new June.Mesh( new June.PlaneGeometry(100, 100, "#f30") ); 
 			mesh2.position.x = -30;
 			mesh2.position.y = -30;
 			mesh2.position.z = -30;
 			scene.add( mesh2 );
 			
-		//scene.add( new June.Vector3(20, 20, 100)  );
+		var mesh3 = new June.Mesh(new June.Object3D(20, 20, 100), '#000');
+		
+			//mesh3.rotation.y = 0.01;
+			//mesh3.rotation.z = 0.02;
+			mesh3.rotation.x = 0.02;
+			
+			scene.add(  mesh3 );
 		
 		var render = new June.CanvasRenderer( canvas );
 		
@@ -50,10 +56,11 @@
 		mesh2.rotation.x = 0.02;
 		
 		mesh1.rotation.y = 0.01;
-		mesh2.rotation.y = 0.02;
+		mesh2.rotation.y = -0.02;
 		
 		mesh1.rotation.z = 0.01;
 		mesh2.rotation.z = 0.02;
+		
 		
 		function animate(){
 			//console.log(1);

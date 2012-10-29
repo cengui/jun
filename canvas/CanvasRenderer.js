@@ -21,8 +21,14 @@ June.CanvasRenderer = function(canvas){
 			//console.log( item.position );
 			//item.applyMatrix(  );
 				
-			if(geometry instanceof June.Vector3){
-				point = scene.getXY( geometry );
+			if(geometry instanceof June.Object3D){
+			
+				geometry.translateX( item.rotation.x );
+				geometry.translateY( item.rotation.y );
+				geometry.translateZ( item.rotation.z );
+
+				point = canmera.getXY( geometry.position );
+				//console.log(point.x, point.y);
 				this.drawPoint( point.x, point.y );
 			}
 	
@@ -30,9 +36,8 @@ June.CanvasRenderer = function(canvas){
 			if(geometry instanceof June.PlaneGeometry){
 				
 				geometry.translateX( item.rotation.x );
-				//console.log(item.rotation.y);
-				//geometry.translateY( item.rotation.y );
-				//geometry.translateZ( item.rotation.z );
+				geometry.translateY( item.rotation.y );
+				geometry.translateZ( item.rotation.z );
 				
 				var v1 = canmera.getXY(geometry.vectors[0].clone().addSelf( item.position ))
 				, v2 = canmera.getXY(geometry.vectors[1].clone().addSelf( item.position ))

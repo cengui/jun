@@ -25,6 +25,7 @@ June.PlaneGeometry.prototype = {
 	
 	},
 	translateX : function( angleX ){
+
 		var item = null;
 		for(var i=0; i<this.vectors.length; i++){
 			item = this.vectors[i];
@@ -38,16 +39,24 @@ June.PlaneGeometry.prototype = {
 	},
 	// ÈÆyÖáÐý×ª
 	translateY: function (angleY) {
+		
+		//console.log(angleY);
 		var item = null;
 		for(var i=0; i<this.vectors.length; i++){
 			item = this.vectors[i];
 			var cosy = Math.cos(angleY),
 				siny = Math.sin(angleY),
-				x = item.sx * cosy - item.sz * siny,
-				z = item.sz * cosy + item.sx * siny;
+				x = item.x * cosy - item.z * siny,
+				z = item.z * cosy + item.x * siny;
 			item.x = x;
 			item.z = z;
+			//console.log(x, z);
+			
 		}
+		
+	
+
+
 	},
 	// ÈÆzÖáÐý×ª
 	translateZ: function (angleZ) {
@@ -56,12 +65,12 @@ June.PlaneGeometry.prototype = {
 			item = this.vectors[i];
 			var cosz = Math.cos(angleZ),
 				sinz = Math.sin(angleZ),
-				x = item.sx * cosz - item.sy * sinz,
-				y = item.sy * cosz + item.sx * sinz;
+				x = item.x * cosz - item.y * sinz,
+				y = item.y * cosz + item.x * sinz;
 			item.x = x;
 			item.y = y;
 		}
-	},
+	}
 }
 
 
