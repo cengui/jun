@@ -23,7 +23,7 @@
 				this.p = data[0].length;
 				this.data = data;
 			},
-			//当前矩阵乘以宁外一个矩阵
+			//当前矩阵乘以另外一个矩阵
 			
 			/**   
 						 1 2 3  			1 2		
@@ -55,7 +55,7 @@
 			//矩阵加法
 			plus:function( matrix ){
 				if(this.m != matrix.m || this.p != matrix.p){
-					throw "not plus";
+					throw "mp != mp error";
 				};
 				var data = this.data;
 				var newData = [];

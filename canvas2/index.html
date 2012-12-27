@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello</title>
+	<script type="text/javascript" src="june.js"></script>
+	<script type="text/javascript" src="Scene.js"></script>
+	<script type="text/javascript" src="PerspectiveCamera.js"></script>
+	<script type="text/javascript" src="Vector3.js"></script>
+	<script type="text/javascript" src="CanvasRenderer.js"></script>
+	<script type="text/javascript" src="Object3D.js"></script>
+	<script type="text/javascript" src="PlaneGeometry.js"></script>
+
+</head>
+<body>
+	<canvas width="500" height="500" id="canvas" ></canvas>
+	<script type="text/javascript">
+		
+		var scene = new June.Scene();
+		
+		
+		var canmera = new June.PerspectiveCamera(); //摄像机
+			scene.add( canmera );
+			
+		
+		var plane1 =  new June.PlaneGeometry(100, 100, new June.Vector3(0,0,0), "#f30");
+		var plane2 =  new June.PlaneGeometry(100, 100, new June.Vector3(0,1.5,0), "#000");
+		var plane3 =  new June.PlaneGeometry(100, 100, new June.Vector3(0,0,0), "#ccc");
+			
+		plane1.position.x = 0;
+		plane2.position.x = 50;
+		plane3.position.z = 100;
+		
+		//plane1.rotation.y = 0.1;
+		//plane2.rotation.y = 0.1;
+		//plane3.rotation.y = 0.1;
+		
+		//plane1.rotation.z = 0.1;
+		//plane2.rotation.z = 0.1;
+		//plane3.rotation.z = 0.1;
+		
+		scene.add( plane3 );
+		scene.add( plane2 );
+		scene.add( plane1 );
+		
+		
+		
+		var render = new June.CanvasRenderer( canvas );
+		
+		
+		animate();
+		
+		
+		function animate(){
+			//console.log(1);
+			requestAnimationFrame( animate );
+			
+			render.clear();
+			render.render(scene,  canmera);
+			
+			
+			//render.clear();
+		}
+		
+	</script>
+</body>
+</html>

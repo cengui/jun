@@ -3,8 +3,8 @@
 June.Object3D = function(x, y, z){
 
 	this.position = new June.Vector3(x || 0, y || 0, z || 0);
-	
-	this.matrix = new June.Matrix4();
+
+	//this.matrix = new June.Matrix4();
 	
 	this.__v3 = new June.Vector3();
 	this.child = [];

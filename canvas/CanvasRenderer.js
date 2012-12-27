@@ -22,7 +22,7 @@ June.CanvasRenderer = function(canvas){
 			//item.applyMatrix(  );
 				
 			if(geometry instanceof June.Object3D){
-			
+					
 				geometry.translateX( item.rotation.x );
 				geometry.translateY( item.rotation.y );
 				geometry.translateZ( item.rotation.z );
@@ -47,7 +47,16 @@ June.CanvasRenderer = function(canvas){
 				//console.log( v1, v2, v3, v4 );
 				this.drawBegin(v1, v2, v3, v4, geometry.color);
 			}
-
+			//console.log(geometry);
+			if(geometry instanceof June.Line){
+				//console.log(geometry);
+				//console.log(item.rotation.x);
+				
+				var v1 = canmera.getXY(geometry.vectors[0].clone().addSelf( item.position ))
+				, v2 = canmera.getXY(geometry.vectors[1].clone().addSelf( item.position ));
+				//console.log(v1, v2);
+				this.drawLine(v1, v2);
+			}
 		}
 	}
 	
@@ -78,6 +87,18 @@ June.CanvasRenderer = function(canvas){
 		ctx.strokeStyle = color;//"#000";
 		ctx.stroke();
 	};
+	
+	this.drawLine = function(v1, v2, color){
+	
+		ctx.beginPath();
+		ctx.moveTo(v1.x, v1.y);
+		ctx.lineTo(v2.x, v2.y);
+		ctx.closePath();
+		ctx.fill();
+		ctx.strokeStyle = color|| "#000";
+		ctx.stroke();
+		
+	}
 	
 	
 	this.clear = function(){
