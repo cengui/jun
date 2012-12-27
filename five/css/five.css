@@ -1,0 +1,21 @@
+/**
+	五子棋 CSS
+ */
+.five-doc{background:url(../images/block.png) no-repeat -999em -999em;width:30px;height:30px;position:absolute;cursor:pointer;}
+.five-doc1{background-position:15px 15px;}
+.five-doc2{background-position:-15px 15px;}
+.five-doc3{background-position:-44px 15px;}
+
+.five-doc4{background-position:15px -15px;}
+.five-doc5{background-position:-15px -15px;}
+.five-doc6{background-position:-44px -15px;}
+
+.five-doc7{background-position:15px -45px;}
+.five-doc8{background-position:-15px -45px;}
+.five-doc9{background-position:-44px -45px;}
+
+.five-d:hover{background-position:0 -80px;}
+.five-white{background-position:-61px -81px !important;cursor:default;}
+.five-black{background-position:-31px -81px !important;cursor:default;}
+.five-current-white{background-position:-121px -80px !important;cursor:default;}
+.five-current-black{background-position:-91px -81px !important;cursor:default;}

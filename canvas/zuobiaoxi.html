@@ -1,0 +1,61 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello June</title>
+	<script type="text/javascript" src="June.js"></script>
+	<script type="text/javascript" src="Scene.js"></script>
+	<script type="text/javascript" src="Object3D.js"></script>
+	<script type="text/javascript" src="Vector2.js"></script>
+	<script type="text/javascript" src="Vector3.js"></script>
+	<script type="text/javascript" src="Matrix4.js"></script>
+	
+	<script type="text/javascript" src="Mesh.js"></script>
+	<script type="text/javascript" src="PerspectiveCamera.js"></script>
+	<script type="text/javascript" src="PlaneGeometry.js"></script>
+	<script type="text/javascript" src="CanvasRenderer.js"></script>
+	<script type="text/javascript" src="line.js"></script>
+</head>
+<body>
+	<canvas width="500" height="500" id="canvas" ></canvas>
+	
+	<script type="text/javascript">
+		var render = new June.CanvasRenderer( canvas );
+		var scene = new June.Scene();
+		var canmera = new June.PerspectiveCamera(); //摄像机
+			scene.add( canmera );
+			
+		var x = new June.Mesh(new June.Line(new June.Vector3(), new June.Vector3(100,0,0)));
+		var y = new June.Mesh(new June.Line(new June.Vector3(), new June.Vector3(0,100,0)));
+		var z = new June.Mesh(new June.Line(new June.Vector3(), new June.Vector3(0,0,100)));
+		
+		x.position.x = y.position.x = z.position.x = 0;
+		x.position.y = y.position.y = z.position.y = 0;
+		x.position.z = y.position.z = z.position.z = 0;
+		
+		x.rotation.x = y.rotation.x = z.rotation.x = 0.01;
+		x.rotation.y = y.rotation.y = z.rotation.y = 0.01;
+		x.rotation.z = y.rotation.z = z.rotation.z = 0.01;
+		
+		scene.add(x);
+		scene.add(y);
+		scene.add(z);
+		
+		animate();
+
+		
+		function animate(){
+			//console.log(1);
+			requestAnimationFrame( animate );
+			
+			render.clear();
+			render.render(scene,  canmera);
+			
+			
+			//render.clear();
+		}
+	
+		
+	</script>
+</body>
+</html>

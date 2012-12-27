@@ -21,9 +21,11 @@
 Jun.g.FiveChessboard = function( options ){
 	this.wrap = null;
 	this.size = 15;
+	this.color = 1;
+	this.status = -2;// -100无法继续  -2 等待对方  -1平局  0可以继续游戏  1 白棋获胜 2 黑棋获胜
+	this.previous = null;
 	Jun.extend(this, options || {});
 	this.data = [];
-	this.s = 1;
 	this.init();
 };
 
@@ -84,26 +86,42 @@ Jun.g.FiveChessboard.prototype = {
 	regEvent:function(){
 		var _this = this;
 		this.wrap.find('.five-d').click(function(){
-			var xy = $(this).data('xy').split(',')
-			_this.setFill(xy[0], xy[1], _this.s);
+			var xy = $(this).data('xy').split(',');
+			if(_this.isFill()){
+				_this.setFill(xy[0], xy[1], _this.color);
+			}
 		});
 	},
-	setFill:function(x, y, s){
+	setFill:function(x, y, color){
 		if(this.data[x][y] === undefined){
-			this.data[x][y] = s;
-			$('#fived'+x+'-'+y).addClass(s==1?"five-white":"five-black");
+			this.data[x][y] = color;
+			this.setPrevious();//改变上一次动作的状态
+			$('#fived'+x+'-'+y).addClass(color==1?"five-current-white":"five-current-black");//five-current-white
+			this.previous = {x:x,y:y,color:color};
 			var a = this.isOver();
-			this.onFill(x, y, s);
+			this.onFill(x, y, color);
 			if(a == 1){
-				alert("白方胜出");
+				//alert("白方胜出");
+				this.onOver(1);
 			}
 			if(a == 2){
-				alert("黑方胜出");
+				this.onOver(2);
+				//alert("黑方胜出");
 			}
 			
 		}
 	},
+	setColor : function( color ){// 1白旗 2黑棋
+		this.color = color == 1 ? 1 : 2;
+	},
+	setPrevious:function(){
+		var p = this.previous;
+		if(p){
+			$('#fived'+p.x+'-'+p.y).removeClass(p.color == 1 ? 'five-current-white' : 'five-current-black').addClass(p.color==1?"five-white":"five-black");//five-current-white
+		}
+	},
 	isOver:function(){
+		// -100无法继续  -2 等待对方  -1平局  0可以继续游戏  1 白棋获胜 2 黑棋获胜
 		var data = this.data;
 	
 		
@@ -131,10 +149,13 @@ Jun.g.FiveChessboard.prototype = {
 		return 0;
 		
 	},
+	isFill:function(){
+		return true;//是否可以落子
+	},
 	onOver:function(){
 	
 	},
-	onFill:function(x, y, s){
+	onFill:function(x, y, color){
 		
 	}
 };

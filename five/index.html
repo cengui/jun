@@ -3,106 +3,226 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Five Chessboard</title>
-	<link rel="stylesheet" href="css/reset.css" />
-	<script type="text/javascript" src="js/jquery-1.6.js"></script>
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" href="css/doc.css" />
+	<link rel="stylesheet" href="css/five.css" />
+	<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript" src="js/jun.js"></script>
 	<script type="text/javascript" src="js/Five.chessboard.js"></script>
-	<script type="text/javascript" src="socket.io/socket.io.js"></script>
-	<style type="text/css">
-		.five-doc{background:url(images/block.png) no-repeat -999em -999em;width:30px;height:30px;position:absolute;cursor:pointer;}
-		.five-doc1{background-position:15px 15px;}
-		.five-doc2{background-position:-15px 15px;}
-		.five-doc3{background-position:-45px 15px;}
-		
-		.five-doc4{background-position:15px -15px;}
-		.five-doc5{background-position:-15px -15px;}
-		.five-doc6{background-position:-45px -15px;}
-		
-		.five-doc7{background-position:15px -45px;}
-		.five-doc8{background-position:-15px -45px;}
-		.five-doc9{background-position:-45px -45px;}
-		
-		.five-d:hover{background-position:0 -80px;}
-		.five-white{background-position:-61px -81px !important;cursor:default;}
-		.five-black{background-position:-31px -81px !important;cursor:default;}
-	</style>
+	<script type="text/javascript" src="../socket.io/socket.io.js"></script>
+	
+
 </head>
 <body>
-	
-	<div style="position:relative;margin:50px;">
-	<!--
-		<div class="five-doc five-doc1">
-			<div class="five-doc five-d five-white"></div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./index.html">Online</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="./index.html">五子棋</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+	<header></header>
+	<div class="container">
+
+		<div class="row">
+			<div class="span3">
+				<br/>
+				
+				
+				<div class="alert alert-info">
+				  <p>
+					<strong>你是：</strong> <span id="fcColor">--</span>
+				  </p>
+				  <p>
+					<strong>房间号：</strong> 
+					<span id="roomnumber">--</span>
+					<p><small>把房间号告诉好友，一起游戏</small></p>
+				  </p>
+				</div>
+				<br/>
+				<div class="alert alert-error hide" id="alertWait">
+				  <strong>等待对手进入...</strong>
+				  <p><input type="button" value="请求系统分配对手" id="allot" class="btn btn-info btn-mini" /></p>
+				</div>
+				
+				<div class="alert alert-error hide" id="alertWaitOther">
+				  <strong>等待对方落子</strong>
+				</div>
+				
+				<div class="alert alert-success hide" id="alertMylazi" >
+				  <strong>请下子</strong>
+				</div>
+				
+				<div class="alert alert-info hide" id="winuser" >
+				  <strong>游戏结束</strong>
+				  <p>
+					<span class="info">--获胜</span>
+				  </p>
+				</div>
+				
+				<div>
+					<form action="#" id="joinform">
+						<p>
+							<strong>输入对方房间号</strong>
+						</p>
+				
+						<input type="text"  id="otherroomid" class="span2" placeholder="输入房间号" />
+						<input type="submit" class="btn"  value="进入" style="vertical-align: top;"/>
+					</form>
+				</div>
+				
+				
+			</div>
+			<div class="span9">
+				<br/>
+				<div id="aaaa" style="position:relative;height:450px;width:450px;background:#D3BF9A;">
+					
+				</div>
+			</div>
 		</div>
-		<div class="five-doc five-doc2" style="left:30px">
-			<div class="five-doc five-d five-black"></div>
-		</div>
-		<div class="five-doc five-doc3" style="left:60px">
-			<div class="five-doc five-d"></div>
-		</div>
-		
-		<div class="five-doc five-doc4" style="top:30px">
-			<div class="five-doc five-d"></div>
-		</div>
-		<div class="five-doc five-doc5" style="left:30px;top:30px">
-			<div class="five-doc five-d"></div>
-		</div>
-		<div class="five-doc five-doc6" style="left:60px;top:30px">
-			<div class="five-doc five-d"></div>
-		</div>
-		
-		<div class="five-doc five-doc7" style="top:60px">
-			<div class="five-doc five-d"></div>
-		</div>
-		<div class="five-doc five-doc8" style="left:30px;top:60px">
-			<div class="five-doc five-d"></div>
-		</div>
-		<div class="five-doc five-doc9" style="left:60px;top:60px">
-			<div class="five-doc five-d"></div>
-		</div>
-	-->
 	</div>
-	
-	<input type="button" value="重新开局" onclick="a.init();" />
-	<input type="button" value="成为黑手" onclick="a.s = 2" />
-	<input type="button" value="成为白手" onclick="a.s = 1"/>
-	
-	<div>
-		输入房间号 ：<input type="text" name="" value="10" id="" />  <input type="button" value="进入房间" />
-	</div>
-	<div id="aaaa" style="margin:50px;position:relative;">
-		
-	</div>
-	
+	<footer>
+		<div class="container">
+			Thanks  <a href="http://nodejs.org">NodeJS</a>  <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> 
+		</div>
+	</footer>
 	<script type="text/javascript">
-		var a = new Jun.g.FiveChessboard({
-			wrap:$('#aaaa'),
-			size:19
-		});
-	</script>
 	
-	
-	<script type="text/javascript">
-		var number = 10;
-		var socket = io.connect('http://10.6.0.26/');
+		var page = page || {};
+		page.fc = null;
+		page.room = -1;
+		page.status = -2;
+
+		page.init = function(){
 		
-		socket.on('news', function (data) {
-			console.log(data);
-			//socket.emit('my other event', { my: 'data' });
-		});
-		
-		socket.emit('create', {number:10});
-		
-		a.onFill = function(x, y, s){
-			socket.emit('pull', {number:number, x:x, y:y, s:s});
+			var _this = this;
+			this.fc = new Jun.g.FiveChessboard({
+				wrap:$('#aaaa')
+			});
+			
+			page.communicate();// 通信
+			this.fc.isFill = function(){
+				return _this.status == _this.fc.color;
+			};
+			this.fc.onFill = function(x, y, color){
+				_this.socket.emit('lazi', { number:page.room, x:x, y:y, color:color});
+			};
+			this.fc.onOver = function(color){
+				console.log("结束", color);
+				_this.socket.emit('over', {number:page.room, color:color});
+				_this.setStatus( -color );
+			};
+			this.regEvent();
 		};
 		
-		socket.on('jieshou', function (data) {
-			console.log(data);
-			if(data.number == number){
-				a.setFill(data.x, data.y, data.s);
+		page.regEvent = function(){
+			var _this = this;
+			$('#joinform').submit(function(){
+				var roomid = parseInt($('#otherroomid').val());
+				if(roomid && !isNaN(roomid)){
+					page.join(roomid);
+				}else{
+					alert("输入一个数字");
+				}
+				return false;
+			});
+			
+			$('#allot').click(function(){
+				$(this).val("请求中...");
+				_this.socket.emit('allot');
+				setTimeout(function(){
+					$('#allot').val("请求系统分配对手");
+				});
+			});
+			
+		};
+		
+		page.communicate = function(){
+			var _this = this;
+			var socket = io.connect(window.location.origin);
+			this.socket = socket;
+			socket.emit("create");
+			socket.on("create", function( data ){
+				//if(data.code == 0){
+				_this.fc.init();
+				_this.setRoom(data.number);
+				_this.setColor(data.color);
+				//}
+			});
+			
+			socket.on("lazi", function( data ){
+				console.log("lazi", data);
+				//if(data.code == 0){
+					_this.fc.setFill(data.x, data.y, data.color);
+				//}
+			});
+			
+			socket.on("status", function( data ){
+				console.log(data);
+				//if(data.code == 0){
+					_this.setStatus(data.status);
+				//}
+			});
+			
+			
+			
+			
+		};
+		
+		
+		page.setColor = function( color ){
+			this.color = color;
+			this.rivalColor = color == 1 ? 2 : 1;
+			this.fc.color = color;
+			$('#fcColor').text(color == 1 ? "白棋" : "黑棋");
+		};
+		
+		page.setRoom = function( number ){
+			this.room = number;
+			$('#roomnumber').text( number );
+		};
+		
+		page.setStatus = function( status ){
+			$('#alertWait,#alertWaitOther,#alertMylazi').addClass('hide');
+			page.status = status;
+			if(status == -100){
+				$('#alertWait').removeClass('hide');
 			}
-		});
+			
+			if(status == this.color){
+				$('#alertMylazi').removeClass('hide');
+			}
+			
+			if(status == this.rivalColor){
+				$('#alertWaitOther').removeClass('hide');
+			}
+			
+			if(status == -1 || status == -2){
+				$('#winuser').removeClass('hide');
+				$('#winuser').find('.info').text(status == -1 ? "白棋获胜" : "黑棋获胜");
+			}
+			
+			//console.log("状态:",  status);
+		};
+		
+		page.join = function( number ){
+			this.socket.emit('join', { number:number});
+		};
+		
+		///---------------
+		page.init();
 	</script>
 </body>
 </html>
