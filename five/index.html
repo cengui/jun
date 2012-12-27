@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Five Chessboard</title>
+	<link rel="stylesheet" href="css/reset.css" />
+	<script type="text/javascript" src="js/jquery-1.6.js"></script>
+	<script type="text/javascript" src="js/jun.js"></script>
+	<script type="text/javascript" src="js/Five.chessboard.js"></script>
+	<script type="text/javascript" src="socket.io/socket.io.js"></script>
+	<style type="text/css">
+		.five-doc{background:url(images/block.png) no-repeat -999em -999em;width:30px;height:30px;position:absolute;cursor:pointer;}
+		.five-doc1{background-position:15px 15px;}
+		.five-doc2{background-position:-15px 15px;}
+		.five-doc3{background-position:-45px 15px;}
+		
+		.five-doc4{background-position:15px -15px;}
+		.five-doc5{background-position:-15px -15px;}
+		.five-doc6{background-position:-45px -15px;}
+		
+		.five-doc7{background-position:15px -45px;}
+		.five-doc8{background-position:-15px -45px;}
+		.five-doc9{background-position:-45px -45px;}
+		
+		.five-d:hover{background-position:0 -80px;}
+		.five-white{background-position:-61px -81px !important;cursor:default;}
+		.five-black{background-position:-31px -81px !important;cursor:default;}
+	</style>
+</head>
+<body>
+	
+	<div style="position:relative;margin:50px;">
+	<!--
+		<div class="five-doc five-doc1">
+			<div class="five-doc five-d five-white"></div>
+		</div>
+		<div class="five-doc five-doc2" style="left:30px">
+			<div class="five-doc five-d five-black"></div>
+		</div>
+		<div class="five-doc five-doc3" style="left:60px">
+			<div class="five-doc five-d"></div>
+		</div>
+		
+		<div class="five-doc five-doc4" style="top:30px">
+			<div class="five-doc five-d"></div>
+		</div>
+		<div class="five-doc five-doc5" style="left:30px;top:30px">
+			<div class="five-doc five-d"></div>
+		</div>
+		<div class="five-doc five-doc6" style="left:60px;top:30px">
+			<div class="five-doc five-d"></div>
+		</div>
+		
+		<div class="five-doc five-doc7" style="top:60px">
+			<div class="five-doc five-d"></div>
+		</div>
+		<div class="five-doc five-doc8" style="left:30px;top:60px">
+			<div class="five-doc five-d"></div>
+		</div>
+		<div class="five-doc five-doc9" style="left:60px;top:60px">
+			<div class="five-doc five-d"></div>
+		</div>
+	-->
+	</div>
+	
+	<input type="button" value="重新开局" onclick="a.init();" />
+	<input type="button" value="成为黑手" onclick="a.s = 2" />
+	<input type="button" value="成为白手" onclick="a.s = 1"/>
+	
+	<div>
+		输入房间号 ：<input type="text" name="" value="10" id="" />  <input type="button" value="进入房间" />
+	</div>
+	<div id="aaaa" style="margin:50px;position:relative;">
+		
+	</div>
+	
+	<script type="text/javascript">
+		var a = new Jun.g.FiveChessboard({
+			wrap:$('#aaaa'),
+			size:19
+		});
+	</script>
+	
+	
+	<script type="text/javascript">
+		var number = 10;
+		var socket = io.connect('http://10.6.0.26/');
+		
+		socket.on('news', function (data) {
+			console.log(data);
+			//socket.emit('my other event', { my: 'data' });
+		});
+		
+		socket.emit('create', {number:10});
+		
+		a.onFill = function(x, y, s){
+			socket.emit('pull', {number:number, x:x, y:y, s:s});
+		};
+		
+		socket.on('jieshou', function (data) {
+			console.log(data);
+			if(data.number == number){
+				a.setFill(data.x, data.y, data.s);
+			}
+		});
+	</script>
+</body>
+</html>
