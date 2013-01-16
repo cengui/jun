@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>css content</title>
+	<style type="text/css">
+		/**quote{quotes:'\201C' '\201D'}*/
+		.d1:after{content:"[插入固定內容]";color:#f30;}
+		.d2:after{content:"插入固定內容 \A 第2行]";color:#f30;}
+		.d3:after{content:"["url(http://www.baidu.com/img/baidu_sylogo1.gif)"]";color:#f30;}
+		.d4:after{content:"["attr(class)"]";color:#f30;}
+		.d5:after{content:"["open-quote  "插入引号" close-quote"]";color:#f30;}
+		.d6:after{content:"["open-quote  "这里有一段文字里面嵌套了单" open-quote "引号" close-quote "。" close-quote"]";color:#f30;}
+		.d7:after{content:"["open-quote  "这里有一段文字里面嵌套了单'引号'。" close-quote"]";color:#f30;}
+		.d8{counter-reset:order;}
+		.d8 li:before{counter-increment:order;content:counter(order)". ";}
+	</style>
+</head>
+<body>
+	<div>
+		<h1>content:</h1>
+			<ul>
+				<li>1：可以在文档中插入固定内容。</li>
+				<li>2：可以在文档中插入动态内容（包含元素属性值）</li>
+				<li>3：可以在文档中插入外部引用内容（图片，以及其他外部资源）</li>
+				<li>4：可配合计数器工作</li>
+				<li>5：由content生成的内容不可以被选中</li>
+			</ul>
+		[] 中的內容为CSS content 插入的内容。
+	</div>
+	<div class="d1">
+		例子1：固定内容
+	</div>
+	
+	<div class="d2">
+		例子2：固定内容包含换行,CSS权威指南 388 页，对于转意字符的浏览器支持不太好。（待定）	
+	</div>
+	
+	
+	
+	<div class="d3">
+		例子3：外部内容（图片）
+	</div>
+	
+	<div class="d4">
+		例子4：插入属性值
+	</div>
+	<div class="d5">
+		例子5：插入引号
+	</div>
+	
+	<div class="d6">
+		例子6：引号嵌套
+	</div>
+	
+	<div class="d7">
+		例子7：和上面同样效果
+	</div>
+	
+	<div class="d8">
+		例子8：计数器的实现，查看CSS权威指南 p392
+		<ul>
+			<li>Hello</li>
+			<li>Hello</li>
+		</ul>
+	</div>
+</body>
+</html>

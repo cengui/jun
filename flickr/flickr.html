@@ -1,0 +1,227 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>pics</title>
+	<style type="text/css">
+		.container{width:auto;text-align:center;}
+			.photo-container{display:inline-block;margin:4px;position:relative;}
+			.photo-container img{background:#ccc;display:block;}
+			.photo-container .text{position:absolute;bottom:0;color:#fff;width:100%;text-shadow: 1px 1px 1px #000;}
+			.photo-container .text span{padding:5px;text-align:left;display:block;font-size:12px;}
+			.photo-container:hover span{background:rgba(0,0,0,.5);}
+	</style>
+	<script type="text/javascript" src="pics.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		"use static"
+		/**
+		var photos = [];//[{"label":"Loch Mudle and the Inner Hebrides","file":"_9e43571cab_z.jpg","url":"http://farm9.staticflickr.com/8088/8375393903_9e43571cab_z.jpg","width":"640","height":"380"},{"label":"dernières ventes","file":"_a74b4072d6_z.jpg","url":"http://farm9.staticflickr.com/8328/8375017797_a74b4072d6_z.jpg","width":"427","height":"640"},{"label":"The hill road wet with rain...","file":"_b12c8c6e7e_z.jpg","url":"http://farm9.staticflickr.com/8331/8376693628_b12c8c6e7e_z.jpg","width":"640","height":"426"},{"label":"Run, run, run - fly!!!!","file":"_3071505a3c_z.jpg","url":"http://farm9.staticflickr.com/8095/8375724991_3071505a3c_z.jpg","width":"640","height":"493"},{"label":"Tidal tracks","file":"_31077902e4_z.jpg","url":"http://farm9.staticflickr.com/8469/8375216863_31077902e4_z.jpg","width":"640","height":"280"},{"label":"La niebla y la noche    (Explored)","file":"_73e010bd01_z.jpg","url":"http://farm9.staticflickr.com/8073/8376679521_73e010bd01_z.jpg","width":"640","height":"458"},{"label":"The Wood","file":"_3820f303a1_z.jpg","url":"http://farm9.staticflickr.com/8512/8375985543_3820f303a1_z.jpg","width":"640","height":"427"},{"label":".","file":"_8d467cf8ce_z.jpg","url":"http://farm9.staticflickr.com/8365/8377038038_8d467cf8ce_z.jpg","width":"640","height":"640"},{"label":"When Nature Takes Over","file":"_322f370522_z.jpg","url":"http://farm9.staticflickr.com/8365/8376340940_322f370522_z.jpg","width":"640","height":"427"},{"label":"Pieces of Art","file":"_3912b63573_z.jpg","url":"http://farm9.staticflickr.com/8514/8377702170_3912b63573_z.jpg","width":"640","height":"426"},{"label":"Shadows - Explored","file":"_e66f9eceea_z.jpg","url":"http://farm9.staticflickr.com/8474/8375539387_e66f9eceea_z.jpg","width":"640","height":"614"},{"label":false,"file":"_d4a988a846_z.jpg","url":"http://farm9.staticflickr.com/8324/8376330894_d4a988a846_z.jpg","width":"640","height":"427"},{"label":"Royal Observatory","file":"_52fdff36f8_z.jpg","url":"http://farm9.staticflickr.com/8467/8377610118_52fdff36f8_z.jpg","width":"640","height":"427"},{"label":"PETTIROSSO","file":"_5da0c855ca_z.jpg","url":"http://farm9.staticflickr.com/8471/8378159408_5da0c855ca_z.jpg","width":"640","height":"427"},{"label":"Vago svanendo","file":"_72aba4cd9a_z.jpg","url":"http://farm9.staticflickr.com/8187/8376773572_72aba4cd9a_z.jpg","width":"640","height":"422"},{"label":"Alone..","file":"_43e7a273b9_z.jpg","url":"http://farm9.staticflickr.com/8367/8375135673_43e7a273b9_z.jpg","width":"640","height":"459"},{"label":"Sometimes Classic is Best - 2/52","file":"_0f608dff3c_z.jpg","url":"http://farm9.staticflickr.com/8237/8378575598_0f608dff3c_z.jpg","width":"640","height":"427"},{"label":"an element of predictability [explore]","file":"_7b084b02d9_z.jpg","url":"http://farm9.staticflickr.com/8217/8376247530_7b084b02d9_z.jpg","width":"640","height":"427"},{"label":"South Georgia","file":"_82cdabce61_z.jpg","url":"http://farm9.staticflickr.com/8497/8376283095_82cdabce61_z.jpg","width":"640","height":"180"},{"label":"dead leaf","file":"_69c3a1440a_z.jpg","url":"http://farm9.staticflickr.com/8229/8375569489_69c3a1440a_z.jpg","width":"640","height":"448"},{"label":"IMG_5678","file":"_ec3931192c_z.jpg","url":"http://farm9.staticflickr.com/8357/8375683083_ec3931192c_z.jpg","width":"640","height":"427"},{"label":"D'Oro","file":"_69ae92a3e4_z.jpg","url":"http://farm9.staticflickr.com/8496/8376342616_69ae92a3e4_z.jpg","width":"640","height":"425"},{"label":"our ride to the stars [EXPLORED]","file":"_cd38f36d95_z.jpg","url":"http://farm9.staticflickr.com/8505/8376273268_cd38f36d95_z.jpg","width":"640","height":"427"},{"label":"To Save A Life (Explore)","file":"_d583623a7b_z.jpg","url":"http://farm9.staticflickr.com/8475/8376345114_d583623a7b_z.jpg","width":"640","height":"425"},{"label":"Italia dei Valori","file":"_b48ed042a3_z.jpg","url":"http://farm9.staticflickr.com/8370/8375031705_b48ed042a3_z.jpg","width":"640","height":"427"},{"label":false,"file":"_2b2cf9447b_z.jpg","url":"http://farm9.staticflickr.com/8368/8377234690_2b2cf9447b_z.jpg","width":"640","height":"427"},{"label":"helter skelter","file":"_2ae0b51957_z.jpg","url":"http://farm9.staticflickr.com/8360/8375726479_2ae0b51957_z.jpg","width":"640","height":"426"},{"label":"passage","file":"_fd2692a480_z.jpg","url":"http://farm9.staticflickr.com/8233/8377315593_fd2692a480_z.jpg","width":"640","height":"640"},{"label":"Burning Sky#2","file":"_4dd93d77a3_z.jpg","url":"http://farm9.staticflickr.com/8512/8376143925_4dd93d77a3_z.jpg","width":"640","height":"427"},{"label":"ray of light (explore 13.01.13)","file":"_849d5a2c18_z.jpg","url":"http://farm9.staticflickr.com/8076/8375974173_849d5a2c18_z.jpg","width":"640","height":"427"},{"label":"Seas of Gold","file":"_6813520052_z.jpg","url":"http://farm9.staticflickr.com/8501/8375552303_6813520052_z.jpg","width":"427","height":"640"},{"label":"o--o","file":"_d317f053f5_z.jpg","url":"http://farm9.staticflickr.com/8330/8375593021_d317f053f5_z.jpg","width":"640","height":"424"},{"label":"Eurpean Bee-eater","file":"_9d0b88f407_z.jpg","url":"http://farm9.staticflickr.com/8366/8376139197_9d0b88f407_z.jpg","width":"556","height":"640"},{"label":"she sells sea shells..","file":"_5ff3255aee_z.jpg","url":"http://farm9.staticflickr.com/8374/8376598612_5ff3255aee_z.jpg","width":"427","height":"640"},{"label":"IMGP1457","file":"_485f9c1192_z.jpg","url":"http://farm9.staticflickr.com/8369/8375149437_485f9c1192_z.jpg","width":"640","height":"424"},{"label":"A cgull for cgullz","file":"_233fdcec3f_z.jpg","url":"http://farm9.staticflickr.com/8336/8376025299_233fdcec3f_z.jpg","width":"640","height":"480"},{"label":"Ghost Rider","file":"_940031dc6b_z.jpg","url":"http://farm9.staticflickr.com/8355/8377181438_940031dc6b_z.jpg","width":"640","height":"488"},{"label":"Wintry Scene, Glencorse Waterfall","file":"_3f3c1331be_z.jpg","url":"http://farm9.staticflickr.com/8475/8376149375_3f3c1331be_z.jpg","width":"640","height":"396"},{"label":"A Berry Good Tart!","file":"_0c028f5fa7_z.jpg","url":"http://farm9.staticflickr.com/8092/8377819510_0c028f5fa7_z.jpg","width":"426","height":"640"},{"label":false,"file":"_8301179f95_z.jpg","url":"http://farm9.staticflickr.com/8097/8376089151_8301179f95_z.jpg","width":"640","height":"427"},{"label":"J","file":"_7e40a7817e_z.jpg","url":"http://farm9.staticflickr.com/8093/8378060480_7e40a7817e_z.jpg","width":"531","height":"640"},{"label":"Gig Harbor","file":"_347ce15fa1_z.jpg","url":"http://farm9.staticflickr.com/8516/8376909343_347ce15fa1_z.jpg","width":"640","height":"393"}]
+		var item = null;
+		
+		
+		function formatePics(pics, size){
+			for(var i=0; i<pics.rows.length; i++){
+				for(var j=0; j<pics.rows[i].row.length; j++){
+					item = pics.rows[i].row[j].sizes[size]; 
+					item.label = pics.rows[i].row[j].name;
+					photos.push(item);
+				}
+			}
+		}
+		//数据来自 flickr.com
+		////s 比较小的图 z 大图
+		formatePics(pics1, "s");
+		formatePics(pics2, "s");
+		formatePics(pics3, "s");
+		
+		photos.sort(function(){
+			return Math.random() - 0.5;
+		});
+		*/
+		photos = [{"label":false,"file":"_d4a988a846_m.jpg","url":"http://farm9.staticflickr.com/8324/8376330894_d4a988a846_m.jpg","width":"240","height":"160"},{"label":"Gig Harbor","file":"_347ce15fa1_m.jpg","url":"http://farm9.staticflickr.com/8516/8376909343_347ce15fa1_m.jpg","width":"240","height":"147"},{"label":"Loch Mudle and the Inner Hebrides","file":"_9e43571cab_m.jpg","url":"http://farm9.staticflickr.com/8088/8375393903_9e43571cab_m.jpg","width":"240","height":"143"},{"label":"The Wood","file":"_3820f303a1_m.jpg","url":"http://farm9.staticflickr.com/8512/8375985543_3820f303a1_m.jpg","width":"240","height":"160"},{"label":"dernières ventes","file":"_a74b4072d6_m.jpg","url":"http://farm9.staticflickr.com/8328/8375017797_a74b4072d6_m.jpg","width":"160","height":"240"},{"label":"our ride to the stars [EXPLORED]","file":"_cd38f36d95_m.jpg","url":"http://farm9.staticflickr.com/8505/8376273268_cd38f36d95_m.jpg","width":"240","height":"160"},{"label":"The hill road wet with rain...","file":"_b12c8c6e7e_m.jpg","url":"http://farm9.staticflickr.com/8331/8376693628_b12c8c6e7e_m.jpg","width":"240","height":"160"},{"label":false,"file":"_d4a988a846_m.jpg","url":"http://farm9.staticflickr.com/8324/8376330894_d4a988a846_m.jpg","width":"240","height":"160"},{"label":false,"file":"_8301179f95_m.jpg","url":"http://farm9.staticflickr.com/8097/8376089151_8301179f95_m.jpg","width":"240","height":"160"},{"label":"Run, run, run - fly!!!!","file":"_3071505a3c_m.jpg","url":"http://farm9.staticflickr.com/8095/8375724991_3071505a3c_m.jpg","width":"240","height":"185"},{"label":"Run, run, run - fly!!!!","file":"_3071505a3c_m.jpg","url":"http://farm9.staticflickr.com/8095/8375724991_3071505a3c_m.jpg","width":"240","height":"185"},{"label":"dead leaf","file":"_69c3a1440a_m.jpg","url":"http://farm9.staticflickr.com/8229/8375569489_69c3a1440a_m.jpg","width":"240","height":"168"},{"label":"The hill road wet with rain...","file":"_b12c8c6e7e_m.jpg","url":"http://farm9.staticflickr.com/8331/8376693628_b12c8c6e7e_m.jpg","width":"240","height":"160"},{"label":"ray of light (explore 13.01.13)","file":"_849d5a2c18_m.jpg","url":"http://farm9.staticflickr.com/8076/8375974173_849d5a2c18_m.jpg","width":"240","height":"160"},{"label":"When Nature Takes Over","file":"_322f370522_m.jpg","url":"http://farm9.staticflickr.com/8365/8376340940_322f370522_m.jpg","width":"240","height":"160"},{"label":"A Berry Good Tart!","file":"_0c028f5fa7_m.jpg","url":"http://farm9.staticflickr.com/8092/8377819510_0c028f5fa7_m.jpg","width":"160","height":"240"},{"label":"Vago svanendo","file":"_72aba4cd9a_m.jpg","url":"http://farm9.staticflickr.com/8187/8376773572_72aba4cd9a_m.jpg","width":"240","height":"158"},{"label":"La niebla y la noche    (Explored)","file":"_73e010bd01_m.jpg","url":"http://farm9.staticflickr.com/8073/8376679521_73e010bd01_m.jpg","width":"240","height":"172"},{"label":"PETTIROSSO","file":"_5da0c855ca_m.jpg","url":"http://farm9.staticflickr.com/8471/8378159408_5da0c855ca_m.jpg","width":"240","height":"160"},{"label":"Alone..","file":"_43e7a273b9_m.jpg","url":"http://farm9.staticflickr.com/8367/8375135673_43e7a273b9_m.jpg","width":"240","height":"172"},{"label":"Ghost Rider","file":"_940031dc6b_m.jpg","url":"http://farm9.staticflickr.com/8355/8377181438_940031dc6b_m.jpg","width":"240","height":"183"},{"label":"Italia dei Valori","file":"_b48ed042a3_m.jpg","url":"http://farm9.staticflickr.com/8370/8375031705_b48ed042a3_m.jpg","width":"240","height":"160"},{"label":"IMG_5678","file":"_ec3931192c_m.jpg","url":"http://farm9.staticflickr.com/8357/8375683083_ec3931192c_m.jpg","width":"240","height":"160"},{"label":"Italia dei Valori","file":"_b48ed042a3_m.jpg","url":"http://farm9.staticflickr.com/8370/8375031705_b48ed042a3_m.jpg","width":"240","height":"160"},{"label":"Eurpean Bee-eater","file":"_9d0b88f407_m.jpg","url":"http://farm9.staticflickr.com/8366/8376139197_9d0b88f407_m.jpg","width":"208","height":"240"},{"label":"Tidal tracks","file":"_31077902e4_m.jpg","url":"http://farm9.staticflickr.com/8469/8375216863_31077902e4_m.jpg","width":"240","height":"105"},{"label":"J","file":"_7e40a7817e_m.jpg","url":"http://farm9.staticflickr.com/8093/8378060480_7e40a7817e_m.jpg","width":"199","height":"240"},{"label":"an element of predictability [explore]","file":"_7b084b02d9_m.jpg","url":"http://farm9.staticflickr.com/8217/8376247530_7b084b02d9_m.jpg","width":"240","height":"160"},{"label":"Gig Harbor","file":"_347ce15fa1_m.jpg","url":"http://farm9.staticflickr.com/8516/8376909343_347ce15fa1_m.jpg","width":"240","height":"147"},{"label":"La niebla y la noche    (Explored)","file":"_73e010bd01_m.jpg","url":"http://farm9.staticflickr.com/8073/8376679521_73e010bd01_m.jpg","width":"240","height":"172"},{"label":"ray of light (explore 13.01.13)","file":"_849d5a2c18_m.jpg","url":"http://farm9.staticflickr.com/8076/8375974173_849d5a2c18_m.jpg","width":"240","height":"160"},{"label":"Seas of Gold","file":"_6813520052_m.jpg","url":"http://farm9.staticflickr.com/8501/8375552303_6813520052_m.jpg","width":"160","height":"240"},{"label":"ray of light (explore 13.01.13)","file":"_849d5a2c18_m.jpg","url":"http://farm9.staticflickr.com/8076/8375974173_849d5a2c18_m.jpg","width":"240","height":"160"},{"label":"IMGP1457","file":"_485f9c1192_m.jpg","url":"http://farm9.staticflickr.com/8369/8375149437_485f9c1192_m.jpg","width":"240","height":"159"},{"label":false,"file":"_8301179f95_m.jpg","url":"http://farm9.staticflickr.com/8097/8376089151_8301179f95_m.jpg","width":"240","height":"160"},{"label":"Alone..","file":"_43e7a273b9_m.jpg","url":"http://farm9.staticflickr.com/8367/8375135673_43e7a273b9_m.jpg","width":"240","height":"172"},{"label":"Sometimes Classic is Best - 2/52","file":"_0f608dff3c_m.jpg","url":"http://farm9.staticflickr.com/8237/8378575598_0f608dff3c_m.jpg","width":"240","height":"160"},{"label":"our ride to the stars [EXPLORED]","file":"_cd38f36d95_m.jpg","url":"http://farm9.staticflickr.com/8505/8376273268_cd38f36d95_m.jpg","width":"240","height":"160"},{"label":"A cgull for cgullz","file":"_233fdcec3f_m.jpg","url":"http://farm9.staticflickr.com/8336/8376025299_233fdcec3f_m.jpg","width":"240","height":"180"},{"label":"IMGP1457","file":"_485f9c1192_m.jpg","url":"http://farm9.staticflickr.com/8369/8375149437_485f9c1192_m.jpg","width":"240","height":"159"},{"label":"A cgull for cgullz","file":"_233fdcec3f_m.jpg","url":"http://farm9.staticflickr.com/8336/8376025299_233fdcec3f_m.jpg","width":"240","height":"180"},{"label":"Ghost Rider","file":"_940031dc6b_m.jpg","url":"http://farm9.staticflickr.com/8355/8377181438_940031dc6b_m.jpg","width":"240","height":"183"},{"label":"Pieces of Art","file":"_3912b63573_m.jpg","url":"http://farm9.staticflickr.com/8514/8377702170_3912b63573_m.jpg","width":"240","height":"160"},{"label":"helter skelter","file":"_2ae0b51957_m.jpg","url":"http://farm9.staticflickr.com/8360/8375726479_2ae0b51957_m.jpg","width":"240","height":"160"},{"label":"Tidal tracks","file":"_31077902e4_m.jpg","url":"http://farm9.staticflickr.com/8469/8375216863_31077902e4_m.jpg","width":"240","height":"105"},{"label":"Ghost Rider","file":"_940031dc6b_m.jpg","url":"http://farm9.staticflickr.com/8355/8377181438_940031dc6b_m.jpg","width":"240","height":"183"},{"label":"Pieces of Art","file":"_3912b63573_m.jpg","url":"http://farm9.staticflickr.com/8514/8377702170_3912b63573_m.jpg","width":"240","height":"160"},{"label":"Burning Sky#2","file":"_4dd93d77a3_m.jpg","url":"http://farm9.staticflickr.com/8512/8376143925_4dd93d77a3_m.jpg","width":"240","height":"160"},{"label":"Alone..","file":"_43e7a273b9_m.jpg","url":"http://farm9.staticflickr.com/8367/8375135673_43e7a273b9_m.jpg","width":"240","height":"172"},{"label":"Loch Mudle and the Inner Hebrides","file":"_9e43571cab_m.jpg","url":"http://farm9.staticflickr.com/8088/8375393903_9e43571cab_m.jpg","width":"240","height":"143"},{"label":"South Georgia","file":"_82cdabce61_m.jpg","url":"http://farm9.staticflickr.com/8497/8376283095_82cdabce61_m.jpg","width":"240","height":"68"},{"label":"D'Oro","file":"_69ae92a3e4_m.jpg","url":"http://farm9.staticflickr.com/8496/8376342616_69ae92a3e4_m.jpg","width":"240","height":"159"},{"label":"PETTIROSSO","file":"_5da0c855ca_m.jpg","url":"http://farm9.staticflickr.com/8471/8378159408_5da0c855ca_m.jpg","width":"240","height":"160"},{"label":"Seas of Gold","file":"_6813520052_m.jpg","url":"http://farm9.staticflickr.com/8501/8375552303_6813520052_m.jpg","width":"160","height":"240"},{"label":false,"file":"_2b2cf9447b_m.jpg","url":"http://farm9.staticflickr.com/8368/8377234690_2b2cf9447b_m.jpg","width":"240","height":"160"},{"label":"To Save A Life (Explore)","file":"_d583623a7b_m.jpg","url":"http://farm9.staticflickr.com/8475/8376345114_d583623a7b_m.jpg","width":"240","height":"159"},{"label":"Burning Sky#2","file":"_4dd93d77a3_m.jpg","url":"http://farm9.staticflickr.com/8512/8376143925_4dd93d77a3_m.jpg","width":"240","height":"160"},{"label":false,"file":"_d4a988a846_m.jpg","url":"http://farm9.staticflickr.com/8324/8376330894_d4a988a846_m.jpg","width":"240","height":"160"},{"label":"she sells sea shells..","file":"_5ff3255aee_m.jpg","url":"http://farm9.staticflickr.com/8374/8376598612_5ff3255aee_m.jpg","width":"160","height":"240"},{"label":"Sometimes Classic is Best - 2/52","file":"_0f608dff3c_m.jpg","url":"http://farm9.staticflickr.com/8237/8378575598_0f608dff3c_m.jpg","width":"240","height":"160"},{"label":"an element of predictability [explore]","file":"_7b084b02d9_m.jpg","url":"http://farm9.staticflickr.com/8217/8376247530_7b084b02d9_m.jpg","width":"240","height":"160"},{"label":"PETTIROSSO","file":"_5da0c855ca_m.jpg","url":"http://farm9.staticflickr.com/8471/8378159408_5da0c855ca_m.jpg","width":"240","height":"160"},{"label":"Burning Sky#2","file":"_4dd93d77a3_m.jpg","url":"http://farm9.staticflickr.com/8512/8376143925_4dd93d77a3_m.jpg","width":"240","height":"160"},{"label":"IMGP1457","file":"_485f9c1192_m.jpg","url":"http://farm9.staticflickr.com/8369/8375149437_485f9c1192_m.jpg","width":"240","height":"159"},{"label":"Sometimes Classic is Best - 2/52","file":"_0f608dff3c_m.jpg","url":"http://farm9.staticflickr.com/8237/8378575598_0f608dff3c_m.jpg","width":"240","height":"160"},{"label":"Loch Mudle and the Inner Hebrides","file":"_9e43571cab_m.jpg","url":"http://farm9.staticflickr.com/8088/8375393903_9e43571cab_m.jpg","width":"240","height":"143"},{"label":"passage","file":"_fd2692a480_m.jpg","url":"http://farm9.staticflickr.com/8233/8377315593_fd2692a480_m.jpg","width":"240","height":"240"},{"label":"J","file":"_7e40a7817e_m.jpg","url":"http://farm9.staticflickr.com/8093/8378060480_7e40a7817e_m.jpg","width":"199","height":"240"},{"label":"Shadows - Explored","file":"_e66f9eceea_m.jpg","url":"http://farm9.staticflickr.com/8474/8375539387_e66f9eceea_m.jpg","width":"240","height":"230"},{"label":"she sells sea shells..","file":"_5ff3255aee_m.jpg","url":"http://farm9.staticflickr.com/8374/8376598612_5ff3255aee_m.jpg","width":"160","height":"240"},{"label":"Shadows - Explored","file":"_e66f9eceea_m.jpg","url":"http://farm9.staticflickr.com/8474/8375539387_e66f9eceea_m.jpg","width":"240","height":"230"},{"label":"o--o","file":"_d317f053f5_m.jpg","url":"http://farm9.staticflickr.com/8330/8375593021_d317f053f5_m.jpg","width":"240","height":"159"},{"label":"South Georgia","file":"_82cdabce61_m.jpg","url":"http://farm9.staticflickr.com/8497/8376283095_82cdabce61_m.jpg","width":"240","height":"68"},{"label":"Royal Observatory","file":"_52fdff36f8_m.jpg","url":"http://farm9.staticflickr.com/8467/8377610118_52fdff36f8_m.jpg","width":"240","height":"160"},{"label":"To Save A Life (Explore)","file":"_d583623a7b_m.jpg","url":"http://farm9.staticflickr.com/8475/8376345114_d583623a7b_m.jpg","width":"240","height":"159"},{"label":"The Wood","file":"_3820f303a1_m.jpg","url":"http://farm9.staticflickr.com/8512/8375985543_3820f303a1_m.jpg","width":"240","height":"160"},{"label":"IMG_5678","file":"_ec3931192c_m.jpg","url":"http://farm9.staticflickr.com/8357/8375683083_ec3931192c_m.jpg","width":"240","height":"160"},{"label":false,"file":"_2b2cf9447b_m.jpg","url":"http://farm9.staticflickr.com/8368/8377234690_2b2cf9447b_m.jpg","width":"240","height":"160"},{"label":"helter skelter","file":"_2ae0b51957_m.jpg","url":"http://farm9.staticflickr.com/8360/8375726479_2ae0b51957_m.jpg","width":"240","height":"160"},{"label":"Royal Observatory","file":"_52fdff36f8_m.jpg","url":"http://farm9.staticflickr.com/8467/8377610118_52fdff36f8_m.jpg","width":"240","height":"160"},{"label":"The Wood","file":"_3820f303a1_m.jpg","url":"http://farm9.staticflickr.com/8512/8375985543_3820f303a1_m.jpg","width":"240","height":"160"},{"label":"Shadows - Explored","file":"_e66f9eceea_m.jpg","url":"http://farm9.staticflickr.com/8474/8375539387_e66f9eceea_m.jpg","width":"240","height":"230"},{"label":"she sells sea shells..","file":"_5ff3255aee_m.jpg","url":"http://farm9.staticflickr.com/8374/8376598612_5ff3255aee_m.jpg","width":"160","height":"240"},{"label":"Wintry Scene, Glencorse Waterfall","file":"_3f3c1331be_m.jpg","url":"http://farm9.staticflickr.com/8475/8376149375_3f3c1331be_m.jpg","width":"240","height":"149"},{"label":"J","file":"_7e40a7817e_m.jpg","url":"http://farm9.staticflickr.com/8093/8378060480_7e40a7817e_m.jpg","width":"199","height":"240"},{"label":"Tidal tracks","file":"_31077902e4_m.jpg","url":"http://farm9.staticflickr.com/8469/8375216863_31077902e4_m.jpg","width":"240","height":"105"},{"label":"Eurpean Bee-eater","file":"_9d0b88f407_m.jpg","url":"http://farm9.staticflickr.com/8366/8376139197_9d0b88f407_m.jpg","width":"208","height":"240"},{"label":"To Save A Life (Explore)","file":"_d583623a7b_m.jpg","url":"http://farm9.staticflickr.com/8475/8376345114_d583623a7b_m.jpg","width":"240","height":"159"},{"label":".","file":"_8d467cf8ce_m.jpg","url":"http://farm9.staticflickr.com/8365/8377038038_8d467cf8ce_m.jpg","width":"240","height":"240"},{"label":"passage","file":"_fd2692a480_m.jpg","url":"http://farm9.staticflickr.com/8233/8377315593_fd2692a480_m.jpg","width":"240","height":"240"},{"label":"our ride to the stars [EXPLORED]","file":"_cd38f36d95_m.jpg","url":"http://farm9.staticflickr.com/8505/8376273268_cd38f36d95_m.jpg","width":"240","height":"160"},{"label":"Vago svanendo","file":"_72aba4cd9a_m.jpg","url":"http://farm9.staticflickr.com/8187/8376773572_72aba4cd9a_m.jpg","width":"240","height":"158"},{"label":false,"file":"_2b2cf9447b_m.jpg","url":"http://farm9.staticflickr.com/8368/8377234690_2b2cf9447b_m.jpg","width":"240","height":"160"},{"label":"A Berry Good Tart!","file":"_0c028f5fa7_m.jpg","url":"http://farm9.staticflickr.com/8092/8377819510_0c028f5fa7_m.jpg","width":"160","height":"240"},{"label":"o--o","file":"_d317f053f5_m.jpg","url":"http://farm9.staticflickr.com/8330/8375593021_d317f053f5_m.jpg","width":"240","height":"159"},{"label":"dead leaf","file":"_69c3a1440a_m.jpg","url":"http://farm9.staticflickr.com/8229/8375569489_69c3a1440a_m.jpg","width":"240","height":"168"},{"label":"dead leaf","file":"_69c3a1440a_m.jpg","url":"http://farm9.staticflickr.com/8229/8375569489_69c3a1440a_m.jpg","width":"240","height":"168"},{"label":"A Berry Good Tart!","file":"_0c028f5fa7_m.jpg","url":"http://farm9.staticflickr.com/8092/8377819510_0c028f5fa7_m.jpg","width":"160","height":"240"},{"label":"D'Oro","file":"_69ae92a3e4_m.jpg","url":"http://farm9.staticflickr.com/8496/8376342616_69ae92a3e4_m.jpg","width":"240","height":"159"},{"label":"D'Oro","file":"_69ae92a3e4_m.jpg","url":"http://farm9.staticflickr.com/8496/8376342616_69ae92a3e4_m.jpg","width":"240","height":"159"},{"label":"A cgull for cgullz","file":"_233fdcec3f_m.jpg","url":"http://farm9.staticflickr.com/8336/8376025299_233fdcec3f_m.jpg","width":"240","height":"180"},{"label":".","file":"_8d467cf8ce_m.jpg","url":"http://farm9.staticflickr.com/8365/8377038038_8d467cf8ce_m.jpg","width":"240","height":"240"},{"label":"passage","file":"_fd2692a480_m.jpg","url":"http://farm9.staticflickr.com/8233/8377315593_fd2692a480_m.jpg","width":"240","height":"240"},{"label":"helter skelter","file":"_2ae0b51957_m.jpg","url":"http://farm9.staticflickr.com/8360/8375726479_2ae0b51957_m.jpg","width":"240","height":"160"},{"label":"an element of predictability [explore]","file":"_7b084b02d9_m.jpg","url":"http://farm9.staticflickr.com/8217/8376247530_7b084b02d9_m.jpg","width":"240","height":"160"},{"label":"Italia dei Valori","file":"_b48ed042a3_m.jpg","url":"http://farm9.staticflickr.com/8370/8375031705_b48ed042a3_m.jpg","width":"240","height":"160"},{"label":"dernières ventes","file":"_a74b4072d6_m.jpg","url":"http://farm9.staticflickr.com/8328/8375017797_a74b4072d6_m.jpg","width":"160","height":"240"},{"label":"Wintry Scene, Glencorse Waterfall","file":"_3f3c1331be_m.jpg","url":"http://farm9.staticflickr.com/8475/8376149375_3f3c1331be_m.jpg","width":"240","height":"149"},{"label":".","file":"_8d467cf8ce_m.jpg","url":"http://farm9.staticflickr.com/8365/8377038038_8d467cf8ce_m.jpg","width":"240","height":"240"},{"label":"When Nature Takes Over","file":"_322f370522_m.jpg","url":"http://farm9.staticflickr.com/8365/8376340940_322f370522_m.jpg","width":"240","height":"160"},{"label":"dernières ventes","file":"_a74b4072d6_m.jpg","url":"http://farm9.staticflickr.com/8328/8375017797_a74b4072d6_m.jpg","width":"160","height":"240"},{"label":"o--o","file":"_d317f053f5_m.jpg","url":"http://farm9.staticflickr.com/8330/8375593021_d317f053f5_m.jpg","width":"240","height":"159"},{"label":"Eurpean Bee-eater","file":"_9d0b88f407_m.jpg","url":"http://farm9.staticflickr.com/8366/8376139197_9d0b88f407_m.jpg","width":"208","height":"240"},{"label":"Gig Harbor","file":"_347ce15fa1_m.jpg","url":"http://farm9.staticflickr.com/8516/8376909343_347ce15fa1_m.jpg","width":"240","height":"147"},{"label":"Pieces of Art","file":"_3912b63573_m.jpg","url":"http://farm9.staticflickr.com/8514/8377702170_3912b63573_m.jpg","width":"240","height":"160"},{"label":"When Nature Takes Over","file":"_322f370522_m.jpg","url":"http://farm9.staticflickr.com/8365/8376340940_322f370522_m.jpg","width":"240","height":"160"},{"label":"Seas of Gold","file":"_6813520052_m.jpg","url":"http://farm9.staticflickr.com/8501/8375552303_6813520052_m.jpg","width":"160","height":"240"},{"label":"Wintry Scene, Glencorse Waterfall","file":"_3f3c1331be_m.jpg","url":"http://farm9.staticflickr.com/8475/8376149375_3f3c1331be_m.jpg","width":"240","height":"149"},{"label":false,"file":"_8301179f95_m.jpg","url":"http://farm9.staticflickr.com/8097/8376089151_8301179f95_m.jpg","width":"240","height":"160"},{"label":"Vago svanendo","file":"_72aba4cd9a_m.jpg","url":"http://farm9.staticflickr.com/8187/8376773572_72aba4cd9a_m.jpg","width":"240","height":"158"},{"label":"IMG_5678","file":"_ec3931192c_m.jpg","url":"http://farm9.staticflickr.com/8357/8375683083_ec3931192c_m.jpg","width":"240","height":"160"},{"label":"Royal Observatory","file":"_52fdff36f8_m.jpg","url":"http://farm9.staticflickr.com/8467/8377610118_52fdff36f8_m.jpg","width":"240","height":"160"},{"label":"South Georgia","file":"_82cdabce61_m.jpg","url":"http://farm9.staticflickr.com/8497/8376283095_82cdabce61_m.jpg","width":"240","height":"68"},{"label":"La niebla y la noche    (Explored)","file":"_73e010bd01_m.jpg","url":"http://farm9.staticflickr.com/8073/8376679521_73e010bd01_m.jpg","width":"240","height":"172"},{"label":"Run, run, run - fly!!!!","file":"_3071505a3c_m.jpg","url":"http://farm9.staticflickr.com/8095/8375724991_3071505a3c_m.jpg","width":"240","height":"185"},{"label":"The hill road wet with rain...","file":"_b12c8c6e7e_m.jpg","url":"http://farm9.staticflickr.com/8331/8376693628_b12c8c6e7e_m.jpg","width":"240","height":"160"}];
+		/**
+		MAX : 1000,
+		
+		width  * height
+		300 * 100  a1, a2
+		300 * 150  b1, b2
+		500 * 500  c1, c2
+		400 * 200  d1, d2
+		 =
+		
+		已知 a1, a2, b1, b2, c1, c2, d1, d2 为正整数,
+		s为正整数，且有如下公式成立 ：
+
+		a2*av = b2*bv = c2*cv = d2*dv = w;
+		a1*av + b1*bv+ c1*cv + d1*dv = s;
+		
+		求av, bv, cv, dv的公式？
+		
+		解答
+			av = w/a2
+			bv = w/b2
+			cv = w/c2
+			dv = w/d2
+			
+		a1 * (w/a2) + b1 * (w/b2) + c1 * (w/c2)	+ d1 * (w/d2) = s;
+		
+		*/
+		
+		
+	</script>
+	
+	<div id="pics" style="min-width:960px;">
+	</div>
+	<input type="button" style="width:100%;padding:10px 0" value="more>>" onclick="more()" />
+	<!--
+	<div class="container">
+		<span class="photo-container">
+			<img src="" alt="#" width="300" id="img1" height="200" />
+		</span>
+		<span class="photo-container">
+			<img src="" alt="#" width="300" id="img2" height="200" />
+		</span>
+		<span class="photo-container">
+			<img src="" alt="#" width="300" id="img3" height="200" />
+		</span>
+		<span class="photo-container">
+			<img src="" alt="#" width="300" id="img4" height="200" />
+		</span>
+	</div>
+	-->
+	<script type="text/javascript">
+		/**
+			options 
+				pics:[]
+		*/
+		function Adaptive(options){
+			this.tmpl = '<span class="photo-container"><img src="$url$"  width="$w$" height="$h$" /><div class="text"><span>$label$</span></div></span>';
+			this.pics = options.pics;//[];
+			this.parent = options.parent;
+			this.gap = options.gap;
+			this.winWidth = 0;
+			this.htmlPics = [];
+			this.init();
+		};
+		Adaptive.prototype = {
+			constructor:Adaptive,
+			init:function(){
+				var _this = this;
+				this.winWidth = this.parent.clientWidth - 70;
+				window.onresize = function(){
+					_this.winWidth = _this.parent.clientWidth - 70;
+					_this.update();
+				}
+			},
+			update:function(){
+				
+				for(var i=0; i<this.htmlPics.length; i++){
+					this.setWH(this.htmlPics[i], this.winWidth - this.htmlPics[i].length*this.gap);
+					for(var j=0; j<this.htmlPics[i].length; j++){
+						this.htmlPics[i][j].img.width = this.htmlPics[i][j].w;
+						this.htmlPics[i][j].img.height = this.htmlPics[i][j].h;
+					}
+				}
+			},
+			getPics:function( num ){
+				var pics = [];
+				for(var i=0; i<num && this.pics.length > 0; i++){
+					pics.push( this.pics.shift() );
+				}
+				return pics;
+			},
+			createRow:function(){
+				
+				var pics = this.getPics(4);
+				
+				if(pics.length < 4){
+					alert("没有更多数据了");
+					return false;
+				}
+				
+				while( this.setWH( pics,  this.winWidth - (pics.length)*this.gap) > 200){
+
+					pics.push( this.pics.shift() );
+				}
+				
+				this.innerHTML( pics );
+			},/**
+			setWH:function(pics, maxWidth){
+				var a = pics[0], b = pics[1], c = pics[2], d = pics[3];
+				var w = maxWidth/(a.width/a.height+b.width/b.height+c.width/c.height+d.width/d.height);
+				a.v = w/a.height;
+					a.w = a.width * a.v;
+					a.h = a.height * a.v;
+				b.v = w/b.height;
+					b.w = b.width * b.v;
+					b.h = b.height * b.v;
+				c.v = w/c.height;
+					c.w = c.width * c.v;
+					c.h = c.height * c.v;
+				d.v = w/d.height;
+					d.w = d.width * d.v;
+					d.h = d.height * d.v;
+				return d.h;
+			},*/
+			setWH:function(pics, maxWidth){
+				
+				var sv = 0, w = 0, v
+				for(var i=0; i<pics.length; i++){
+					sv += pics[i].width/pics[i].height;
+				}
+				
+				w = maxWidth / sv;
+				
+				for(var i=0; i<pics.length; i++){
+					v = pics[i].v = w/pics[i].height;
+					pics[i].w = pics[i].width * v;
+					pics[i].h = pics[i].height * v;
+				}
+				
+				return pics[0].h
+			},
+			innerHTML:function( pics ){
+				var html = '';
+				
+				for(var i=0; i<pics.length; i++){
+					html += this.tmpl.replace("$url$", pics[i].url).replace("$w$", pics[i].w).replace("$h$", pics[i].h).replace("$label$", pics[i].label);
+				}
+				var div = document.createElement("DIV");
+					div.className = "container";
+					div.innerHTML = html;
+				
+				this.parent.appendChild( div );
+				
+				var imgs = div.getElementsByTagName("img");
+				for(var i=0; i<pics.length; i++){
+					pics[i].img = imgs[i];
+				}
+				
+				this.htmlPics.push( pics );
+			}
+		}
+		
+		
+		//---------------------------
+		var ada = new Adaptive({
+			pics:photos,
+			parent:document.getElementById('pics'),
+			gap:8
+		});
+		
+		ada.init();
+		function more(){
+			ada.createRow();
+			ada.createRow();
+			ada.createRow();
+			ada.createRow();
+			ada.createRow();
+			ada.createRow();
+		}
+		more();
+	</script>
+	
+</body>
+</html>
