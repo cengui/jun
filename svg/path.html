@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>SVG PATH</title>
+	<script type="text/javascript" src="../src/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../src/DragElement.js"></script>
+	<script type="text/javascript" src="svg.js"></script>
+	<style type="text/css">
+		body{margin:0;padding:0;}
+		.handle{border:2px solid #2cb5fa;width:10px;height:10px;position:absolute;border-radius:15px;background:#fff;
+			margin-left:-5px;margin-top:-5px;
+		}
+	</style>
+</head>
+<body >
+	<div id="p1" class="handle"></div>
+	<div id="p2" class="handle"></div>
+	<div id="p3" class="handle"></div>
+	
+	<svg width="1000" height="768" id="svg" ></svg>
+	
+	<!--<path d="M200,170 L277,83 A10,10,0,0,0,80,170 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></path>-->
+	<script type="text/javascript">
+		
+		
+		
+		function CreatePath(p1, p2, p3){
+			this.p1 = p1;
+			this.p2 = p2;
+			this.p3 = p3;
+			this.rx = 10;
+			this.ry = 10;
+			this.largeFlag = 0;
+			this.init();
+		}
+		
+		CreatePath.prototype = {
+			init:function(){
+				var _this = this;
+				this.p1node = $('#p1');
+				this.p2node = $('#p2');
+				this.p3node = $('#p3');
+				
+				this.p1node.css({
+					top:this.p1.y,
+					left:this.p1.x
+					
+				});
+				
+				this.p2node.css({
+					top:this.p2.y,
+					left:this.p2.x
+				})
+				
+				this.p3node.css({
+					top:this.p3.y,
+					left:this.p3.x
+				})
+				
+				var p1 = new DragElement({
+					dragElement:this.p1node,
+					moveElement:this.p1node
+				});
+				
+				p1.onmove = function(x, y){
+					_this.setP1({x:x, y:y});
+					_this.update();
+				};
+				p1.init();
+				
+				var p2 = new DragElement({
+					dragElement:this.p2node,
+					moveElement:this.p2node
+				});
+				
+				p2.onmove = function(x, y){
+					_this.setP2({x:x, y:y});
+					_this.update();
+				};
+				p2.init();
+				
+				var p3 = new DragElement({
+					dragElement:this.p3node,
+					moveElement:this.p3node
+				});
+				p3.onmove = function(x, y){
+					_this.setP3({x:x, y:y});
+					_this.update();
+				};
+				p3.init();
+		
+		
+			},
+			setR:function( r ){
+				this.rx = r;
+				this.ry = r;
+			},
+			setP1:function( p ){
+				this.p1 = p;
+			},
+			setP2:function( p ){
+				this.p2 = p;
+			},
+			setP3:function( p ){
+				this.p3 = p;
+			},
+			setLarge:function(){
+				this.largeFlag = 1;
+			},
+			setSmall:function(){
+				this.largeFlag = 0;
+			},
+			getd:function(){
+				return "M"+this.p1.x+","+this.p1.y+" L"+this.p2.x+","+this.p2.y+" A"+this.rx+","+this.ry+","+0+","+0+","+this.largeFlag+","+this.p3.x+","+this.p3.y+" Z";
+			},
+			getNode:function(){
+				
+				var svgns = 'http://www.w3.org/2000/svg';
+				this.path = document.createElementNS(svgns, 'path');
+				//this.path = document.createElement("PATH");
+				this.path.setAttribute("d", this.getd());
+				this.path.setAttribute("fill", "#dc6c40");
+				this.path.setAttribute("stroke", "#dc6c40");
+				this.path.setAttribute("stroke-width", 2);
+
+				return  this.path;
+			},
+			update:function(){
+				this.path.setAttribute("d", this.getd());
+			}
+		}
+		
+		
+		var path = new CreatePath(
+			{x:200,y:170},
+			{x:277,y:83},
+			{x:80,y:170}
+		);
+		
+		document.getElementById("svg").appendChild( path.getNode() );
+	</script>
+</body>
+</html>
