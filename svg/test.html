@@ -9,10 +9,20 @@
 		svg{background:#fff;}
 		circle{cursor:pointer;}
 	</style>
+	
+	<script type="text/javascript">
+		
+	</script>
 </head>
 <body style="padding:0;margin:0;">
-	<svg height="500" id="svg" style="overflow: hidden; position: relative;" height="100" version="1.1" width="460" xmlns="http://www.w3.org/2000/svg" >
+	
+	<svg>
+		<path d="M320,468 L521,68 A125,125,0,0,0,700,468 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></path>
+	</svg>
+	
+	<svg height="200" width="500" id="svg" style="overflow: hidden; position: relative;" height="100" version="1.1" width="460" xmlns="http://www.w3.org/2000/svg" >
 		<path d="m10,50 40,20" stroke="#d8e5eb" stroke-width="4px"></path>
+		
 		<circle  cx="10" cy="50" r="5" fill="#fff" stroke="#cee2e9" stroke-width="2px" ></circle>
 		<text style="font-size:14px;font-family: Arial;" x="12" y="110"  text-anchor="middle" stroke="none" fill="#cee2e9" font-size="12px">
 			<tspan dy="10.5" >1月</tspan>
@@ -53,9 +63,16 @@
 		<text style="font-size:14px;font-family: Arial;" x="302" y="110"  text-anchor="middle" stroke="none" fill="#cee2e9" font-size="12px">
 			<tspan dy="10.5" >8月</tspan>
 		</text>
-		
+		<!-- line -->
+		<line x1="10"  y1="10"  x2="50"  y2="10" stroke="#d8e5eb" stroke-width="4px" ></line>
 	</svg>
 
+	
+	<svg>
+		<path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="#dc6c40" stroke="none" d="M130,125 L5,124 A125,125,0,0,0,254,140 Z" stroke-width="1"></path>
+		
+	</svg>
+	
 	<script type="text/javascript">
 		var svg = Jun.dom.$("svg");
 		var circles = Jun.dom.getTG(svg, 'circle');
