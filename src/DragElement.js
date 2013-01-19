@@ -179,6 +179,11 @@
             //触发事件
             this.onmove(x, y);
         },
+		setPosition:function(x, y){
+			var moveElement = this.option.moveElement;
+            moveElement[0].style.left = x + "px";
+            moveElement[0].style.top = y + "px";
+		},
         up:function(){
             var doc = $(document);
             var dragElement = this.option.dragElement;

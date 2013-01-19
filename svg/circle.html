@@ -2,16 +2,18 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>SVG PATH 画弧</title>
+	<title>SVG Circle</title>
 	<script type="text/javascript" src="../src/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="../src/DragElement.js"></script>
-	<script type="text/javascript" src="svg.js"></script>
+		<script type="text/javascript" src="svg.js"></script>
 	<script type="text/javascript" src="js/svgnode.js"></script>
-	<script type="text/javascript" src="js/svgpath.js"></script>
+	<script type="text/javascript" src="js/svgcircle.js"></script>
+
 	<style type="text/css">
 		body{margin:0;padding:0;}
+		.wrapper{position:relative;}
 		.handle{border:2px solid #2cb5fa;width:10px;height:10px;position:absolute;border-radius:15px;background:#fff;
-			margin-left:-5px;margin-top:-5px;
+			margin-left:-5px;margin-top:-5px;cursor:pointer;
 		}
 	</style>
 </head>
@@ -23,37 +25,44 @@
 			<li>边框宽度:<input type="text" id="strokeWidth" value="2" /></li>
 		</ul>
 	</div>
-	
-	<svg width="1000" height="768" id="svg" ></svg>
-	
-	<!--<line d="M200,170 L277,83 A10,10,0,0,0,80,170 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></line>-->
+	<div class="wrapper">
+		<svg width="1000" height="768" id="svg" >
+			
+		</svg>
+		
+	</div>
+	<!--<circle  cx="10" cy="50" r="5" fill="#fff" stroke="#cee2e9" stroke-width="2px" ></circle>-->
 	<script type="text/javascript">
 		
-		var path = new SVGPath(
-			{x:200,y:170},
-			{x:277,y:83},
-			{x:80,y:170}
-		);
 		
-		path.setFill( $('#fill').val() );
-		path.setStroke( $('#stroke').val() );
-		path.setStrokeWidth( $('#strokeWidth').val() );
-
 		
-		document.getElementById("svg").appendChild( path.node );
+		
+		
+		
+		var circle = new SVGCircle(100,100, 100 );
+		
+		circle.setFill( $('#fill').val() );
+		circle.setStroke( $('#stroke').val() );
+		circle.setStrokeWidth( $('#strokeWidth').val() );
+		
+		document.getElementById("svg").appendChild( circle.node );
+		
+		
 		
 		/**属性设置*/
+		
 		$('#fill')[0].oninput = function(){
-			path.setFill( $(this).val() );
+			circle.setFill( $(this).val() );
 		};
 		
 		$('#stroke')[0].oninput = function(){
-			path.setStroke( $(this).val() );
+			circle.setStroke( $(this).val() );
 		};
 		
 		$('#strokeWidth')[0].oninput = function(){
-			path.setStrokeWidth( $(this).val() );
+			circle.setStrokeWidth( $(this).val() );
 		};
+		
 	</script>
 </body>
 </html>

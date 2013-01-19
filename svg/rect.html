@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="../src/DragElement.js"></script>
 	<script type="text/javascript" src="svg.js"></script>
 	<script type="text/javascript" src="js/svgnode.js"></script>
-	<script type="text/javascript" src="js/svgpath.js"></script>
+	<script type="text/javascript" src="js/svgrect.js"></script>
 	<style type="text/css">
 		body{margin:0;padding:0;}
 		.handle{border:2px solid #2cb5fa;width:10px;height:10px;position:absolute;border-radius:15px;background:#fff;
@@ -26,33 +26,29 @@
 	
 	<svg width="1000" height="768" id="svg" ></svg>
 	
-	<!--<line d="M200,170 L277,83 A10,10,0,0,0,80,170 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></line>-->
+	<!--<rect x="10" y="10" width="100" height="100" cx="20" cy="20"/>-->
 	<script type="text/javascript">
 		
-		var path = new SVGPath(
-			{x:200,y:170},
-			{x:277,y:83},
-			{x:80,y:170}
-		);
+		var rect = new SVGRect(10, 10, 100, 100);
 		
-		path.setFill( $('#fill').val() );
-		path.setStroke( $('#stroke').val() );
-		path.setStrokeWidth( $('#strokeWidth').val() );
+		rect.setFill( $('#fill').val() );
+		rect.setStroke( $('#stroke').val() );
+		rect.setStrokeWidth( $('#strokeWidth').val() );
 
 		
-		document.getElementById("svg").appendChild( path.node );
+		document.getElementById("svg").appendChild( rect.node );
 		
 		/**属性设置*/
 		$('#fill')[0].oninput = function(){
-			path.setFill( $(this).val() );
+			rect.setFill( $(this).val() );
 		};
 		
 		$('#stroke')[0].oninput = function(){
-			path.setStroke( $(this).val() );
+			rect.setStroke( $(this).val() );
 		};
 		
 		$('#strokeWidth')[0].oninput = function(){
-			path.setStrokeWidth( $(this).val() );
+			rect.setStrokeWidth( $(this).val() );
 		};
 	</script>
 </body>
