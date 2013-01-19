@@ -17,6 +17,8 @@ $.extend(SVGCircle.prototype, {
 		var _this = this;
 		var handles = this.createHandle( 2 );
 		
+		var sqrt = Math.sqrt, abs = Math.abs, pow = Math.pow;
+
 		this.p1node = $(handles[0]);
 		this.p2node = $(handles[1]);
 		
@@ -47,10 +49,10 @@ $.extend(SVGCircle.prototype, {
 			dragElement:this.p2node,
 			moveElement:this.p2node
 		});
-		
+
 		p2.onmove = function(x, y){
-			var r = Math.abs(x - _this.cx);
-			_this.setR( r );
+			var r = sqrt(pow(abs(x - _this.cx), 2) + pow(abs(y - _this.cy), 2));
+ 			_this.setR( r );
 		};
 		p2.init();
 		
