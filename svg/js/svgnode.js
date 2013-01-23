@@ -8,16 +8,16 @@
 		this.svgns = "http://www.w3.org/2000/svg";
 		
 		this.tagName = tagName;
-		//½Úµã
+		//èŠ‚ç‚¹
 		this.node = null;
 		
-		//±ß¿òÑÕÉ«
+		//è¾¹æ¡†é¢œè‰²
 		this.stroke = "none";
 		
-		//Ìî³äÑÕÉ«
+		//å¡«å……é¢œè‰²
 		this.fill = "none";
 		
-		//±ß¿ò¿í¶È
+		//è¾¹æ¡†å®½åº¦
 		this.strockWidth = 0;
 		
 	}
@@ -40,6 +40,9 @@
 			this.node.setAttribute("stroke", color);
 		},
 		
+		bind:function(type, handle){
+			this.node.addEventListener(type, handle, false);	
+		},
 		createHandle:function( number ){
 			var handles = [];
 			var node = null;

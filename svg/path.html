@@ -24,22 +24,38 @@
 		</ul>
 	</div>
 	
-	<svg width="1000" height="768" id="svg" ></svg>
+	<svg width="1000" height="768" id="svg" >
+	</svg>
 	
 	<!--<line d="M200,170 L277,83 A10,10,0,0,0,80,170 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></line>-->
 	<script type="text/javascript">
 		
+		p1 = {
+			x: 300,
+			y: 300
+		}
+
+		p3 = {
+			x: 300,
+			y: 200
+		}
+		p2 = {
+			x: 360,
+			y: 314
+		}	
 		var path = new SVGPath(
-			{x:200,y:170},
-			{x:277,y:83},
-			{x:80,y:170}
+			p1,
+			p2,
+			p3
 		);
+		
 		
 		path.setFill( $('#fill').val() );
 		path.setStroke( $('#stroke').val() );
 		path.setStrokeWidth( $('#strokeWidth').val() );
-
+		path.initHandle();
 		
+
 		document.getElementById("svg").appendChild( path.node );
 		
 		/**属性设置*/

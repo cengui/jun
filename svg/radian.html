@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>SVG PATH 更具一个角度画弧</title>
+	<script type="text/javascript" src="../src/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../src/DragElement.js"></script>
+	<script type="text/javascript" src="svg.js"></script>
+	<script type="text/javascript" src="js/svgnode.js"></script>
+	<script type="text/javascript" src="js/svgpath.js"></script>
+	<script type="text/javascript" src="js/PieChart.js"></script>
+	<style type="text/css">
+		body{margin:0;padding:0;}
+		.handle{border:2px solid #2cb5fa;width:10px;height:10px;position:absolute;border-radius:15px;background:#fff;
+			margin-left:-5px;margin-top:-5px;
+		}
+	</style>
+</head>
+<body >
+	<div style="position:absolute;z-index:10;right:0;">
+		<ul>
+			<li>填充顏色:<input type="text" id="fill" value="#dc6c40" /></li>
+			<li>边框颜色:<input type="text" id="stroke" value="#f30" /></li>
+			<li>边框宽度:<input type="text" id="strokeWidth" value="2" /></li>
+		</ul>
+	</div>
+	
+	<svg width="1000" height="768" id="svg" >
+	</svg>
+	
+
+	<!--<line d="M200,170 L277,83 A10,10,0,0,0,80,170 Z" fill="#dc6c40" stroke="#dc6c40" stroke-width="2"></line>-->
+	<script type="text/javascript">
+	
+		//var p = {x:300, y:300};
+		//var r = 100;
+		//var angle = 90;
+
+		//获取一个幅度的3个点
+
+		var pie = new PieChart([
+			{
+				number:10,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:10,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:10,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:10,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:10,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:20,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:100,
+				name:"1111111111",
+				des:"11111111111"
+			},
+			{
+				number:100,
+				name:"1111111111",
+				des:"11111111111"
+			}
+		], {
+
+			svg:document.getElementById("svg")
+		});
+
+
+		function getP(r, angle, p, p1){
+
+			var	p1 = {
+				x:p.x - Math.sin( angle/2/180 * Math.PI ) * r,
+				y:p.y - Math.cos( angle/2/180 * Math.PI ) * r
+			};
+
+			var	p2 = {
+				x:p.x + Math.sin( angle/2/180 * Math.PI ) * r,
+				y:p.y - Math.cos( angle/2/180 * Math.PI ) * r
+			}; 
+
+			return {
+				p:p,
+				p2:p2,
+				p1:p1	
+			}	
+
+		};
+
+		function getX(x, y , a){
+			console.log(x, y, a);	
+			return {
+				x:x*Math.cos(-a) - y*Math.sin(-a),
+				y:y*Math.cos(-a) + x*Math.sin(-a)
+			}
+
+		}
+
+	</script>
+</body>
+</html>

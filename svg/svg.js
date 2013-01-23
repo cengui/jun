@@ -6,4 +6,5 @@ $(function(){
 	updateSVGSize();
 	
 	$(window).resize(updateSVGSize);
+
 });
